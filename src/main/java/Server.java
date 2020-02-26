@@ -1,9 +1,14 @@
+import java.beans.EventHandler;
 import java.io.*;
 import java.net.*;
 import java.util.logging.FileHandler;
 
 import com.sun.net.httpserver.*;
+import handler.DefaultHandler;
 import handler.ListGamesHandler;
+import handler.LoginHandler;
+import handler.RegisterHandler;
+import model.User;
 
 /*
 	This example demonstrates the basic structure of the Family Map Server
@@ -76,7 +81,8 @@ public class Server {
         // When the HttpServer receives an HTTP request containing the
         // "/games/list" URL path, it will forward the request to ListGamesHandler
         // for processing.
-        server.createContext("/games/list", new ListGamesHandler());
+        // server.createContext("/games/list", new ListGamesHandler());
+        registerHandlerFiles();
 
         // Create and install the HTTP handler for the "/routes/claim" URL path.
         // When the HttpServer receives an HTTP request containing the
@@ -114,11 +120,19 @@ public class Server {
     // HIKARU
     // Register Handler Files
     public void registerHandlerFiles(){
-        server.createContext("/", new FileHandler());
-        server.createContext("/", new LoginHandler());
-    }
-
-
-
-
+        server.createContext("/", new DefaultHandler());                    // Default Handler
+        server.createContext("/user/register", new RegisterHandler());      // Creates a new user account, generates 4 generations of ancestor data for the new user, logs the user in, and returns an auth token.
+        server.createContext("/user/login", new LoginHandler());            // Logs in the user and returns an auth token
+        server.createContext("/clear", new ClearHandler());                 // Deletes ALL data from the database, including user accounts, auth tokens, and generated person and event data.
+        server.createContext("/fill", new FillHandler());                   // /fill/[username]/{generations} // Populates the server's database with generated data for the specified user name.
+//        The required "username" parameter must be a user already registered with the server. If there is
+//        any data in the database already associated with the given user name, it is deleted. The
+//        optional “generations” parameter lets the caller specify the number of generations of ancestors
+//        to be generated, and must be a non-negative integer (the default is 4, which results in 31 new
+//        persons each with associated events).
+        server.createContext("/load", new LoadHandler());                   // Clears all data from the database (just like the /clear API), and then loads the posted user, person, and event data into the database.
+        server.createContext("/person/", new PersonIDHandler());            // /person/[personID] // Returns the single Person object with the specified ID
+        server.createContext("/person", new PersonHandler());               //  Returns ALL family members of the current user. The current user is determined from the provided auth token
+        server.createContext("/event/", new EventIDHandler());              // /event/[eventID] //  Returns the single Event object with the specified ID.
+        server.createContext("/event", new EventHandler());                 // Returns ALL events for ALL family members of the current user. The current user is determined from the provided auth token.
 }
