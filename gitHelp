@@ -1,3 +1,5 @@
 How to remove the .git from a directory you are inside of: rm -rf .git
 How to add all the changes you made including deletions: git add -A
 Committing in git: git commit -m "message"
+Example for making java doc: javadoc Student.java -d doc
+OR, for javadoc: tools/generateJavadoc
