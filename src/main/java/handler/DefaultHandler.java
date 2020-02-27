@@ -39,8 +39,8 @@ public class DefaultHandler implements HttpHandler {
             String path;
             String URI = httpExchange.getRequestURI().toString();
             if(URI.equals("/")) {
-                path = "/Users/hikarupurba/Desktop/GIT_Repos/FamilyMapServer/web/index.html";
-//                path = "";  // Path on my laptop
+                path = "C:/Users/hikarupurba/Desktop/GIT_Repos/FamilyMapServer/web/index.html";
+//                path = "C:\Users\hikar\Desktop\GIT_Repos\FamilyMapServer\web";  // Path on my laptop
             }
             else {
                 path = "/Users/hikarupurba/Desktop/GIT_Repos/FamilyMapServer/web" + httpExchange.getRequestURI();
