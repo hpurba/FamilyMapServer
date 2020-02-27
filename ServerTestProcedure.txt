@@ -1,0 +1,18 @@
+Your server will be tested as follows:
+	Registering a user
+	Registering the same user
+	Valid login
+	Invalid login
+	Getting the list of people
+	Getting the list of events
+	Restarting the server and running the tests above
+	Clear
+	Load, followed by:
+		Login
+		Find specific person
+		Get all events
+	Trying to retrieve information that belongs to another user
+	Fill
+
+
+	https://students.cs.byu.edu/~cs240ta/winter2020/projects/family-map-server/passoff-tips.txt
