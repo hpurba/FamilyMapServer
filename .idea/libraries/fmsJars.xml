@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="fmsJars">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/fmsJars" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/fmsJars" recursive="false" />
+  </library>
+</component>
