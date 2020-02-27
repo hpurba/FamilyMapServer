@@ -1,14 +1,7 @@
-import java.beans.EventHandler;
 import java.io.*;
 import java.net.*;
-import java.util.logging.FileHandler;
-
 import com.sun.net.httpserver.*;
 import handler.DefaultHandler;
-import handler.ListGamesHandler;
-import handler.LoginHandler;
-import handler.RegisterHandler;
-import model.User;
 
 /*
 	This example demonstrates the basic structure of the Family Map Server
@@ -23,7 +16,6 @@ import model.User;
 		the server should accept incoming client connections.
 */
 public class Server {
-
     /*
     // The maximum number of waiting incoming connections to queue.
     // While this value is necessary, for our purposes it is unimportant.
