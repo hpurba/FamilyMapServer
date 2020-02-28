@@ -3,3 +3,4 @@ How to add all the changes you made including deletions: git add -A
 Committing in git: git commit -m "message"
 Example for making java doc: javadoc Student.java -d doc
 OR, for javadoc: tools/generateJavadoc
+Remove a non empty directory: rm -rf dir-name

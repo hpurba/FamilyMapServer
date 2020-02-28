@@ -102,7 +102,7 @@ public class Server {
      * "main" method for the server program
      * "args" should contain one command-line argument, which is the port number on which the server should
      * accept incoming client connections.
-     * @param args
+     * @param args main_arguments
      */
     public static void main(String[] args) {
         String portNumber = args[0];    // port 8000, or 8080
