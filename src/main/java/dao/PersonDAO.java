@@ -1,6 +1,8 @@
 package dao;
 
+import model.Event;
 import model.Person;
+import model.User;
 
 import java.sql.*;
 
@@ -86,9 +88,8 @@ public class PersonDAO {
         return false;
     }
 
-    // update information on a person
-    public void modifyPerson(String personName) throws SQLException {
-
+    public Person[] getPersons(User username) throws DataAccessException {
+        return null;
     }
 }
 

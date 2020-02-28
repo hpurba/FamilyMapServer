@@ -23,7 +23,7 @@ package service.response;
  * success:false // Boolean identifier
  * }
  */
-public class eventIDResponse {
+public class eventIDResponse  extends Response{
     private String associatedUserName;     // Username of user account this event belongs to (non-empty string)
     private String eventID;                // Event’s unique ID (non-empty string)
     private String personID;               // ID of the person this event belongs to (non-empty string)

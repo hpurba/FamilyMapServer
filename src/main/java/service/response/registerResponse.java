@@ -17,7 +17,7 @@ package service.response;
  * success:false // Boolean identifier
  * }
  */
-public class registerResponse {
+public class registerResponse extends Response {
     // Variables
     private String authorizationToken;
     private String userName;

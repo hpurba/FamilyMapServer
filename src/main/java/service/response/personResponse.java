@@ -17,7 +17,7 @@ import java.util.*;
         * success:false // Boolean identifier
         *}
  */
-public class personResponse {
+public class personResponse extends Response {
 
     private ArrayList<Person> personsArrayList;
     private String message;

@@ -12,7 +12,7 @@ package service.response;
  * success:false // Boolean identifier
  * }
  */
-public class loadResponse {
+public class loadResponse extends Response {
     private String message;
 
     public void setMessage(String message) { this.message = message; }

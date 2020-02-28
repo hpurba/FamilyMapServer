@@ -21,7 +21,7 @@ package service.response;
  * success:false // Boolean identifier
  * }
  */
-public class personIDResponse {
+public class personIDResponse  extends Response{
 
     private String associatedUserName;
     private String personID;

@@ -18,7 +18,7 @@ import java.util.ArrayList;
         * success:false // Boolean identifier
         *}
  */
-public class eventResponse {
+public class eventResponse extends Response {
 
     private ArrayList<Event> eventsArrayList;
     private String message;

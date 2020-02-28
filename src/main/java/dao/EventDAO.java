@@ -1,6 +1,7 @@
 package dao;
 
 import model.Event;
+import model.User;
 
 import java.sql.*;
 
@@ -75,4 +76,9 @@ public class EventDAO {
             throw new DataAccessException("SQL Error encountered while clearing tables");
         }
     }
+
+    public Event[] getEvents(User username) throws DataAccessException {
+        return null;
+    }
+
 }
