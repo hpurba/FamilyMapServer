@@ -75,6 +75,7 @@ public class UserDAO {
     // delete a single user (current one) from the database
     public void delete(String token, String userName) throws SQLException {
 
+
     }
 
     // check if a user exists by their userName

@@ -38,17 +38,15 @@ public class DefaultHandler implements HttpHandler {
         try {
             String path;
             String URI = httpExchange.getRequestURI().toString();
+
             if(URI.equals("/")) {
-//                path = "C:/Users/hikarupurba/Desktop/GIT_Repos/FamilyMapServer/web/index.html";
                 path = "web/index.html";  // Path on my laptop
             }
             else {
                 path = "web" + httpExchange.getRequestURI();
             }
 
-
             Path source = Paths.get(path);
-
             httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
             OutputStream responseBody = httpExchange.getResponseBody();
             Files.copy(source, responseBody);
@@ -60,10 +58,5 @@ public class DefaultHandler implements HttpHandler {
             httpExchange.getResponseBody().close();
             e.printStackTrace();
         }
-
-
     }
 }
-
-
-// /Users/hikarupurba/Desktop/GIT_Repos/FamilyMapServer/web/index.html

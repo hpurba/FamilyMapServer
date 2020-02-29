@@ -13,7 +13,7 @@ package service.response;
  * success:false // Boolean identifier
  * }
  */
-public class clearResponse extends Response{
+public class ClearResponse extends Response{
     private String message;
 
     public void setMessage(String message) { this.message = message; }

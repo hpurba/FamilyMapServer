@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.*;
 import com.sun.net.httpserver.*;
+import handler.ClearHandler;
 import handler.DefaultHandler;
 
 /*
@@ -115,7 +116,7 @@ public class Server {
         server.createContext("/", new DefaultHandler());                    // Default Handler
         // server.createContext("/user/register", new RegisterHandler());      // Creates a new user account, generates 4 generations of ancestor data for the new user, logs the user in, and returns an auth token.
         // server.createContext("/user/login", new LoginHandler());            // Logs in the user and returns an auth token
-        // server.createContext("/clear", new ClearHandler());                 // Deletes ALL data from the database, including user accounts, auth tokens, and generated person and event data.
+        server.createContext("/clear", new ClearHandler());                 // Deletes ALL data from the database, including user accounts, auth tokens, and generated person and event data.
         // server.createContext("/fill", new FillHandler());                   // /fill/[username]/{generations} // Populates the server's database with generated data for the specified user name.
         // server.createContext("/load", new LoadHandler());                   // Clears all data from the database (just like the /clear API), and then loads the posted user, person, and event data into the database.
         // server.createContext("/person/", new PersonIDHandler());            // /person/[personID] // Returns the single Person object with the specified ID

@@ -12,7 +12,7 @@ import java.sql.SQLException;
  * Request Body: None
  * Errors: Invalid auth token, Internal server error
  */
-public class event {
+public class Event {
 
     public eventResponse execute(String userName) throws SQLException {
         eventResponse response = new eventResponse();
