@@ -106,7 +106,8 @@ public class Server {
      */
     public static void main(String[] args) {
         String portNumber = args[0];    // port 8000, or 8080
-        new Server().run(portNumber);
+        // portNumber = 8080;
+        new Server().run("8080");
     }
 
     // Register Handler Files
