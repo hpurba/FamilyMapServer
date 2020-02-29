@@ -5,8 +5,8 @@ import com.google.gson.Gson;
 import model.AuthorizationToken;
 import model.Person;
 import model.User;
-import service.request.registerRequest;
-import service.response.registerResponse;
+import service.request.RegisterRequest;
+import service.response.RegisterResponse;
 
 import java.sql.*;
 import java.util.*;
@@ -20,13 +20,13 @@ import java.util.*;
 public class register {
 
 
-    public registerResponse execute(registerRequest request) throws SQLException {
+    public RegisterResponse execute(RegisterRequest request) throws SQLException {
         // Variables
         Gson gson = new Gson();                                         //  It can also be used to convert a JSON string to an equivalent Java object
         // UserDAO user_dao = new UserDAO();                               // new user DAO, data access object (DAO) is a pattern that provides an abstract interface to some type of database or other persistence mechanism. By mapping application calls to the persistence layer, the DAO provides some specific data operations without exposing details of the database. This isolation supports the single responsibility principle.
         authorizationTokenDAO token_dao = new authorizationTokenDAO();  // this may not be required
         // PersonDAO person_dao = new PersonDAO();
-        registerResponse response = new registerResponse();             // registering response object
+        RegisterResponse response = new RegisterResponse();             // registering response object
 
 
         // Grabs the username from the request object, then the user_dao will check if this user exists.

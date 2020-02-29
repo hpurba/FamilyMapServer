@@ -3,6 +3,7 @@ import java.net.*;
 import com.sun.net.httpserver.*;
 import handler.ClearHandler;
 import handler.DefaultHandler;
+import handler.RegisterHandler;
 
 /*
 	This example demonstrates the basic structure of the Family Map Server
@@ -114,7 +115,7 @@ public class Server {
     // Register Handler Files
     public void registerHandlerFiles() {
         server.createContext("/", new DefaultHandler());                    // Default Handler
-        // server.createContext("/user/register", new RegisterHandler());      // Creates a new user account, generates 4 generations of ancestor data for the new user, logs the user in, and returns an auth token.
+        server.createContext("/user/register", new RegisterHandler());      // Creates a new user account, generates 4 generations of ancestor data for the new user, logs the user in, and returns an auth token.
         // server.createContext("/user/login", new LoginHandler());            // Logs in the user and returns an auth token
         server.createContext("/clear", new ClearHandler());                 // Deletes ALL data from the database, including user accounts, auth tokens, and generated person and event data.
         // server.createContext("/fill", new FillHandler());                   // /fill/[username]/{generations} // Populates the server's database with generated data for the specified user name.

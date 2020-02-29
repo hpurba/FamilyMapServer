@@ -6,7 +6,7 @@ package service.request;
  * Errors: Request property missing or has invalid value, Username already taken by another user,
  * Internal server error
  */
-public class registerRequest {
+public class RegisterRequest {
     // Variables
     private String userName;
     private String password;
@@ -17,4 +17,5 @@ public class registerRequest {
 
     // Getter
     public String getUserName() { return userName; }
+
 }

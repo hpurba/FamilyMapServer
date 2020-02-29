@@ -70,3 +70,4 @@ public class ClearHandler implements HttpHandler {
         }
     }
 }
+
