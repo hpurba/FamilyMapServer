@@ -1,6 +1,5 @@
-package dao;
+package DAO;
 
-import model.Event;
 import model.Person;
 import model.User;
 

@@ -1,8 +1,6 @@
 package service.services;
 
-import dao.authorizationTokenDAO;
-import dao.PersonDAO;
-import dao.UserDAO;
+import DAO.authorizationTokenDAO;
 import com.google.gson.Gson;
 import model.AuthorizationToken;
 import model.Person;

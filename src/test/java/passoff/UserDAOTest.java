@@ -1,10 +1,8 @@
 package passoff;
 
-import dao.DataAccessException;
-import dao.Database;
-import dao.PersonDAO;
-import dao.UserDAO;
-import model.Person;
+import DAO.DataAccessException;
+import DAO.Database;
+import DAO.UserDAO;
 import model.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
