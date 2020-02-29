@@ -23,6 +23,17 @@ public class RegisterHandler implements HttpHandler {
     }
 
 
+    private String readString(InputStream is) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        InputStreamReader sr = new InputStreamReader(is);
+        char[] buf = new char[1024];
+        int len;
+        while ((len = sr.read(buf)) > 0) {
+            sb.append(buf, 0, len);
+        }
+        return sb.toString();
+    }
+
     /**
      * This takes the JsonString I generated from the response object of clearing AND the outputStream for which I will insert the json into. then close it
      * @param str
@@ -41,7 +52,7 @@ public class RegisterHandler implements HttpHandler {
     public void handle(HttpExchange httpExchange) throws IOException {
 
         boolean success = false;
-        // RegisterRequest registerRequestObj = new RegisterRequest();
+        RegisterRequest registerRequestObj = new RegisterRequest();
         // RegisterResponse responseObj = new RegisterResponse();
         String JSONString = "";
 
@@ -49,14 +60,24 @@ public class RegisterHandler implements HttpHandler {
         try {
             // Use httpExchange request body as parameters for creating a new user
             // probably want to make the request body into a user
-            try{
-                ObjectInputStream registerRequestIS = new ObjectInputStream(httpExchange.getRequestBody()); // grabs the httpExchange requestbody and turns it into an object input stream
-                RegisterRequest registerRequestObj = (RegisterRequest) registerRequestIS.readObject();
-//                 System.out.println("" + (String) registerRequestIS.readObject());
-            }
-            catch (ClassNotFoundException e){
-                e.printStackTrace();
-            }
+            InputStream reqBody = httpExchange.getRequestBody();
+            // Read JSON string from the input stream
+            String reqData = readString(reqBody);
+
+            // Display/log the request JSON data
+            System.out.println(reqData);
+            Object reqObj= reqData;
+
+
+//
+//            try{
+//                ObjectInputStream registerRequestIS = new ObjectInputStream(httpExchange.getRequestBody()); // grabs the httpExchange requestbody and turns it into an object input stream
+//                // RegisterRequest registerRequestObj = (RegisterRequest) registerRequestIS.readObject();
+////                 System.out.println("" + (String) registerRequestIS.readObject());
+//            }
+//            catch (Exception e){
+//                e.printStackTrace();
+//            }
 
 
 //             RegisterRequest request = gson.fromJson(reqData, RegisterRequest.class);
