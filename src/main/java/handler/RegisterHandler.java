@@ -6,12 +6,14 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import service.request.RegisterRequest;
 import service.response.RegisterResponse;
+import service.services.Register;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.sql.SQLException;
 
 public class RegisterHandler implements HttpHandler {
 
@@ -68,6 +70,15 @@ public class RegisterHandler implements HttpHandler {
             System.out.println(reqData);
             Gson gson = new Gson();
             RegisterRequest registerRequestObj = gson.fromJson(reqData, RegisterRequest.class);
+
+            Register registerService = new Register();
+            RegisterResponse registerResponseObj = new RegisterResponse();
+            try{
+                registerResponseObj = registerService.execute(registerRequestObj);    // this will give back to me a response object
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
 
 //
 //            try{

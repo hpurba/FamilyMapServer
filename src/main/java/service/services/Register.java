@@ -17,7 +17,7 @@ import java.util.*;
  * HTTP Method: POST
  * Auth Token Required: No
  */
-public class register {
+public class Register {
 
 
     public RegisterResponse execute(RegisterRequest request) throws SQLException {
