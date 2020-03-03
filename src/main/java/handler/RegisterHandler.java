@@ -52,7 +52,7 @@ public class RegisterHandler implements HttpHandler {
     public void handle(HttpExchange httpExchange) throws IOException {
 
         boolean success = false;
-        RegisterRequest registerRequestObj = new RegisterRequest();
+//        RegisterRequest registerRequestObj = new RegisterRequest();
         // RegisterResponse responseObj = new RegisterResponse();
         String JSONString = "";
 
@@ -66,8 +66,8 @@ public class RegisterHandler implements HttpHandler {
 
             // Display/log the request JSON data
             System.out.println(reqData);
-            Object reqObj= reqData;
-
+            Gson gson = new Gson();
+            RegisterRequest registerRequestObj = gson.fromJson(reqData, RegisterRequest.class);
 
 //
 //            try{
