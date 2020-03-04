@@ -119,23 +119,33 @@ public class UserDAO {
             stmt.setString(1, userName);
             rs = stmt.executeQuery();
             if (rs.next()) {
+                conn.commit();
+                conn.close();
                 return true;
             }
         } catch (SQLException e) {
-            db.closeConnection(false);
+            conn.commit();
+            conn.close();
+//            db.closeConnection(false);
             e.printStackTrace();
 //            throw new DataAccessException("Error encountered while finding person");
         } finally {
             if(rs != null) {
                 try {
+//                    conn.commit();
+//                    conn.close();
                     rs.close();
                 } catch (SQLException e) {
-                    db.closeConnection(false);
+//                    conn.commit();
+//                    conn.close();
+//                    db.closeConnection(false);
                     e.printStackTrace();
                 }
             }
         }
-        db.closeConnection(true);
+        conn.commit();
+        conn.close();
+//        db.closeConnection(true);
 
         return false;
     }
