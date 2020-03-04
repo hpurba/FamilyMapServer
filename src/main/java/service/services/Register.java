@@ -29,10 +29,10 @@ public class Register {
         PersonDAO person_dao = new PersonDAO();
 
         // If the user already exists in the database, don't add
-        if (user_dao.existsUser(request.getUserName())) {
+        if (user_dao.existsUser(request.getUserName()) || person_dao.find(request.getUserName()) != null) {
             response.setMessage("Username already exists, please choose a different one.");
             response.setSuccess(false);
-            return response;
+//            return response;
         } else {
             // Generate unique AuthorizationToken and PersonID
             String authorizationToken = UUID.randomUUID().toString();
@@ -61,7 +61,6 @@ public class Register {
             response.setPersonID(personID);
             response.setSuccess(true);
         }
-
         return response;
     }
 }

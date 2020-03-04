@@ -7,22 +7,13 @@ import java.sql.*;
 
 public class PersonDAO {
 
-//    private final Connection conn;
-//    public PersonDAO(Connection conn)
-//    {
-//        this.conn = conn;
-//    }
-
     // INSERTION
     public void insert(Person person) throws DataAccessException, SQLException {
         Database db = new Database();
         Connection conn = db.openConnection();
 
-        //We can structure our string to be similar to a sql command, but if we insert question
-        //marks we can change them later with help from the statement
-
         String sql = "INSERT INTO Persons (PersonID, AssociatedUserName, FirstName, LastName, " +
-                "Gender, FatherID, MotherID, SpouseID) VALUES(?,?,?,?,?,?,?,?)";
+                "Gender, FatherID, MotherID, SpouseID) VALUES (?,?,?,?,?,?,?,?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             //Using the statements built-in set(type) functions we can pick the question mark we want
             //to fill in and give it a proper value. The first argument corresponds to the first
@@ -40,14 +31,37 @@ public class PersonDAO {
             e.printStackTrace();
             db.closeConnection(false);
             throw new DataAccessException("Error encountered while inserting into the database");
-        }finally {
+        }
+        finally {
             try {
                 conn.commit();
                 conn.close();
-//                db.closeConnection(true);
             } catch (Exception e) { /* ignored */ }
         }
-//        db.closeConnection(true);
+
+
+        //        try {
+//            Statement statement = conn.createStatement();
+//            String sql = "INSERT INTO PERSONS " +
+//                    "(PersonID, AssociatedUserName, FirstName, LastName, Gender, FatherID, MotherID, SpouseID) VALUES ('" +
+//                    person.getPersonID() + "', '" +
+//                    person.getAssociatedUserName() + "', '" +
+//                    person.getFirstName() + "', '" +
+//                    person.getLastName() + "', '" +
+//                    person.getGender() + "', '" +
+//                    person.getFatherID() + "', '" +
+//                    person.getMotherID() + "', '" +
+//                    person.getSpouseID() + "')";
+//            statement.executeUpdate(sql);
+//
+//            statement.close();
+//            conn.commit();
+//            conn.close();
+////            db.closeConnection(true);
+//        }
+//        catch (Exception e){
+//            e.printStackTrace();
+//        }
     }
 
     // RETRIEVE INFORMATION (FIND)
@@ -116,13 +130,3 @@ public class PersonDAO {
         return null;
     }
 }
-
-
-/*
-The 3 methods you will implement inside each DAO class will handle inserting new data
-into the table, retrieving information from a table, and clearing all information from the
-table.
- */
-// inserting
-// retrieving information
-// clearing

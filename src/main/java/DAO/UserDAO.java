@@ -5,14 +5,6 @@ import java.sql.*;
 
 public class UserDAO {
 
-//    private Connection conn;
-//
-//    public UserDAO(Connection conn)
-//    {
-//        this.conn = conn;
-//    }
-
-
     // INSERTION
     public void insert(User user) throws DataAccessException, SQLException {
         Database db = new Database();
@@ -158,11 +150,3 @@ public class UserDAO {
         return false;
     }
 }
-
-
-
-/*
- The 3 methods you will implement inside each DAO class will handle inserting new data
- into the table, retrieving information from a table, and clearing all information from the
- table.
- */
