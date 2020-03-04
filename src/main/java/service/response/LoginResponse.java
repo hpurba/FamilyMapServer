@@ -15,7 +15,7 @@ package service.response;
  * success:false // Boolean identifier
  * }
  */
-public class loginResponse extends Response {
+public class LoginResponse extends Response {
 
     private String authorizationToken;  // non-empty authorization token string
     private String userName;            // user name passed in with request

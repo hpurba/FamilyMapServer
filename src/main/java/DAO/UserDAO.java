@@ -80,19 +80,26 @@ public class UserDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            //
+            conn.commit();
+            conn.close();
+            //
             db.closeConnection(false);
             throw new DataAccessException("Error encountered while finding person");
         } finally {
             if(rs != null) {
                 try {
+                    //
+                    conn.commit();
+                    conn.close();
+                    //
                     rs.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
         }
-        db.closeConnection(true);
-
+//        db.closeConnection(true);
         return null;
     }
 

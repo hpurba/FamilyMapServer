@@ -8,7 +8,7 @@ package service.request;
  * }
  * Errors: Request property missing or has invalid value, Internal server error
  */
-public class loginRequest {
+public class LoginRequest {
     // Variables
     private String userName;    // non-empty string
     private String password;    // non-empty string
