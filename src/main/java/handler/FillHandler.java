@@ -7,8 +7,10 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import request.FillRequest;
 import service.request.RegisterRequest;
+import service.response.ClearResponse;
 import service.response.FillResponse;
 import service.response.RegisterResponse;
+import service.services.Clear;
 import service.services.Fill;
 import service.services.Register;
 
@@ -73,6 +75,7 @@ public class FillHandler implements HttpHandler {
     public void handle(HttpExchange httpExchange) throws IOException {
 
         System.out.print("Now inside the fill handler");
+        
 
 //        try {
 //            boolean success = false;
