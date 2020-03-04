@@ -6,14 +6,18 @@ import model.User;
 import java.sql.*;
 
 public class PersonDAO {
-    private final Connection conn;
-    public PersonDAO(Connection conn)
-    {
-        this.conn = conn;
-    }
+
+//    private final Connection conn;
+//    public PersonDAO(Connection conn)
+//    {
+//        this.conn = conn;
+//    }
 
     // INSERTION
-    public void insert(Person person) throws DataAccessException {
+    public void insert(Person person) throws DataAccessException, SQLException {
+        Database db = new Database();
+        Connection conn = db.openConnection();
+
         //We can structure our string to be similar to a sql command, but if we insert question
         //marks we can change them later with help from the statement
 
@@ -33,12 +37,24 @@ public class PersonDAO {
             stmt.setString(8, person.getSpouseID());
             stmt.executeUpdate();
         } catch (SQLException e) {
+            e.printStackTrace();
+            db.closeConnection(false);
             throw new DataAccessException("Error encountered while inserting into the database");
+        }finally {
+            try {
+                conn.commit();
+                conn.close();
+//                db.closeConnection(true);
+            } catch (Exception e) { /* ignored */ }
         }
+//        db.closeConnection(true);
     }
 
     // RETRIEVE INFORMATION (FIND)
-    public Person find(String userID) throws DataAccessException {
+    public Person find(String userID) throws DataAccessException, SQLException {
+        Database db = new Database();
+        Connection conn = db.openConnection();
+
         Person person;
         ResultSet rs = null;
         String sql = "SELECT * FROM Persons WHERE PersonID = ?;";
@@ -52,6 +68,7 @@ public class PersonDAO {
                 return person;
             }
         } catch (SQLException e) {
+            db.closeConnection(false);
             e.printStackTrace();
             throw new DataAccessException("Error encountered while finding person");
         } finally {
@@ -59,22 +76,30 @@ public class PersonDAO {
                 try {
                     rs.close();
                 } catch (SQLException e) {
+                    db.closeConnection(false);
                     e.printStackTrace();
                 }
             }
         }
+        db.closeConnection(true);
+
         return null;
     }
 
 
     // clear/delete all people from the database
-    public void clear() throws DataAccessException {
+    public void clear() throws DataAccessException, SQLException {
+        Database db = new Database();
+        Connection conn = db.openConnection();
+
         try (Statement stmt = conn.createStatement()){
             String sql = "DELETE FROM Persons";
             stmt.executeUpdate(sql);
         } catch (SQLException e) {
+            db.closeConnection(false);
             throw new DataAccessException("SQL Error encountered while clearing tables");
         }
+        db.closeConnection(true);
     }
 
     // delete a single person from the database

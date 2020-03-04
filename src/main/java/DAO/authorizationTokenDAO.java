@@ -1,7 +1,6 @@
 package DAO;
 
 import model.AuthorizationToken;
-
 import java.sql.SQLException;
 
 public class authorizationTokenDAO {

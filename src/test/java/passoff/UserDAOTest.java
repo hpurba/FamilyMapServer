@@ -13,7 +13,8 @@ import java.sql.Connection;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class UserDAOTest {private Database db;
+public class UserDAOTest {
+    private Database db;
     private String userName;    // User name, Non-empty String
     private String password;    // User's password, Non-empty String
     private String email;       // User's email address, Non-empty String
@@ -61,8 +62,9 @@ public class UserDAOTest {private Database db;
 
         try {
             //Let's get our connection and make a new DAO
+
             Connection conn = db.openConnection();
-            UserDAO eDao = new UserDAO(conn);
+            UserDAO eDao = new UserDAO();
             //While insert returns a bool we can't use that to verify that our function actually worked
             //only that it ran without causing an error
             eDao.insert(bestUser);
@@ -92,7 +94,7 @@ public class UserDAOTest {private Database db;
         boolean didItWork = true;
         try {
             Connection conn = db.openConnection();
-            UserDAO eDao = new UserDAO(conn);
+            UserDAO eDao = new UserDAO();
             //if we call the method the first time it will insert it successfully
             eDao.insert(bestUser);
             //but our sql table is set up so that "eventID" must be unique. So trying to insert it
@@ -115,7 +117,7 @@ public class UserDAOTest {private Database db;
         User compareTest = bestUser;
         try {
             Connection conn = db.openConnection();
-            UserDAO eDao = new UserDAO(conn);
+            UserDAO eDao = new UserDAO();
             //and then get something back from our find. If the event is not in the database we
             //should have just changed our compareTest to a null object
             compareTest = eDao.find(bestUser.getPersonID());
@@ -135,7 +137,7 @@ public class UserDAOTest {private Database db;
 
         try {
             Connection conn = db.openConnection();
-            UserDAO eDao = new UserDAO(conn);
+            UserDAO eDao = new UserDAO();
             eDao.insert(mehUser);
             compareTest = eDao.find(mehUser.getUserName());
             db.closeConnection(true);
@@ -152,7 +154,7 @@ public class UserDAOTest {private Database db;
         User compareTest = null;
         try {
             Connection conn = db.openConnection();
-            UserDAO eDao = new UserDAO(conn);
+            UserDAO eDao = new UserDAO();
             eDao.insert(mehUser);
             compareTest = eDao.find(evilUser.getPersonID());
             db.closeConnection(true);
@@ -176,7 +178,7 @@ public class UserDAOTest {private Database db;
         try {
             //Let's get our connection and make a new DAO
             Connection conn = db.openConnection();
-            UserDAO eDao = new UserDAO(conn);
+            UserDAO eDao = new UserDAO();
             eDao.insert(mehUser);
             eDao.clear();
             //So lets use a find method to get the event that we just put in back out

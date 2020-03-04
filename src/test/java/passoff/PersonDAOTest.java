@@ -58,7 +58,7 @@ public class PersonDAOTest {
         try {
             //Let's get our connection and make a new DAO
             Connection conn = db.openConnection();
-            PersonDAO eDao = new PersonDAO(conn);
+            PersonDAO eDao = new PersonDAO();
             //While insert returns a bool we can't use that to verify that our function actually worked
             //only that it ran without causing an error
             eDao.insert(bestPerson);
@@ -88,7 +88,7 @@ public class PersonDAOTest {
         boolean didItWork = true;
         try {
             Connection conn = db.openConnection();
-            PersonDAO eDao = new PersonDAO(conn);
+            PersonDAO eDao = new PersonDAO();
             //if we call the method the first time it will insert it successfully
             eDao.insert(bestPerson);
             //but our sql table is set up so that "eventID" must be unique. So trying to insert it
@@ -111,7 +111,7 @@ public class PersonDAOTest {
         Person compareTest = bestPerson;
         try {
             Connection conn = db.openConnection();
-            PersonDAO eDao = new PersonDAO(conn);
+            PersonDAO eDao = new PersonDAO();
             //and then get something back from our find. If the event is not in the database we
             //should have just changed our compareTest to a null object
             compareTest = eDao.find(bestPerson.getPersonID());
@@ -133,7 +133,7 @@ public class PersonDAOTest {
 
         try {
             Connection conn = db.openConnection();
-            PersonDAO eDao = new PersonDAO(conn);
+            PersonDAO eDao = new PersonDAO();
             eDao.insert(okPerson);
             compareTest = eDao.find(okPerson.getPersonID());
             db.closeConnection(true);
@@ -150,7 +150,7 @@ public class PersonDAOTest {
         Person compareTest = null;
         try {
             Connection conn = db.openConnection();
-            PersonDAO eDao = new PersonDAO(conn);
+            PersonDAO eDao = new PersonDAO();
             eDao.insert(bestPerson);
             compareTest = eDao.find(worstPerson.getPersonID());
             db.closeConnection(true);
@@ -171,7 +171,7 @@ public class PersonDAOTest {
         try {
             //Let's get our connection and make a new DAO
             Connection conn = db.openConnection();
-            PersonDAO eDao = new PersonDAO(conn);
+            PersonDAO eDao = new PersonDAO();
             //While insert returns a bool we can't use that to verify that our function actually worked
             //only that it ran without causing an error
             eDao.clear();

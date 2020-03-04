@@ -1,6 +1,6 @@
 package service.services;
 
-import DAO.authorizationTokenDAO;
+import DAO.*;
 import com.google.gson.Gson;
 import model.AuthorizationToken;
 import model.Person;
@@ -19,49 +19,105 @@ import java.util.*;
  */
 public class Register {
 
+    public RegisterResponse execute(RegisterRequest request) throws SQLException, DataAccessException {
 
-    public RegisterResponse execute(RegisterRequest request) throws SQLException {
-        // Variables
         Gson gson = new Gson();                                         //  It can also be used to convert a JSON string to an equivalent Java object
-        // UserDAO user_dao = new UserDAO();                               // new user DAO, data access object (DAO) is a pattern that provides an abstract interface to some type of database or other persistence mechanism. By mapping application calls to the persistence layer, the DAO provides some specific data operations without exposing details of the database. This isolation supports the single responsibility principle.
-        authorizationTokenDAO token_dao = new authorizationTokenDAO();  // this may not be required
-        // PersonDAO person_dao = new PersonDAO();
+        authorizationTokenDAO token_dao = new authorizationTokenDAO();
         RegisterResponse response = new RegisterResponse();             // registering response object
+        // Database db = null;
+        UserDAO user_dao = new UserDAO();
+        PersonDAO person_dao = new PersonDAO();
 
+        // If the user already exists in the database, don't add
+        if (user_dao.existsUser(request.getUserName())) {
+            response.setMessage("Username already exists, please choose a different one.");
+            response.setSuccess(false);
+            return response;
+        } else {
+            // Generate unique AuthorizationToken and PersonID
+            String authorizationToken = UUID.randomUUID().toString();
+            String personID = UUID.randomUUID().toString();
 
-        // Grabs the username from the request object, then the user_dao will check if this user exists.
-//        if(user_dao.existsUser(request.getUserName())) {
-//            response.setMessage("Username already exists, please choose another.");
-//            return response;
-//        }
+            String requestJsonStr = gson.toJson(request);                  // conversion to Json
 
-        // USER DOESN'T EXIST (make one) --->>>
-        String personID = (String.valueOf(UUID.randomUUID().getLeastSignificantBits())).toString();
-        String authorizationToken = (String.valueOf(UUID.randomUUID().getLeastSignificantBits())).toString();
+            // USER
+            User user = gson.fromJson(requestJsonStr, User.class);
+            user.setPersonID(personID);
+            // PERSON
+            Person person = gson.fromJson(requestJsonStr, Person.class);   // grab the person
+            person.setPersonID(personID);
+            person.setAssociatedUserName(user.getUserName());
+            // AUTHORIZATION TOKEN
+            AuthorizationToken token = new AuthorizationToken(authorizationToken, user.getUserName());
 
-        //create USER and PERSON and AUTH TOKEN, add to database
-        String requestData = gson.toJson(request);                  // conversion to Json
-        User user = gson.fromJson(requestData, User.class);         // grab the user
-        Person person = gson.fromJson(requestData, Person.class);   // grab the person
+            // Insertion into database
+            user_dao.insert(user);
+            person_dao.insert(person);
+            token_dao.addAuthorizationToken(token);
 
-        // set the personID for both the user and the person
-        user.setPersonID(personID);
-        person.setPersonID(personID);
-
-        // makes an authorization token and adds it to: user_dao and token_dao
-        AuthorizationToken token = new AuthorizationToken(authorizationToken, user.getUserName());
-        // user_dao.insert(user);
-        token_dao.addAuthorizationToken(token);
-
-        //create 4 generations of person (0-4) and events for each
-
-
-        //create response
-        response.setUserName(user.getUserName());
-        response.setPersonID(personID);
-        response.setAuthorizationToken(authorizationToken);
+            //create response to the Register Request
+            response.setAuthorizationToken(authorizationToken);
+            response.setUserName(user.getUserName());
+            response.setPersonID(personID);
+            response.setSuccess(true);
+        }
 
         return response;
     }
 }
 
+
+        // Establish connection to database
+//        try {
+//            db = new Database();
+//            Connection conn = db.openConnection();          // Open connection to database
+//            UserDAO user_dao = new UserDAO(conn);           // Data Access Object: User
+//            PersonDAO person_dao = new PersonDAO(conn);
+//
+//
+//
+//            // User already exists, cannot register
+//            if(user_dao.existsUser(request.getUserName())) {
+//                response.setMessage("Username already exists, please choose a different one.");
+//                response.setSuccess(false);
+//                return response;
+//            }
+//
+//            // Generate random IDs
+//            String authorizationToken = UUID.randomUUID().toString();   // Was this: (String.valueOf(UUID.randomUUID().getLeastSignificantBits())).toString();
+//            String personID = UUID.randomUUID().toString();
+//
+//            // Convert the request to a json String
+//            String requestJsonStr = gson.toJson(request);                  // conversion to Json
+//
+//            // USER
+//            User user = gson.fromJson(requestJsonStr, User.class);
+//            user.setPersonID(personID);
+//            // PERSON
+//            Person person = gson.fromJson(requestJsonStr, Person.class);   // grab the person
+//            person.setPersonID(personID);
+//            person.setAssociatedUserName(user.getUserName());
+//            // AUTHORIZATION TOKEN
+//            AuthorizationToken token = new AuthorizationToken(authorizationToken, user.getUserName());
+//
+//            // Insertion into database
+//            user_dao.insert(user);
+//            person_dao.insert(person);
+//            token_dao.addAuthorizationToken(token);
+//
+//
+//            //create response
+//            response.setAuthorizationToken(authorizationToken);
+//            response.setUserName(user.getUserName());
+//            response.setPersonID(personID);
+//            response.setSuccess(true);
+//
+//
+//            System.out.println("Uh oh something went terribly wrong! Before");
+//            System.out.println("Uh oh something went terribly wrong! After");
+//
+//            db.closeConnection(true);   // this closes the connection
+//        } catch (DataAccessException e) {
+//            db.closeConnection(false);   // this closes the connection
+//            e.printStackTrace();
+//        }

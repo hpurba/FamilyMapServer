@@ -1,11 +1,11 @@
 package handler;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import service.response.*;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import service.services.Clear;
+import service.response.*;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -14,6 +14,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 
 public class ClearHandler implements HttpHandler {
+
     /**
      * This makes any object a Json String
      * @param input
@@ -26,7 +27,6 @@ public class ClearHandler implements HttpHandler {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         return gson.toJson(input);
     }
-
 
     /**
      * This takes the JsonString I generated from the response object of clearing AND the outputStream for which I will insert the json into. then close it
@@ -42,17 +42,22 @@ public class ClearHandler implements HttpHandler {
         bw.flush();     // sends the buffered writer
     }
 
-    // httpExchange holds onto the request and response object
+    /**
+     * Handles the httpExchange for clearing the database
+     * httpExchange holds onto the request and response object
+     * @param httpExchange
+     * @throws IOException
+     */
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
 
         boolean success = false;
-        Clear clearobj = new Clear();
+        Clear clearService = new Clear();
         ClearResponse responseObj = new ClearResponse();
         String JSONString = "";
 
         try {
-            responseObj = clearobj.execute(); // this will actually give me a clear response object which I will need to return later
+            responseObj = clearService.execute(); // this will actually give me a clear response object which I will need to return later
             JSONString = serialize(responseObj);
 
 

@@ -1,5 +1,6 @@
 package handler;
 
+import DAO.DataAccessException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
@@ -17,6 +18,12 @@ import java.sql.SQLException;
 
 public class RegisterHandler implements HttpHandler {
 
+    /**
+     * Converts a given object to a json String
+     * @param input
+     * @param <T>
+     * @return
+     */
     private static <T> String serialize(T input) {
         // JSON is a format for storing any kind of data in a tree structure
         // Gson is a tool google made to translate objects to/from json
@@ -24,7 +31,12 @@ public class RegisterHandler implements HttpHandler {
         return gson.toJson(input);
     }
 
-
+    /**
+     * Converts a InputStream to a String
+     * @param is
+     * @return
+     * @throws IOException
+     */
     private String readString(InputStream is) throws IOException {
         StringBuilder sb = new StringBuilder();
         InputStreamReader sr = new InputStreamReader(is);
@@ -50,67 +62,38 @@ public class RegisterHandler implements HttpHandler {
         bw.flush();     // sends the buffered writer
     }
 
+    /**
+     * Handles the httpExchange. Grabs the request body, uses it to register the user, then generates a response object to return to server.
+     * @param httpExchange
+     * @throws IOException
+     */
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
 
-        boolean success = false;
-//        RegisterRequest registerRequestObj = new RegisterRequest();
-        // RegisterResponse responseObj = new RegisterResponse();
-        String JSONString = "";
-
-
         try {
-            // Use httpExchange request body as parameters for creating a new user
-            // probably want to make the request body into a user
-            InputStream reqBody = httpExchange.getRequestBody();
-            // Read JSON string from the input stream
-            String reqData = readString(reqBody);
-
-            // Display/log the request JSON data
-            System.out.println(reqData);
-            Gson gson = new Gson();
-            RegisterRequest registerRequestObj = gson.fromJson(reqData, RegisterRequest.class);
-
+            boolean success = false;
             Register registerService = new Register();
             RegisterResponse registerResponseObj = new RegisterResponse();
+            String JsonString = "";
+            Gson gson = new Gson();
+
+            // From httpExchange, grab the inputStream request Body as an inputStream
+            InputStream requestBodyIS = httpExchange.getRequestBody();
+            String reqJsonStr = readString(requestBodyIS); // Convert InputStream to a Json
+            RegisterRequest registerRequestObj = gson.fromJson(reqJsonStr, RegisterRequest.class); // Json String to the request Object
+
             try{
                 registerResponseObj = registerService.execute(registerRequestObj);    // this will give back to me a response object
+            } catch (DataAccessException e) {
+                 e.printStackTrace();
             } catch (SQLException e) {
-                e.printStackTrace();
+                 e.printStackTrace();
             }
-
-
-//
-//            try{
-//                ObjectInputStream registerRequestIS = new ObjectInputStream(httpExchange.getRequestBody()); // grabs the httpExchange requestbody and turns it into an object input stream
-//                // RegisterRequest registerRequestObj = (RegisterRequest) registerRequestIS.readObject();
-////                 System.out.println("" + (String) registerRequestIS.readObject());
-//            }
-//            catch (Exception e){
-//                e.printStackTrace();
-//            }
-
-
-//             RegisterRequest request = gson.fromJson(reqData, RegisterRequest.class);
-
-            System.out.print("Hi maybe we are closer to getting the register working.");
-
-
-            // Execute a register request which will return a registerResponse object
-
-
-//            responseObj = registe.execute(); // this will actually give me a clear response object which I will need to return later
-//            JSONString = serialize(responseObj);
-//
-//            responseObj = clearobj.execute(); // this will actually give me a clear response object which I will need to return later
-//            JSONString = serialize(responseObj);
-
-
+            JsonString = serialize(registerResponseObj);    // object to Json String
             httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0); // this indicates the sending proceedure is about to start
             OutputStream responseBody = httpExchange.getResponseBody();
-            writeString(JSONString, responseBody);
-            // responseBody.flush();   // forces to send.   // this is not necessary
-            responseBody.close();   // indicates "I'm done"
+            writeString(JsonString, responseBody);
+            responseBody.close();   // indicates "I'm done", closes the connection
         }
         catch (IOException e) {
             httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_SERVER_ERROR, 0);
