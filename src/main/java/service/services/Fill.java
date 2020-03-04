@@ -1,6 +1,6 @@
 package service.services;
 
-import service.response.fillResponse;
+import service.response.FillResponse;
 import java.sql.SQLException;
 
 /**
@@ -17,11 +17,11 @@ import java.sql.SQLException;
  * Request Body: None
  * Errors: Invalid username or generations parameter, Internal server error
  */
-public class fill {
+public class Fill {
 
-    public fillResponse execute(String username, int generations) throws SQLException {
+    public FillResponse execute(String username, int generations) throws SQLException {
 
-        fillResponse response = new fillResponse();
+        FillResponse response = new FillResponse();
 
         // make sure user exists (to fill the information in)
 
