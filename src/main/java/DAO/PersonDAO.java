@@ -27,6 +27,7 @@ public class PersonDAO {
             stmt.setString(7, person.getMotherID());
             stmt.setString(8, person.getSpouseID());
             stmt.executeUpdate();
+//            db.closeConnection(true);
         } catch (SQLException e) {
             e.printStackTrace();
             db.closeConnection(false);
@@ -38,30 +39,6 @@ public class PersonDAO {
                 conn.close();
             } catch (Exception e) { /* ignored */ }
         }
-
-
-        //        try {
-//            Statement statement = conn.createStatement();
-//            String sql = "INSERT INTO PERSONS " +
-//                    "(PersonID, AssociatedUserName, FirstName, LastName, Gender, FatherID, MotherID, SpouseID) VALUES ('" +
-//                    person.getPersonID() + "', '" +
-//                    person.getAssociatedUserName() + "', '" +
-//                    person.getFirstName() + "', '" +
-//                    person.getLastName() + "', '" +
-//                    person.getGender() + "', '" +
-//                    person.getFatherID() + "', '" +
-//                    person.getMotherID() + "', '" +
-//                    person.getSpouseID() + "')";
-//            statement.executeUpdate(sql);
-//
-//            statement.close();
-//            conn.commit();
-//            conn.close();
-////            db.closeConnection(true);
-//        }
-//        catch (Exception e){
-//            e.printStackTrace();
-//        }
     }
 
     // RETRIEVE INFORMATION (FIND)
@@ -130,3 +107,30 @@ public class PersonDAO {
         return null;
     }
 }
+
+
+
+
+
+//        try {
+//            Statement statement = conn.createStatement();
+//            String sql = "INSERT INTO PERSONS " +
+//                    "(PersonID, AssociatedUserName, FirstName, LastName, Gender, FatherID, MotherID, SpouseID) VALUES ('" +
+//                    person.getPersonID() + "', '" +
+//                    person.getAssociatedUserName() + "', '" +
+//                    person.getFirstName() + "', '" +
+//                    person.getLastName() + "', '" +
+//                    person.getGender() + "', '" +
+//                    person.getFatherID() + "', '" +
+//                    person.getMotherID() + "', '" +
+//                    person.getSpouseID() + "')";
+//            statement.executeUpdate(sql);
+//
+//            statement.close();
+//            conn.commit();
+//            conn.close();
+////            db.closeConnection(true);
+//        }
+//        catch (Exception e){
+//            e.printStackTrace();
+//        }

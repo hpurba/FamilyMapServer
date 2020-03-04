@@ -10,23 +10,6 @@ public class UserDAO {
         Database db = new Database();
         Connection conn = db.openConnection();
 
-//        Statement statement = conn.createStatement();
-//        String sql = "INSERT INTO USERS " +
-//                "(UserName, Password, Email, FirstName, LastName, Gender, PersonID) VALUES ('" +
-//                user.getUserName() + "', '" +
-//                user.getPassword() + "', '" +
-//                user.getEmail() + "', '" +
-//                user.getFirstName() + "', '" +
-//                user.getLastName() + "', '" +
-//                user.getGender() + "', '" +
-//                user.getGender() + "')";
-//        statement.executeUpdate(sql);
-//
-//        statement.close();
-//        conn.close();
-//        db.closeConnection(true);
-
-
         //We can structure our string to be similar to a sql command, but if we insert question
         //marks we can change them later with help from the statement
         String sql = "INSERT INTO Users (UserName, Password, Email, FirstName, LastName, " +
@@ -157,3 +140,20 @@ public class UserDAO {
         return false;
     }
 }
+
+
+//        Statement statement = conn.createStatement();
+//        String sql = "INSERT INTO USERS " +
+//                "(UserName, Password, Email, FirstName, LastName, Gender, PersonID) VALUES ('" +
+//                user.getUserName() + "', '" +
+//                user.getPassword() + "', '" +
+//                user.getEmail() + "', '" +
+//                user.getFirstName() + "', '" +
+//                user.getLastName() + "', '" +
+//                user.getGender() + "', '" +
+//                user.getGender() + "')";
+//        statement.executeUpdate(sql);
+//
+//        statement.close();
+//        conn.close();
+//        db.closeConnection(true);
