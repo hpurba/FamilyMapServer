@@ -1,9 +1,6 @@
 package service.services;
 
-import DAO.Database;
-import DAO.PersonDAO;
-import DAO.UserDAO;
-import DAO.authorizationTokenDAO;
+import DAO.*;
 import model.User;
 import service.response.FillResponse;
 
@@ -27,12 +24,18 @@ import java.sql.SQLException;
 public class Fill {
 
     public FillResponse execute(String username, int generations) throws SQLException {
+        System.out.println("Entered the fill!");
 
         FillResponse response = new FillResponse();
+        boolean closingConnectionBool = false;
+
+        Database db = new Database();
+        Connection conn = null;
 
         try {
-            Database db = new Database();
-            Connection conn = db.openConnection();
+            conn = db.openConnection();
+            int numPeople = 0;
+            int numEvents = 0;
 
             UserDAO user_dao = new UserDAO();
             User user = user_dao.find(username);
@@ -50,13 +53,13 @@ public class Fill {
 
 
 
+
+
+                // Stuck this in here for now
+                response.setMessage("Successfully added " + numPeople + " persons and " + numEvents + " events to the database.");
+                response.setSuccess(true);
+                closingConnectionBool = true;
             }
-
-
-
-
-
-
 
 //            PersonDAO person_dao = new PersonDAO();
 //            authorizationTokenDAO token_dao = new authorizationTokenDAO();
@@ -64,15 +67,18 @@ public class Fill {
         }
         catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            try { conn.close(); } catch (SQLException e) { e.printStackTrace(); }
+            try { db.closeConnection(closingConnectionBool); } catch (DataAccessException e) { e.printStackTrace(); }
         }
+
+
 
         // get user data from username
 
         // delete data for specific user (if they already exist with info)
 
         // create 4 generations of family, or different based on number of generations
-
-        response.setMessage("Successfully");
         return response;
     }
 }
