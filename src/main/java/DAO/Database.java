@@ -65,7 +65,6 @@ public class Database {
 
     public void clearTables() throws DataAccessException
     {
-
         try (Statement stmt = conn.createStatement()){
             String sql = "DELETE FROM Events";
             stmt.executeUpdate(sql);

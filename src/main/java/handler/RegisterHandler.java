@@ -25,7 +25,6 @@ public class RegisterHandler extends HandlerGeneric implements HttpHandler {
     public void handle(HttpExchange httpExchange) throws IOException {
 
         try {
-
             Register registerService = new Register();
             RegisterResponse registerResponseObj = new RegisterResponse();
             String JsonString = "";
