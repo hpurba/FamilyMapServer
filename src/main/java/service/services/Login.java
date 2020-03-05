@@ -13,16 +13,18 @@ import service.response.LoginResponse;
 import java.sql.SQLException;
 import java.util.UUID;
 
-/**
- * URL Path: /user/login
- * Description: Logs in the user and returns an auth token.
- * HTTP Method: POST
- * Auth Token Required: No
- */
 public class Login {
 
+    /**
+     * Logs in the user and returns and Authtoken
+     * @param request
+     * @return
+     * @throws SQLException
+     * @throws DataAccessException
+     */
     public LoginResponse execute(LoginRequest request) throws SQLException, DataAccessException {
         LoginResponse response = new LoginResponse();
+
         try{
             Gson gson = new Gson();
             response = new LoginResponse();
@@ -31,9 +33,9 @@ public class Login {
             PersonDAO person_dao = new PersonDAO();
             authorizationTokenDAO token_dao = new authorizationTokenDAO();
 
-            User user = user_dao.find(request.getUserName());
+            User user = user_dao.find(request.getUserName());   // First grab the user
 
-            // If the password is also a match
+            // If the password is a match to the user, then continue the login
             if(user != null && user.getPassword().equals(request.getPassword())){
                 String authorizationToken = UUID.randomUUID().toString();
 
