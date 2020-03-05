@@ -1,63 +1,17 @@
 package handler;
 
-
 import java.io.*;
 import java.net.*;
 import java.sql.SQLException;
 
 import DAO.DataAccessException;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.*;
 import service.request.*;
 import service.response.LoginResponse;
 import service.services.Login;
 
-public class LoginHandler implements HttpHandler {
-
-    /**
-     * Converts a given object to a json String
-     * @param input
-     * @param <T>
-     * @return
-     */
-    private static <T> String serialize(T input) {
-        // JSON is a format for storing any kind of data in a tree structure
-        // Gson is a tool google made to translate objects to/from json
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return gson.toJson(input);
-    }
-
-    /**
-     * Converts a InputStream to a String
-     * @param is
-     * @return
-     * @throws IOException
-     */
-    private String readString(InputStream is) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        InputStreamReader sr = new InputStreamReader(is);
-        char[] buf = new char[1024];
-        int len;
-        while ((len = sr.read(buf)) > 0) {
-            sb.append(buf, 0, len);
-        }
-        return sb.toString();
-    }
-
-    /**
-     * This takes the JsonString I generated from the response object of clearing AND the outputStream for which I will insert the json into. then close it
-     * @param str
-     * @param os
-     * @throws IOException
-     */
-    private void writeString(String str, OutputStream os) throws IOException {
-        // writer vs stream, writer is better for strings and characters, stream is for bytes (like 1s and 0s)
-        OutputStreamWriter sw = new OutputStreamWriter(os);
-        BufferedWriter bw = new BufferedWriter(sw);
-        bw.write(str);  // This is where we put the jsonstring into the outputstream(but is really a buffered writer)
-        bw.flush();     // sends the buffered writer
-    }
+public class LoginHandler extends HandlerGeneric implements HttpHandler {
 
     /**
      * Handles the httpExchange. Grabs the request body, uses it to register the user, then generates a response object to return to server.

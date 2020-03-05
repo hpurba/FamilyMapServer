@@ -19,52 +19,7 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.sql.SQLException;
 
-public class FillHandler implements HttpHandler {
-
-    /**
-     * Converts a given object to a json String
-     * @param input
-     * @param <T>
-     * @return
-     */
-    private static <T> String serialize(T input) {
-        // JSON is a format for storing any kind of data in a tree structure
-        // Gson is a tool google made to translate objects to/from json
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return gson.toJson(input);
-    }
-
-    /**
-     * Converts a InputStream to a String
-     * @param is
-     * @return
-     * @throws IOException
-     */
-    private String readString(InputStream is) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        InputStreamReader sr = new InputStreamReader(is);
-        char[] buf = new char[1024];
-        int len;
-        while ((len = sr.read(buf)) > 0) {
-            sb.append(buf, 0, len);
-        }
-        return sb.toString();
-    }
-
-    /**
-     * This takes the JsonString I generated from the response object of clearing AND the outputStream for which I will insert the json into. then close it
-     * @param str
-     * @param os
-     * @throws IOException
-     */
-    private void writeString(String str, OutputStream os) throws IOException {
-        // writer vs stream, writer is better for strings and characters, stream is for bytes (like 1s and 0s)
-        OutputStreamWriter sw = new OutputStreamWriter(os);
-        BufferedWriter bw = new BufferedWriter(sw);
-        bw.write(str);  // This is where we put the jsonstring into the outputstream(but is really a buffered writer)
-        bw.flush();     // sends the buffered writer
-    }
-
+public class FillHandler extends HandlerGeneric implements HttpHandler {
     /**
      * Handles the httpExchange. Populates the server's database with generated data
      * for the specified userName.
@@ -76,52 +31,45 @@ public class FillHandler implements HttpHandler {
 
         System.out.print("Now inside the fill handler");
 
+        try {
+            String urlPathGiven = httpExchange.getRequestURI().toString();
+            String[] requestData = urlPathGiven.split("/");             // Splits up the url path into an Array of Strings
+            String userName;
+            String numGenerations;
 
-//        try {
-//            boolean success = false;
-//            Fill fillService = new Fill();
-//            FillResponse fillResponseObj = new FillResponse();
-//            String JsonString = "";
-//            Gson gson = new Gson();
-//            int generations;
-//
-//            URI uri = httpExchange.getRequestURI();
-//            String[] parts = uri.getPath().split("/");
-//            String userName = parts[2];
-//            if(parts.length == 3){
-//                generations = 4;
-//            }
-//            else {
-//                generations = Integer.parseInt(parts[3]);
-//            }
-//
-////            // From httpExchange, grab the inputStream request Body as an inputStream
-////            InputStream requestBodyIS = httpExchange.getRequestBody();
-////            String reqJsonStr = readString(requestBodyIS); // Convert InputStream to a Json
-////            FillRequest registerRequestObj = gson.fromJson(reqJsonStr, RegisterRequest.class); // Json String to the request Object
-//
-////            try{
-////                registerResponseObj = fillService.execute(registerRequestObj);    // this will give back to me a response object
-////            } catch (DataAccessException e) {
-////                e.printStackTrace();
-////            } catch (SQLException e) {
-////                e.printStackTrace();
-////            }
-//
-//
-//
-//            JsonString = serialize(fillResponseObj);    // object to Json String
-//            httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0); // this indicates the sending proceedure is about to start
-//            OutputStream responseBody = httpExchange.getResponseBody();
-//            writeString(JsonString, responseBody);
-//            responseBody.close();   // indicates "I'm done", closes the connection
-//        }
-//        catch (IOException e) {
-//            httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_SERVER_ERROR, 0);
-//            httpExchange.getResponseBody().close();
-//            e.printStackTrace();
-//        }
+            // Case where the number of generations is not specified, so the default of 4 is implemented
+            if(requestData.length == 3) {
+                userName = requestData[2];
+                numGenerations = "4";
+            }
+            else {
+                userName = requestData[2];
+                numGenerations = requestData[3];
+            }
 
+            Fill fillService = new Fill();
+            FillResponse fillResponseObj = new FillResponse();
 
+            // Attempt to fill using the fillService
+            try{
+                fillResponseObj = fillService.execute(userName, Integer.parseInt(numGenerations));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            String JsonString = "";
+            Gson gson = new Gson();
+
+            JsonString = serialize(fillResponseObj);                                       // Response Object to Json String
+            httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);     // Indicates the sending procedure is about to start
+            OutputStream responseBody = httpExchange.getResponseBody();                        //  Grabs the response body (OutputStream) from the httpExchange
+            writeString(JsonString, responseBody);                                             // Writes the Json into the response body / OutputStream
+            responseBody.close();                                                              // indicates "I'm done", closes the httpExchange
+        }
+        catch (IOException e) {
+            httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_SERVER_ERROR, 0);
+            httpExchange.getResponseBody().close();
+            e.printStackTrace();
+        }
     }
 }

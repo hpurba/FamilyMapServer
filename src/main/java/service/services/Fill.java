@@ -1,6 +1,13 @@
 package service.services;
 
+import DAO.Database;
+import DAO.PersonDAO;
+import DAO.UserDAO;
+import DAO.authorizationTokenDAO;
+import model.User;
 import service.response.FillResponse;
+
+import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
@@ -23,7 +30,41 @@ public class Fill {
 
         FillResponse response = new FillResponse();
 
-        // make sure user exists (to fill the information in)
+        try {
+            Database db = new Database();
+            Connection conn = db.openConnection();
+
+            UserDAO user_dao = new UserDAO();
+            User user = user_dao.find(username);
+
+            if(user == null) {
+                response.setMessage("Username incorrect.");
+                response.setSuccess(false);
+            }
+            else if (generations < 0) {
+                response.setMessage("generations must be 1 or more.");
+                response.setSuccess(false);
+            }
+            else {
+                // Username exists and the correct number of Generations is provided
+
+
+
+            }
+
+
+
+
+
+
+
+//            PersonDAO person_dao = new PersonDAO();
+//            authorizationTokenDAO token_dao = new authorizationTokenDAO();
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
 
         // get user data from username
 

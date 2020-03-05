@@ -61,6 +61,11 @@ public class Register {
                 person_dao.insert(person);
                 token_dao.addAuthorizationToken(token);
 
+
+                // 4 Generations
+                Fill fillService = new Fill();
+                fillService.execute(request.getUserName(), 4);
+
                 //create response to the Register Request
                 response.setAuthorizationToken(authorizationToken);
                 response.setUserName(user.getUserName());

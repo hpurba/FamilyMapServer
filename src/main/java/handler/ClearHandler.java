@@ -1,16 +1,12 @@
 package handler;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import service.services.Clear;
 import service.response.*;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 
 public class ClearHandler extends HandlerGeneric implements HttpHandler {
