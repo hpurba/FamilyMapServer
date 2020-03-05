@@ -21,15 +21,16 @@ public class Register {
 
     public RegisterResponse execute(RegisterRequest request) throws SQLException, DataAccessException {
         RegisterResponse response = new RegisterResponse();             // registering response object
+
         try{
             Gson gson = new Gson();                                         //  It can also be used to convert a JSON string to an equivalent Java object
-            authorizationTokenDAO token_dao = new authorizationTokenDAO();
             response = new RegisterResponse();
-            // Database db = null;
+            // DAOs
+            authorizationTokenDAO token_dao = new authorizationTokenDAO();
             UserDAO user_dao = new UserDAO();
             PersonDAO person_dao = new PersonDAO();
 
-            // If the user already exists in the database, don't add
+            // If the user already exists in the database, don't add. If the
             if (user_dao.existsUser(request.getUserName()) || person_dao.find(request.getUserName()) != null) {
                 response.setMessage("Username already exists, please choose a different one.");
                 response.setSuccess(false);

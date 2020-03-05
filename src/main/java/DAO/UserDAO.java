@@ -6,16 +6,20 @@ import java.sql.*;
 public class UserDAO {
 
     // INSERTION
+
+    /**
+     * INSERTION
+     * Inserts a user into the database
+     * @param user
+     * @throws DataAccessException
+     * @throws SQLException
+     */
     public void insert(User user) throws DataAccessException, SQLException {
         Database db = new Database();
         Connection conn = db.openConnection();
 
-        //We can structure our string to be similar to a sql command, but if we insert question
-        //marks we can change them later with help from the statement
         String sql = "INSERT INTO Users (UserName, Password, Email, FirstName, LastName, " +
                 "Gender, PersonID) VALUES(?,?,?,?,?,?,?)";
-
-
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             //Using the statements built-in set(type) functions we can pick the question mark we want
             //to fill in and give it a proper value. The first argument corresponds to the first
@@ -34,17 +38,27 @@ public class UserDAO {
             throw new DataAccessException("Error encountered while inserting into the database");
         }
         finally {
-            // try { conn.close(); } catch (Exception e) { /* ignored */ }
-            try {
-                conn.commit();
-                conn.close();
-//                db.closeConnection(true);
-            } catch (Exception e) { /* ignored */ }
+            db.closeConnection(true);
+//            try { conn.commit(); } catch (Exception e) { /* ignored */ }
+//            try { conn.close(); } catch (Exception e) {}
+            // OR
+//            try {
+//                conn.commit();
+//                conn.close();
+//            } catch (Exception e) { /* ignored */ }
         }
-//        db.closeConnection(true);
     }
 
     // RETRIEVE INFORMATION (FIND)
+
+    /**
+     * FIND
+     * Finds a user in the Users table. Compiles ResultSet from its findings.
+     * @param userName
+     * @return
+     * @throws DataAccessException
+     * @throws SQLException
+     */
     public User find(String userName) throws DataAccessException, SQLException {
         Database db = new Database();
         Connection conn = db.openConnection();
@@ -55,6 +69,7 @@ public class UserDAO {
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, userName);
             rs = stmt.executeQuery();
+
             if (rs.next()) {
                 user = new User(rs.getString("UserName"), rs.getString("Password"),
                         rs.getString("Email"), rs.getString("FirstName"), rs.getString("LastName"),
@@ -101,10 +116,14 @@ public class UserDAO {
         db.closeConnection(true);
     }
 
-    // delete a single user (current one) from the database
+    /**
+     * delete a single user (current one) from the database
+     * Code not yet written, this may not be needed.
+     * @param token
+     * @param userName
+     * @throws SQLException
+     */
     public void delete(String token, String userName) throws SQLException {
-
-
     }
 
     // check if a user exists by their userName

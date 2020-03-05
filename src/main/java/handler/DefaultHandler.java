@@ -19,19 +19,6 @@ import java.nio.file.Paths;
 import com.sun.net.httpserver.*;
 
 public class DefaultHandler implements HttpHandler {
-    /*
-    // Handles HTTP requests containing the "/games/list" URL path.
-    // The "exchange" parameter is an HttpExchange object, which is
-    // defined by Java.
-    // In this context, an "exchange" is an HTTP request/response pair
-    // (i.e., the client and server exchange a request and response).
-    // The HttpExchange object gives the handler access to all of the
-    // details of the HTTP request (Request type [GET or POST],
-    // request headers, request body, etc.).
-    // The HttpExchange object also gives the handler the ability
-    // to construct an HTTP response and send it back to the client
-    // (Status code, headers, response body, etc.).
-     */
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
