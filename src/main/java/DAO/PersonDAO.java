@@ -113,7 +113,7 @@ public class PersonDAO {
         Database db = new Database();
         Connection conn = db.openConnection();
 
-        String sql = "DELETE FROM Persons WHERE Username = ?;";
+        String sql = "DELETE FROM Persons WHERE AssociatedUserName = ?;";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, userName);

@@ -6,21 +6,14 @@ import model.User;
 import java.sql.*;
 
 public class EventDAO {
-    private final Connection conn;
-    public EventDAO(Connection conn)
-    {
-        this.conn = conn;
-    }
 
     public void insert(Event event) throws DataAccessException {
-        //We can structure our string to be similar to a sql command, but if we insert question
-        //marks we can change them later with help from the statement
+        Database db = new Database();
+        Connection conn = db.openConnection();
+
         String sql = "INSERT INTO Events (EventID, AssociatedUserName, PersonID, Latitude, Longitude, " +
                 "Country, City, EventType, Year) VALUES(?,?,?,?,?,?,?,?,?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            //Using the statements built-in set(type) functions we can pick the question mark we want
-            //to fill in and give it a proper value. The first argument corresponds to the first
-            //question mark found in our sql String
             stmt.setString(1, event.getEventID());
             stmt.setString(2, event.getUsername());
             stmt.setString(3, event.getPersonID());
@@ -33,11 +26,19 @@ public class EventDAO {
 
             stmt.executeUpdate();   // executes the sql statement
         } catch (SQLException e) {
-            throw new DataAccessException("Error encountered while inserting into the database");
+            e.printStackTrace();
+            db.closeConnection(false);
+            throw new DataAccessException("Error encountered while inserting event into the database");
+        }
+        finally {
+            db.closeConnection(true);
         }
     }
 
     public Event find(String eventID) throws DataAccessException {
+        Database db = new Database();
+        Connection conn = db.openConnection();
+
         Event event;
         ResultSet rs = null;
         String sql = "SELECT * FROM Events WHERE EventID = ?;";
@@ -51,34 +52,51 @@ public class EventDAO {
                         rs.getString("PersonID"), rs.getFloat("Latitude"), rs.getFloat("Longitude"),
                         rs.getString("Country"), rs.getString("City"), rs.getString("EventType"),
                         rs.getInt("Year"));
+                db.closeConnection(true);
                 return event;
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            db.closeConnection(false);
             throw new DataAccessException("Error encountered while finding event");
         } finally {
             if(rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+                try { db.closeConnection(false); } catch (Exception e) {}
             }
         }
         return null;
     }
-
     public void clear() throws DataAccessException {
+        Database db = new Database();
+        Connection conn = db.openConnection();
+
         try (Statement stmt = conn.createStatement()){
             String sql = "DELETE FROM Events";
             stmt.executeUpdate(sql);
         } catch (SQLException e) {
             throw new DataAccessException("SQL Error encountered while clearing tables");
         }
+        db.closeConnection(true);
     }
 
-    public Event[] getEvents(User username) throws DataAccessException {
-        return null;
+    public void deleteEventFamily(String userName) throws SQLException, DataAccessException {
+        Database db = new Database();
+        Connection conn = db.openConnection();
+
+        String sql = "DELETE FROM Events WHERE AssociatedUserName = ?;";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, userName);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            db.closeConnection(false);
+            throw new DataAccessException("SQL Error encountered while deleting events with AssociatedUserName");
+        }
+        db.closeConnection(true);
     }
 
+//    public Event[] getEvents(User username) throws DataAccessException {
+//        return null;
+//    }
 }
