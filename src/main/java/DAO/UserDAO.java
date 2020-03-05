@@ -4,9 +4,6 @@ import java.sql.*;
 
 
 public class UserDAO {
-
-    // INSERTION
-
     /**
      * INSERTION
      * Inserts a user into the database
@@ -35,21 +32,12 @@ public class UserDAO {
         } catch (SQLException e) {
             e.printStackTrace();
             db.closeConnection(false);
-            throw new DataAccessException("Error encountered while inserting into the database");
+            throw new DataAccessException("Error encountered while inserting user into the database");
         }
         finally {
             db.closeConnection(true);
-//            try { conn.commit(); } catch (Exception e) { /* ignored */ }
-//            try { conn.close(); } catch (Exception e) {}
-            // OR
-//            try {
-//                conn.commit();
-//                conn.close();
-//            } catch (Exception e) { /* ignored */ }
         }
     }
-
-    // RETRIEVE INFORMATION (FIND)
 
     /**
      * FIND
@@ -74,34 +62,28 @@ public class UserDAO {
                 user = new User(rs.getString("UserName"), rs.getString("Password"),
                         rs.getString("Email"), rs.getString("FirstName"), rs.getString("LastName"),
                         rs.getString("Gender"), rs.getString("PersonID"));
+                db.closeConnection(true);
                 return user;
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            //
-            conn.commit();
-            conn.close();
-            //
             db.closeConnection(false);
-            throw new DataAccessException("Error encountered while finding person");
+            throw new DataAccessException("Error encountered while finding username");
         } finally {
             if(rs != null) {
-                try {
-                    //
-                    conn.commit();
-                    conn.close();
-                    //
-                    rs.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+                try { db.closeConnection(false); } catch (Exception e) {}
             }
         }
-//        db.closeConnection(true);
         return null;
     }
 
-    // clear all users from the database
+    /**
+     * CLEAR
+     * Clears all users from the database
+     * @throws DataAccessException
+     * @throws SQLException
+     */
     public void clear() throws DataAccessException, SQLException {
         Database db = new Database();
         Connection conn = db.openConnection();
@@ -115,74 +97,4 @@ public class UserDAO {
         }
         db.closeConnection(true);
     }
-
-    /**
-     * delete a single user (current one) from the database
-     * Code not yet written, this may not be needed.
-     * @param token
-     * @param userName
-     * @throws SQLException
-     */
-    public void delete(String token, String userName) throws SQLException {
-    }
-
-    // check if a user exists by their userName
-    public boolean existsUser(String userName) throws SQLException, DataAccessException {
-        Database db = new Database();
-        Connection conn = db.openConnection();
-
-        User user;
-        ResultSet rs = null;
-        String sql = "SELECT * FROM Users WHERE UserName = ?;";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, userName);
-            rs = stmt.executeQuery();
-            if (rs.next()) {
-                conn.commit();
-                conn.close();
-                return true;
-            }
-        } catch (SQLException e) {
-            conn.commit();
-            conn.close();
-//            db.closeConnection(false);
-            e.printStackTrace();
-//            throw new DataAccessException("Error encountered while finding person");
-        } finally {
-            if(rs != null) {
-                try {
-//                    conn.commit();
-//                    conn.close();
-                    rs.close();
-                } catch (SQLException e) {
-//                    conn.commit();
-//                    conn.close();
-//                    db.closeConnection(false);
-                    e.printStackTrace();
-                }
-            }
-        }
-        conn.commit();
-        conn.close();
-//        db.closeConnection(true);
-
-        return false;
-    }
 }
-
-
-//        Statement statement = conn.createStatement();
-//        String sql = "INSERT INTO USERS " +
-//                "(UserName, Password, Email, FirstName, LastName, Gender, PersonID) VALUES ('" +
-//                user.getUserName() + "', '" +
-//                user.getPassword() + "', '" +
-//                user.getEmail() + "', '" +
-//                user.getFirstName() + "', '" +
-//                user.getLastName() + "', '" +
-//                user.getGender() + "', '" +
-//                user.getGender() + "')";
-//        statement.executeUpdate(sql);
-//
-//        statement.close();
-//        conn.close();
-//        db.closeConnection(true);

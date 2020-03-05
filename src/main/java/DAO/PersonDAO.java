@@ -4,10 +4,19 @@ import model.Person;
 import model.User;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class PersonDAO {
 
     // INSERTION
+
+    /**
+     * INSERTION
+     *  Inserts a person into the database
+     * @param person
+     * @throws DataAccessException
+     * @throws SQLException
+     */
     public void insert(Person person) throws DataAccessException, SQLException {
         Database db = new Database();
         Connection conn = db.openConnection();
@@ -15,9 +24,6 @@ public class PersonDAO {
         String sql = "INSERT INTO Persons (PersonID, AssociatedUserName, FirstName, LastName, " +
                 "Gender, FatherID, MotherID, SpouseID) VALUES (?,?,?,?,?,?,?,?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            //Using the statements built-in set(type) functions we can pick the question mark we want
-            //to fill in and give it a proper value. The first argument corresponds to the first
-            //question mark found in our sql String
             stmt.setString(1, person.getPersonID());
             stmt.setString(2, person.getAssociatedUserName());
             stmt.setString(3, person.getFirstName());
@@ -27,22 +33,25 @@ public class PersonDAO {
             stmt.setString(7, person.getMotherID());
             stmt.setString(8, person.getSpouseID());
             stmt.executeUpdate();
-//            db.closeConnection(true);
         } catch (SQLException e) {
             e.printStackTrace();
             db.closeConnection(false);
-            throw new DataAccessException("Error encountered while inserting into the database");
+            throw new DataAccessException("Error encountered while inserting person into the database");
         }
         finally {
-            try {
-                conn.commit();
-                conn.close();
-            } catch (Exception e) { /* ignored */ }
+            db.closeConnection(true);
         }
     }
 
-    // RETRIEVE INFORMATION (FIND)
-    public Person find(String userID) throws DataAccessException, SQLException {
+    /**
+     * FIND
+     * Finds a user in the Users table. Compiles ResultSet from its findings.
+     * @param personID
+     * @return
+     * @throws DataAccessException
+     * @throws SQLException
+     */
+    public Person find(String personID) throws DataAccessException, SQLException {
         Database db = new Database();
         Connection conn = db.openConnection();
 
@@ -50,35 +59,35 @@ public class PersonDAO {
         ResultSet rs = null;
         String sql = "SELECT * FROM Persons WHERE PersonID = ?;";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, userID);
+            stmt.setString(1, personID);
             rs = stmt.executeQuery();
             if (rs.next()) {
                 person = new Person(rs.getString("PersonID"), rs.getString("AssociatedUserName"),
                         rs.getString("FirstName"), rs.getString("LastName"), rs.getString("Gender"),
                         rs.getString("FatherID"), rs.getString("MotherID"), rs.getString("SpouseID"));
+                db.closeConnection(true);
                 return person;
             }
         } catch (SQLException e) {
-            db.closeConnection(false);
             e.printStackTrace();
+            db.closeConnection(false);
             throw new DataAccessException("Error encountered while finding person");
         } finally {
             if(rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    db.closeConnection(false);
-                    e.printStackTrace();
-                }
+                try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+                try { db.closeConnection(false); } catch (Exception e) {}
             }
         }
-        db.closeConnection(true);
-
         return null;
     }
 
-
-    // clear/delete all people from the database
+    /**
+     * CLEAR
+     * CLEAR
+     * Clears all persons from the database
+     * @throws DataAccessException
+     * @throws SQLException
+     */
     public void clear() throws DataAccessException, SQLException {
         Database db = new Database();
         Connection conn = db.openConnection();
@@ -93,44 +102,57 @@ public class PersonDAO {
         db.closeConnection(true);
     }
 
-    // delete a single person from the database
-    public void deletePerson(String personName) throws SQLException {
+    /**
+     * Delete a user in Persons table
+     * Uses the username to find instances of that person existing in the persons table to remove.
+     * @param userName
+     * @throws SQLException
+     * @throws DataAccessException
+     */
+    public void deletePersonFamily(String userName) throws SQLException, DataAccessException {
+        Database db = new Database();
+        Connection conn = db.openConnection();
 
+        String sql = "DELETE FROM Persons WHERE Username = ?;";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, userName);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            db.closeConnection(false);
+            throw new DataAccessException("SQL Error encountered while deleting person from persons tables where username came up");
+        }
+        db.closeConnection(true);
     }
 
-    // check if a person exists
-    public boolean existsPerson(String personName) throws SQLException {
-        return false;
-    }
+    public ArrayList<Person> getAllPersons(String username) throws DataAccessException {
+        Database db = new Database();
+        Connection conn = db.openConnection();
 
-    public Person[] getPersons(User username) throws DataAccessException {
+        ArrayList<Person> personArrayList = new ArrayList<>();
+        Person person;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM Persons WHERE PersonID = ?;";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                person = new Person(rs.getString("PersonID"), rs.getString("AssociatedUserName"),
+                        rs.getString("FirstName"), rs.getString("LastName"), rs.getString("Gender"),
+                        rs.getString("FatherID"), rs.getString("MotherID"), rs.getString("SpouseID"));
+                personArrayList.add(person);
+            }
+            db.closeConnection(true);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            db.closeConnection(false);
+            throw new DataAccessException("Error encountered while finding person");
+        } finally {
+            if(rs != null) {
+                try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+                try { db.closeConnection(false); } catch (Exception e) {}       // This might be a problem
+            }
+        }
         return null;
     }
 }
-
-
-
-
-
-//        try {
-//            Statement statement = conn.createStatement();
-//            String sql = "INSERT INTO PERSONS " +
-//                    "(PersonID, AssociatedUserName, FirstName, LastName, Gender, FatherID, MotherID, SpouseID) VALUES ('" +
-//                    person.getPersonID() + "', '" +
-//                    person.getAssociatedUserName() + "', '" +
-//                    person.getFirstName() + "', '" +
-//                    person.getLastName() + "', '" +
-//                    person.getGender() + "', '" +
-//                    person.getFatherID() + "', '" +
-//                    person.getMotherID() + "', '" +
-//                    person.getSpouseID() + "')";
-//            statement.executeUpdate(sql);
-//
-//            statement.close();
-//            conn.commit();
-//            conn.close();
-////            db.closeConnection(true);
-//        }
-//        catch (Exception e){
-//            e.printStackTrace();
-//        }

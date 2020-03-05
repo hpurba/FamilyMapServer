@@ -17,5 +17,5 @@ public class RegisterRequest {
 
     // Getter
     public String getUserName() { return userName; }
-
+    public String getGender() { return gender; }
 }
