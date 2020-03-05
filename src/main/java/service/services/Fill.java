@@ -61,6 +61,7 @@ public class Fill {
                 closingConnectionBool = true;
             }
 
+            try { db.closeConnection(closingConnectionBool); } catch (DataAccessException e) { e.printStackTrace(); }
 //            PersonDAO person_dao = new PersonDAO();
 //            authorizationTokenDAO token_dao = new authorizationTokenDAO();
 
@@ -69,7 +70,6 @@ public class Fill {
             e.printStackTrace();
         } finally {
             try { conn.close(); } catch (SQLException e) { e.printStackTrace(); }
-            try { db.closeConnection(closingConnectionBool); } catch (DataAccessException e) { e.printStackTrace(); }
         }
 
 
