@@ -40,8 +40,8 @@ public class FillService {
 
         try {
             conn = db.openConnection();
-            int numPeople = 0;
-            int numEvents = 0;
+//            int numPeople = 1;
+//            int numEvents = 1;
 
             UserDAO user_dao = new UserDAO();
             User user = user_dao.find(username);
@@ -77,12 +77,8 @@ public class FillService {
 
 
 
-
-                // Calculate the numPeople and numEvents
-                numPeople = numPeopleCalculation(generations);
-                numEvents = numEventsCalculation(generations);
-                // Stuck this in here for now
-                response.setMessage("Successfully added " + numPeople + " persons and " + numEvents + " events to the database.");
+                // finished response!
+                response.setMessage("Successfully added " + numPeopleCalculation(generations) + " persons and " + numEventsCalculation(generations) + " events to the database.");
                 response.setSuccess(true);
                 closingConnectionBool = true;
             }
@@ -103,7 +99,7 @@ public class FillService {
      * @return
      */
     private int numPeopleCalculation(int generations) {
-        int numPeople = 0;
+        int numPeople = 1;
         int index = 1;
         for (int i = 0; i < generations; i++) {
             index *= 2;

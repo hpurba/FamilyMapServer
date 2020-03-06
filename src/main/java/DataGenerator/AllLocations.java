@@ -5,11 +5,12 @@ import java.util.Random;
 
 public class AllLocations {
 
-    ArrayList<Location> locationArrayList = new ArrayList<>();
+    ArrayList<Location> data = new ArrayList<>();
 
     public Location getRandomLocation() {
-        Random randomGenerator = new Random();
-        int index = randomGenerator.nextInt(locationArrayList.size());
-        return locationArrayList.get(index);
+        Random random = new Random();
+        int numLocations = data.size();
+        int index = random.nextInt(data.size());
+        return data.get(index);
     }
 }

@@ -64,7 +64,7 @@ public class Generator {
 
     public Location generateLocation() throws IOException {
         Gson gson = new Gson();
-        String path =  genericPath + "Locations.json";
+        String path =  genericPath + "locations.json";
         String content = "";
         try
         {
