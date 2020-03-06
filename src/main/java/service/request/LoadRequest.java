@@ -4,7 +4,7 @@ import model.Event;
 import model.Person;
 import model.User;
 
-public class loadRequest {
+public class LoadRequest {
 
     private User[] usersArray;
     private Person[] personsArray;

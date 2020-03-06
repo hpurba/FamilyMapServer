@@ -6,7 +6,7 @@ package service.response;
 public class Response {
     boolean success;
 
-    public boolean isSuccess() {
+    public boolean isSuccess(boolean b) {
         return success;
     }
 
