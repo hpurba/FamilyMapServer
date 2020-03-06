@@ -1,6 +1,9 @@
 package service.services;
 
-import service.response.eventResponse;
+import DAO.DataAccessException;
+import DAO.EventDAO;
+import DAO.PersonDAO;
+import service.response.EventResponse;
 import java.sql.SQLException;
 
 /**
@@ -14,8 +17,17 @@ import java.sql.SQLException;
  */
 public class Event {
 
-    public eventResponse execute(String userName) throws SQLException {
-        eventResponse response = new eventResponse();
+    public EventResponse execute(String userName) throws SQLException {
+
+        EventResponse response = new EventResponse();
+
+        EventDAO event_dao = new EventDAO();
+        try {
+            response = event_dao.getEvents(userName);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
+
         return response;
     }
 }

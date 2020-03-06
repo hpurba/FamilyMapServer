@@ -26,7 +26,7 @@ public class Register {
             Gson gson = new Gson();                                         //  It can also be used to convert a JSON string to an equivalent Java object
             response = new RegisterResponse();
             // DAOs
-            authorizationTokenDAO token_dao = new authorizationTokenDAO();
+            AuthorizationTokenDAO token_dao = new AuthorizationTokenDAO();
             UserDAO user_dao = new UserDAO();
             PersonDAO person_dao = new PersonDAO();
 

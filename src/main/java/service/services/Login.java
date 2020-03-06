@@ -3,7 +3,7 @@ package service.services;
 import DAO.DataAccessException;
 import DAO.PersonDAO;
 import DAO.UserDAO;
-import DAO.authorizationTokenDAO;
+import DAO.AuthorizationTokenDAO;
 import com.google.gson.Gson;
 import model.AuthorizationToken;
 import model.User;
@@ -31,7 +31,7 @@ public class Login {
 
             UserDAO user_dao = new UserDAO();
             PersonDAO person_dao = new PersonDAO();
-            authorizationTokenDAO token_dao = new authorizationTokenDAO();
+            AuthorizationTokenDAO token_dao = new AuthorizationTokenDAO();
 
             User user = user_dao.find(request.getUserName());   // First grab the user
 

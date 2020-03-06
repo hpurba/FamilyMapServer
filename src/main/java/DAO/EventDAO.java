@@ -2,8 +2,10 @@ package DAO;
 
 import model.Event;
 import model.User;
+import service.response.EventResponse;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class EventDAO {
 
@@ -96,7 +98,49 @@ public class EventDAO {
         db.closeConnection(true);
     }
 
-//    public Event[] getEvents(User username) throws DataAccessException {
-//        return null;
-//    }
+    public EventResponse getEvents(String username) throws DataAccessException {
+        Database db = new Database();
+        Connection conn = db.openConnection();
+
+        Event event;
+        ArrayList<Event> eventsArrayList = new ArrayList<>();
+        ResultSet rs = null;
+        EventResponse eventResponse = new EventResponse();
+
+        String sql = "SELECT * FROM Events WHERE AssociatedUserName = ?;";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            rs = stmt.executeQuery();   // execute the query on the statement will return a list of all the rows that match
+
+            while (rs.next()) {
+                event = new Event(rs.getString("EventID"), rs.getString("AssociatedUserName"),
+                        rs.getString("PersonID"), rs.getFloat("Latitude"), rs.getFloat("Longitude"),
+                        rs.getString("Country"), rs.getString("City"), rs.getString("EventType"),
+                        rs.getInt("Year"));
+                eventsArrayList.add(event);
+            }
+//            eventResponse.setEvents(eventsArrayList);
+//            return eventResponse;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            db.closeConnection(false);
+            throw new DataAccessException("Error encountered while finding event");
+        } finally {
+            if(rs != null) {
+                try { rs.close(); } catch (SQLException e) { e.printStackTrace(); }
+                try { db.closeConnection(true); } catch (Exception e) {}
+            }
+        }
+
+        if(eventsArrayList.size() > 0) {
+            eventResponse.setEvents(eventsArrayList);
+            eventResponse.setSuccess(true);
+            return eventResponse;
+        }
+        else {
+            eventResponse.setMessage("No events associated with username");
+            eventResponse.setSuccess(false);
+        }
+        return eventResponse;
+    }
 }

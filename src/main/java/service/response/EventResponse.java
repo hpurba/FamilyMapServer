@@ -18,16 +18,14 @@ import java.util.ArrayList;
         * success:false // Boolean identifier
         *}
  */
-public class eventResponse extends Response {
+public class EventResponse extends Response {
 
-    private ArrayList<Event> eventsArrayList;
+    private ArrayList<Event> data;
     private String message;
 
     // Initialization
-    public eventResponse() {
-        eventsArrayList = new ArrayList<Event>();
-    }
+    public EventResponse() { }
 
-    public void setEvents(ArrayList<Event> eventsArrayList) { this.eventsArrayList = eventsArrayList; }
+    public void setEvents(ArrayList<Event> eventsArrayList) { this.data = eventsArrayList; }
     public void setMessage(String message) { this.message = message; }
 }
