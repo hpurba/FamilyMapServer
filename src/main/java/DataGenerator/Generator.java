@@ -15,8 +15,6 @@ public class Generator {
     public String generateFemaleName() throws IOException {
         Gson gson = new Gson();
         String path = genericPath + "fnames.json";
-//        NamingGeneric femaleNames = gson.fromJson(Files.readString(Paths.get(genericPath)), NamingGeneric.class);
-//        return femaleNames.pickRandomName();
         String content = "";
         try
         {
@@ -46,7 +44,7 @@ public class Generator {
         return maleNames.pickRandomName();
     }
 
-    public String generateSirName() throws IOException {
+    public String generateSurname() throws IOException {
         Gson gson = new Gson();
         String path =  genericPath + "snames.json";
         String content = "";

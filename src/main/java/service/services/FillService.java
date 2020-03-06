@@ -66,16 +66,16 @@ public class FillService {
                 EventDAO event_dao = new EventDAO();                    // new event DAO
                 Location location = generator.generateLocation();       // generate a location for everything
 
-//                Event birthEvent = generateBirthEvent(person, birthYear, location);
+                // BIRTH
+                Event birthEvent = generateBirthEvent(person, birthYear, location);
+                event_dao.insert(birthEvent);
 
-//                event_dao.insert(birthEvent);
-
-//                generateParents(person.getPersonID(), birthYear, 0, generations, person.getFatherID(), person.getMotherID());
-//                int numPeople = 1;
-
-
+                // Generate 2 more miscilaneous events
+                // DO IT HERE
 
 
+                int rootGeneration = 0;
+                generateParents(person, birthYear, rootGeneration, generations, person.getFatherID(), person.getMotherID());
 
                 // finished response!
                 response.setMessage("Successfully added " + numPeopleCalculation(generations) + " persons and " + numEventsCalculation(generations) + " events to the database.");
@@ -140,7 +140,6 @@ public class FillService {
         EventDAO event_dao = new EventDAO();
         event_dao.deleteEventFamily(username);  // Delete events with associated username
 
-
         // Add the user back to the Persons table
         person = new Person(user.getPersonID(), username, firstName, lastName, gender, null, null, null); // This is needed because a reset on the father,mother, and spouse ID is needed
 
@@ -163,13 +162,43 @@ public class FillService {
      * @param birthYear
      * @return
      */
-    private Event generateBirthEvent(Person person, Location location, int birthYear) {
+    private Event generateBirthEvent(Person person, int birthYear, Location location) {
         int year = birthYear;
         String eventID = UUID.randomUUID().toString();
         String eventType = "Birth";
         Event birthEvent = new Event(eventID, person.getAssociatedUsername(), person.getPersonID(), location.getLatitude(),
                 location.getLongitude(), location.getCountry(), location.getCity(), eventType, year);
         return birthEvent;
+    }
+
+    /**
+     * Generates the parents
+     * @param person
+     * @param birthYear
+     * @param currentGeneration
+     * @param totalGenerations
+     * @param fatherID
+     * @param motherID
+     * @throws IOException
+     * @throws DataAccessException
+     */
+    private void generateParents(Person person, int birthYear, int currentGeneration, int totalGenerations, String fatherID, String motherID) throws IOException, DataAccessException {
+
+        // set mother and father of person
+
+        // Make family tree
+
+        if (currentGeneration >= totalGenerations) {
+            return;
+        }
+
+
+
+
+
+        birthYear = birthYear - 20; // assume the age gap between parents and root child is 20 years
+
+
     }
 
     /**
@@ -215,7 +244,7 @@ public class FillService {
     private Person generateMalePerson(String username) throws IOException, DataAccessException {
         Generator generator = new Generator();
         String maleName = generator.generateMaleName();
-        String lastName = generator.generateSirName();
+        String lastName = generator.generateSurname();
         String personID = UUID.randomUUID().toString().substring(0 ,7);
         String gender = "m";
         Person malePerson = new Person(personID, username, maleName, lastName, gender, null, null, null);
@@ -232,34 +261,10 @@ public class FillService {
     private Person generateFemalePerson(String username) throws IOException, DataAccessException {
         Generator generator = new Generator();
         String femaleName = generator.generateFemaleName();
-        String lastName = generator.generateSirName();
+        String lastName = generator.generateSurname();
         String personID = UUID.randomUUID().toString().substring(0 ,7);
         String gender = "f";
         Person femalePerson = new Person(personID, username, femaleName, lastName, gender, null, null ,null);
         return femalePerson;
-    }
-
-
-    /**
-     * Generates the parents
-     * @param personM
-     * @param birthYear
-     * @param currentGeneration
-     * @param totalGenerations
-     * @param fatherID
-     * @param motherID
-     * @throws IOException
-     * @throws DataAccessException
-     */
-    private void generateParents(Person personM, int birthYear, int currentGeneration, int totalGenerations, String fatherID, String motherID) throws IOException, DataAccessException {
-
-
-        if (currentGeneration >= totalGenerations) {
-            return;
-        }
-
-        birthYear = birthYear - 20; // assume the age gap between parents and root child is 20 years
-
-
     }
 }
