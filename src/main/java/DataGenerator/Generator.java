@@ -17,28 +17,64 @@ public class Generator {
         String path = genericPath + "fnames.json";
 //        NamingGeneric femaleNames = gson.fromJson(Files.readString(Paths.get(genericPath)), NamingGeneric.class);
 //        return femaleNames.pickRandomName();
-        FemaleNames femaleNames = gson.fromJson(Files.readString(Paths.get(path)), FemaleNames.class);  // Gets the object from file path
+        String content = "";
+        try
+        {
+            content = new String ( Files.readAllBytes( Paths.get(path) ) );
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        FemaleNames femaleNames = gson.fromJson(content, FemaleNames.class);  // Gets the object from file path
         return femaleNames.pickRandomName();
     }
 
     public String generateMaleName() throws IOException {
         Gson gson = new Gson();
         String path =  genericPath + "mnames.json";
-        MaleNames maleNames = gson.fromJson(Files.readString(Paths.get(path)), MaleNames.class);
+        String content = "";
+        try
+        {
+            content = new String ( Files.readAllBytes( Paths.get(path) ) );
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        MaleNames maleNames = gson.fromJson(content, MaleNames.class);
         return maleNames.pickRandomName();
     }
 
     public String generateSirName() throws IOException {
         Gson gson = new Gson();
         String path =  genericPath + "snames.json";
-        Surnames sirNames = gson.fromJson(Files.readString(Paths.get(path)), Surnames.class);
+        String content = "";
+        try
+        {
+            content = new String ( Files.readAllBytes( Paths.get(path) ) );
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        Surnames sirNames = gson.fromJson(content, Surnames.class);
         return sirNames.pickRandomName();
     }
 
     public Location generateLocation() throws IOException {
         Gson gson = new Gson();
         String path =  genericPath + "Locations.json";
-        AllLocations allLocations = gson.fromJson(Files.readString(Paths.get(path)), AllLocations.class);
+        String content = "";
+        try
+        {
+            content = new String ( Files.readAllBytes( Paths.get(path) ) );
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        AllLocations allLocations = gson.fromJson(content, AllLocations.class);
         Location location = allLocations.getRandomLocation();
         return location;
     }

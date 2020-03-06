@@ -48,7 +48,7 @@ public class EventDAOTest {
         try {
             //Let's get our connection and make a new DAO
             Connection conn = db.openConnection();
-            EventDAO eDao = new EventDAO(conn);
+            EventDAO eDao = new EventDAO();
             //While insert returns a bool we can't use that to verify that our function actually worked
             //only that it ran without causing an error
             eDao.insert(bestEvent);
@@ -77,7 +77,7 @@ public class EventDAOTest {
         boolean didItWork = true;
         try {
             Connection conn = db.openConnection();
-            EventDAO eDao = new EventDAO(conn);
+            EventDAO eDao = new EventDAO();
             //if we call the method the first time it will insert it successfully
             eDao.insert(bestEvent);
             //but our sql table is set up so that "eventID" must be unique. So trying to insert it
@@ -100,7 +100,7 @@ public class EventDAOTest {
         Event compareTest = bestEvent;
         try {
             Connection conn = db.openConnection();
-            EventDAO eDao = new EventDAO(conn);
+            EventDAO eDao = new EventDAO();
             //and then get something back from our find. If the event is not in the database we
             //should have just changed our compareTest to a null object
             compareTest = eDao.find(bestEvent.getEventID());
@@ -125,7 +125,7 @@ public class EventDAOTest {
         try {
             //Let's get our connection and make a new DAO
             Connection conn = db.openConnection();
-            EventDAO eDao = new EventDAO(conn);
+            EventDAO eDao = new EventDAO();
             //While insert returns a bool we can't use that to verify that our function actually worked
             //only that it ran without causing an error
             eDao.clear();
