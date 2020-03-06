@@ -5,10 +5,10 @@ import DAO.EventDAO;
 import service.response.EventResponse;
 import java.sql.SQLException;
 
-public class Event {
+public class EventService {
 
     /**
-     * Exacutes a normal Event Response
+     * Executes a normal Event Response
      * This API will return ALL events for ALL family members of the current user.
      * The current user is determined from the provided authorization authToken
      * (which is required for this call). The returned JSON object contains "data"

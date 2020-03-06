@@ -1,5 +1,6 @@
 package service.response;
 
+import model.Event;
 import model.Person;
 import java.util.*;
 
@@ -17,17 +18,14 @@ import java.util.*;
         * success:false // Boolean identifier
         *}
  */
-public class personResponse extends Response {
+public class PersonResponse extends Response {
 
-    private ArrayList<Person> personsArrayList;
+    private ArrayList<Person> data;
     private String message;
 
-    // Initialize
-    public personResponse() {
-        personsArrayList = new ArrayList<Person>();
-    }
+    // Initialization
+    public PersonResponse() { }
 
-    // Setters
-    public void setPersonsArrayList(ArrayList<Person> personsArrayList) { this.personsArrayList = personsArrayList; }
+    public void setPersons(ArrayList<Person> personArrayList) { this.data = personArrayList; }
     public void setMessage(String message) { this.message = message; }
 }

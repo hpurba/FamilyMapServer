@@ -9,7 +9,7 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.*;
 import service.request.*;
 import service.response.LoginResponse;
-import service.services.Login;
+import service.services.LoginService;
 
 public class LoginHandler extends HandlerGeneric implements HttpHandler {
 
@@ -23,7 +23,7 @@ public class LoginHandler extends HandlerGeneric implements HttpHandler {
 
         try {
             boolean success = false;
-            Login loginService = new Login();
+            LoginService loginService = new LoginService();
             LoginResponse loginResponseObj = new LoginResponse();
             String JsonString = "";
             Gson gson = new Gson();

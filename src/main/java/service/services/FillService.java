@@ -27,7 +27,7 @@ import java.util.UUID;
  * Request Body: None
  * Errors: Invalid username or generations parameter, Internal server error
  */
-public class Fill {
+public class FillService {
 
     public FillResponse execute(String username, int generations) throws SQLException {
         System.out.println("Entered the fill!");

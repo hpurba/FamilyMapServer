@@ -18,7 +18,7 @@ import java.sql.SQLException;
  * Errors: Invalid auth token, Invalid eventID parameter, Requested event does not belong to this
  * user, Internal server error
  */
-public class EventID {
+public class EventIDService {
 
     /**
      * Executes a eventID query response

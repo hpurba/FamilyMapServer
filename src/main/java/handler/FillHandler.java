@@ -1,22 +1,13 @@
 package handler;
 
-import DAO.DataAccessException;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import request.FillRequest;
-import service.request.RegisterRequest;
-import service.response.ClearResponse;
 import service.response.FillResponse;
-import service.response.RegisterResponse;
-import service.services.Clear;
-import service.services.Fill;
-import service.services.Register;
+import service.services.FillService;
 
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.URI;
 import java.sql.SQLException;
 
 public class FillHandler extends HandlerGeneric implements HttpHandler {
@@ -47,7 +38,7 @@ public class FillHandler extends HandlerGeneric implements HttpHandler {
                 numGenerations = requestData[3];
             }
 
-            Fill fillService = new Fill();
+            FillService fillService = new FillService();
             FillResponse fillResponseObj = new FillResponse();
 
             // Attempt to fill using the fillService

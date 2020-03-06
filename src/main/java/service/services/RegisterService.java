@@ -17,7 +17,7 @@ import java.util.*;
  * HTTP Method: POST
  * Auth Token Required: No
  */
-public class Register {
+public class RegisterService {
 
     public RegisterResponse execute(RegisterRequest request) throws SQLException, DataAccessException {
         RegisterResponse response = new RegisterResponse();             // registering response object

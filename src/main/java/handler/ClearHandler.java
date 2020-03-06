@@ -2,7 +2,7 @@ package handler;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import service.services.Clear;
+import service.services.ClearService;
 import service.response.*;
 
 import java.io.IOException;
@@ -20,7 +20,7 @@ public class ClearHandler extends HandlerGeneric implements HttpHandler {
     public void handle(HttpExchange httpExchange) throws IOException {
 
         boolean success = false;
-        Clear clearService = new Clear();
+        ClearService clearService = new ClearService();
         ClearResponse responseObj = new ClearResponse();
         String JSONString = "";
 

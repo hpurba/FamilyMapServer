@@ -1,6 +1,9 @@
 package service.response;
 
 
+import model.Event;
+import model.Person;
+
 /**
  * Success Response Body:
  * {
@@ -21,19 +24,22 @@ package service.response;
  * success:false // Boolean identifier
  * }
  */
-public class personIDResponse  extends Response{
+public class PersonIDResponse extends Response{
+//    private String associatedUserName;
+//    private String personID;
+//    private String firstName;
+//    private String lastName;
+//    private String gender;
+//    private String fatherID;
+//    private String motherID;
+//    private String spouseID;
+//    private boolean success;
 
-    private String associatedUserName;
-    private String personID;
-    private String firstName;
-    private String lastName;
-    private String gender;
-    private String fatherID;
-    private String motherID;
-    private String spouseID;
-    private boolean success;
-
+    private Person person;
     private String message;
+
+    public void setPerson(Person person) { this.person = person; }
+    public Person getPerson() { return person; }
 
     public void setMessage(String message) { this.message = message; }
 }

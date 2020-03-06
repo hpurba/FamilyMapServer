@@ -13,7 +13,7 @@ import service.response.LoginResponse;
 import java.sql.SQLException;
 import java.util.UUID;
 
-public class Login {
+public class LoginService {
 
     /**
      * Logs in the user and returns and Authtoken

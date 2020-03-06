@@ -14,7 +14,7 @@ import service.response.ClearResponse;
  * Request Body: None
  * Errors: Internal server error
  */
-public class Clear {
+public class ClearService {
 
     // execute a clear on the db
     public ClearResponse execute() {

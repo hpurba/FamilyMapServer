@@ -12,7 +12,7 @@ import service.response.LoadResponse;
 
 import java.sql.SQLException;
 
-public class Load {
+public class LoadService {
 
     public LoadResponse execute(LoadRequest request) throws SQLException {
 

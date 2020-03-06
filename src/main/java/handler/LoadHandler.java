@@ -1,13 +1,12 @@
 package handler;
 
-import DAO.DataAccessException;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import service.request.LoadRequest;
 import service.response.LoadResponse;
-import service.services.Clear;
-import service.services.Load;
+import service.services.ClearService;
+import service.services.LoadService;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,7 +19,7 @@ public class LoadHandler extends HandlerGeneric implements HttpHandler {
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
         // Clear all existing data
-        Clear clearService = new Clear();
+        ClearService clearService = new ClearService();
         try {
             clearService.execute();
         } catch (Exception e) {
@@ -28,7 +27,7 @@ public class LoadHandler extends HandlerGeneric implements HttpHandler {
         }
 
         Gson gson = new Gson();
-        Load loadService = new Load();
+        LoadService loadService = new LoadService();
         LoadResponse loadResponseObj = new LoadResponse();
 
         InputStream requestBodyIS = httpExchange.getRequestBody();                              // Grabs requestBody from httpExchange, which is an InputStream

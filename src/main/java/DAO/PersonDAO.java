@@ -1,6 +1,9 @@
 package DAO;
 
+import model.Event;
 import model.Person;
+import service.response.EventResponse;
+import service.response.PersonResponse;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -124,14 +127,16 @@ public class PersonDAO {
         db.closeConnection(true);
     }
 
-    public ArrayList<Person> getAllPersons(String username) throws DataAccessException {
+    public PersonResponse getAllPersons(String username) throws DataAccessException {
         Database db = new Database();
         Connection conn = db.openConnection();
 
         ArrayList<Person> personArrayList = new ArrayList<>();
         Person person;
         ResultSet rs = null;
-        String sql = "SELECT * FROM Persons WHERE PersonID = ?;";
+        PersonResponse personResponse = new PersonResponse();
+
+        String sql = "SELECT * FROM Persons WHERE AssociatedUserName = ?;";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
             rs = stmt.executeQuery();
@@ -152,6 +157,16 @@ public class PersonDAO {
                 try { db.closeConnection(false); } catch (Exception e) {}       // This might be a problem
             }
         }
-        return null;
+
+        if(personArrayList.size() > 0) {
+            personResponse.setPersons(personArrayList);
+            personResponse.setSuccess(true);
+            return personResponse;
+        }
+        else {
+            personResponse.setMessage("No persons associated with username");
+            personResponse.setSuccess(false);
+        }
+        return personResponse;
     }
 }

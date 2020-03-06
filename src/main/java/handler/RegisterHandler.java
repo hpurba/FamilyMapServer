@@ -6,7 +6,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import service.request.RegisterRequest;
 import service.response.RegisterResponse;
-import service.services.Register;
+import service.services.RegisterService;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -25,7 +25,7 @@ public class RegisterHandler extends HandlerGeneric implements HttpHandler {
     public void handle(HttpExchange httpExchange) throws IOException {
 
         try {
-            Register registerService = new Register();
+            RegisterService registerService = new RegisterService();
             RegisterResponse registerResponseObj = new RegisterResponse();
             String JsonString = "";
             Gson gson = new Gson();
