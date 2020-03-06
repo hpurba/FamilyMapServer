@@ -5,8 +5,10 @@ import DAO.DataAccessException;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import service.response.EventIDResponse;
 import service.response.EventResponse;
 import service.services.Event;
+import service.services.EventID;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -29,7 +31,9 @@ public class EventHandler extends HandlerGeneric implements HttpHandler {
         try {
             AuthorizationTokenDAO auth_dao = new AuthorizationTokenDAO();
             Event eventService = new Event();
+            EventID eventIDService = new EventID();
             EventResponse eventResponseObj = new EventResponse();
+            EventIDResponse eventIDResponseObj = new EventIDResponse();
 
             // This API will return ALL events for ALL family members of the current user.
             // The current user is determined from the provided authorization authToken (which is required for this call).
@@ -51,26 +55,43 @@ public class EventHandler extends HandlerGeneric implements HttpHandler {
                 } catch (DataAccessException e) {
                     e.printStackTrace();
                 }
+
+                String JsonString = "";
+                Gson gson = new Gson();
+
+                JsonString = serialize(eventResponseObj);                                       // Response Object to Json String
+                httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);     // Indicates the sending procedure is about to start
+                OutputStream responseBody = httpExchange.getResponseBody();                        //  Grabs the response body (OutputStream) from the httpExchange
+                writeString(JsonString, responseBody);                                             // Writes the Json into the response body / OutputStream
+                responseBody.close();                                                              // indicates "I'm done", closes the httpExchange
             }
             // If url length is 3, it means eventID is provided
             else {
-                eventID = requestData[1];
+                eventID = requestData[2];
 
+                // grab username using the provided Auth Token
+                List<String> authToken = httpExchange.getRequestHeaders().get("Authorization");
+                String token = authToken.get(0);    // System.out.print(authToken.get(0));
+                String username;
 
+                try {
+                    username = auth_dao.getUserName(token);
+                    eventIDResponseObj = eventIDService.execute(username, eventID);  //  Attempt to fill using the fillService
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } catch (DataAccessException e) {
+                    e.printStackTrace();
+                }
 
+                String JsonString = "";
+                Gson gson = new Gson();
 
-                // getThis API will return the single event with the specified ID.
-                // The event must belong to a relative of the user associated with the authorization authToken. The returned JSON contains the requested event object. Authorization authToken is required.
+                JsonString = serialize(eventIDResponseObj);                                       // Response Object to Json String
+                httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);     // Indicates the sending procedure is about to start
+                OutputStream responseBody = httpExchange.getResponseBody();                        //  Grabs the response body (OutputStream) from the httpExchange
+                writeString(JsonString, responseBody);                                             // Writes the Json into the response body / OutputStream
+                responseBody.close();                                                              // indicates "I'm done", closes the httpExchange
             }
-
-            String JsonString = "";
-            Gson gson = new Gson();
-
-            JsonString = serialize(eventResponseObj);                                       // Response Object to Json String
-            httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);     // Indicates the sending procedure is about to start
-            OutputStream responseBody = httpExchange.getResponseBody();                        //  Grabs the response body (OutputStream) from the httpExchange
-            writeString(JsonString, responseBody);                                             // Writes the Json into the response body / OutputStream
-            responseBody.close();                                                              // indicates "I'm done", closes the httpExchange
         } catch (IOException e) {
             httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_SERVER_ERROR, 0);
             httpExchange.getResponseBody().close();
