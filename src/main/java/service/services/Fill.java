@@ -171,7 +171,7 @@ public class Fill {
         int year = birthYear;
         String eventID = UUID.randomUUID().toString();
         String eventType = "Birth";
-        Event birthEvent = new Event(eventID, person.getAssociatedUserName(), person.getPersonID(), location.getLatitude(),
+        Event birthEvent = new Event(eventID, person.getAssociatedUsername(), person.getPersonID(), location.getLatitude(),
                 location.getLongitude(), location.getCountry(), location.getCity(), eventType, year);
         return birthEvent;
     }
@@ -187,7 +187,7 @@ public class Fill {
         int year = deathYear;
         String eventID = UUID.randomUUID().toString();
         String eventType = "Death";
-        Event deathEvent = new Event(eventID, person.getAssociatedUserName(), person.getPersonID(), location.getLatitude(),
+        Event deathEvent = new Event(eventID, person.getAssociatedUsername(), person.getPersonID(), location.getLatitude(),
                 location.getLongitude(), location.getCountry(), location.getCity(), eventType, year);
         return deathEvent;
     }
@@ -203,7 +203,7 @@ public class Fill {
         int year = marriageYear;
         String eventID = UUID.randomUUID().toString();
         String eventType = "Marriage";
-        Event marriageEvent = new Event(eventID, person.getAssociatedUserName(), person.getPersonID(), location.getLatitude(),
+        Event marriageEvent = new Event(eventID, person.getAssociatedUsername(), person.getPersonID(), location.getLatitude(),
                 location.getLongitude(), location.getCountry(), location.getCity(), eventType, year);
         return marriageEvent;
 

@@ -1,7 +1,6 @@
 package DAO;
 
 import model.Person;
-import model.User;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ public class PersonDAO {
                 "Gender, FatherID, MotherID, SpouseID) VALUES (?,?,?,?,?,?,?,?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, person.getPersonID());
-            stmt.setString(2, person.getAssociatedUserName());
+            stmt.setString(2, person.getAssociatedUsername());
             stmt.setString(3, person.getFirstName());
             stmt.setString(4, person.getLastName());
             stmt.setString(5, person.getGender());

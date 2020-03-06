@@ -44,7 +44,7 @@ public class Login {
                 token_dao.addAuthorizationToken(token);
 
                 // Generate the response
-                response.setAuthorizationToken(authorizationToken);
+                response.setAuthToken(authorizationToken);
                 response.setUserName(user.getUserName());
                 response.setPersonID(user.getPersonID());
                 response.setSuccess(true);

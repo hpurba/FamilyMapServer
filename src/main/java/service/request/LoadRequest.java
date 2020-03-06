@@ -6,12 +6,12 @@ import model.User;
 
 public class LoadRequest {
 
-    private User[] usersArray;
-    private Person[] personsArray;
-    private Event[] eventsArray;
+    private User[] users;
+    private Person[] persons;
+    private Event[] events;
 
     // Getters
-    public User[] getUsersArray() { return usersArray; }
-    public Person[] getPersonsArray() { return personsArray; }
-    public Event[] getEventsArray() { return eventsArray; }
+    public User[] getUsersArray() { return users; }
+    public Person[] getPersonsArray() { return persons; }
+    public Event[] getEventsArray() { return events; }
 }

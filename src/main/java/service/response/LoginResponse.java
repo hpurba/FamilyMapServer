@@ -17,13 +17,13 @@ package service.response;
  */
 public class LoginResponse extends Response {
 
-    private String authorizationToken;  // non-empty authorization token string
+    private String authToken;  // non-empty authorization token string
     private String userName;            // user name passed in with request
     private String personID;            // non-empty string containing the Person ID of the user’s generated Person object
     private String message;             // message to be returned
 
     // Setters
-    public void setAuthorizationToken(String authorizationToken) { this.authorizationToken = authorizationToken; }
+    public void setAuthToken(String authToken) { this.authToken = authToken; }
     public void setUserName(String userName) { this.userName = userName; }
     public void setPersonID(String personID) { this.personID = personID; }
 

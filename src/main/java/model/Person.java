@@ -2,7 +2,7 @@ package model;
 
 public class Person {
     private String personID;            // Unique identifier for this person (non-empty string)
-    private String associatedUserName;  // User (UserName) to which this person belongs
+    private String associatedUsername;  // User (UserName) to which this person belongs
     private String firstName;           // model.Person’s first name (non-empty string)
     private String lastName;            // model.Person’s last name (non-empty string)
     private String gender;              // model.Person’s gender (string: f or m)
@@ -10,10 +10,10 @@ public class Person {
     private String motherID;            // model.Person ID of person’s mother (possibly null)
     private String spouseID;            // model.Person ID of person’s spouse (possibly null)
 
-    public Person(String personID, String associatedUserName, String firstName, String lastName,
+    public Person(String personID, String associatedUsername, String firstName, String lastName,
                   String gender, String fatherID, String motherID, String spouseID) {
         this.personID = personID;
-        this.associatedUserName = associatedUserName;
+        this.associatedUsername = associatedUsername;
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
@@ -32,10 +32,10 @@ public class Person {
     public String getPersonID(){ return personID; }
 
     // associatedUserName
-    public void setAssociatedUserName(String associatedUserName) {
-        this.associatedUserName = associatedUserName;
+    public void setAssociatedUsername(String associatedUsername) {
+        this.associatedUsername = associatedUsername;
     }
-    public String getAssociatedUserName() { return associatedUserName; }
+    public String getAssociatedUsername() { return associatedUsername; }
 
     // firstName
     public void setFirstName(String firstName) {
@@ -86,7 +86,7 @@ public class Person {
         if (o instanceof Person) {
             Person oPerson = (Person) o;
             return oPerson.getPersonID().equals(getPersonID()) &&
-                    oPerson.getAssociatedUserName().equals(getAssociatedUserName()) &&
+                    oPerson.getAssociatedUsername().equals(getAssociatedUsername()) &&
                     oPerson.getFirstName().equals(getFirstName()) &&
                     oPerson.getLastName().equals(getLastName()) &&
                     oPerson.getGender().equals(getGender()) &&

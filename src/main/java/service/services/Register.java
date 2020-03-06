@@ -52,7 +52,7 @@ public class Register {
                 // PERSON
                 Person person = gson.fromJson(requestJsonStr, Person.class);   // grab the person
                 person.setPersonID(personID);
-                person.setAssociatedUserName(user.getUserName());
+                person.setAssociatedUsername(user.getUserName());
                 // AUTHORIZATION TOKEN
                 AuthorizationToken token = new AuthorizationToken(authorizationToken, user.getUserName());
 
