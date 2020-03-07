@@ -47,12 +47,12 @@ public class LoginService {
                 response.setAuthToken(authorizationToken);
                 response.setUserName(user.getUserName());
                 response.setPersonID(user.getPersonID());
-                response.setSuccess("true");
+                response.setMessage("true");
                 return response;
             }
             else{
                 response.setMessage("Wrong Username or Password");
-                response.setSuccess("false");
+                response.setMessage("false");
                 return response;
             }
         }

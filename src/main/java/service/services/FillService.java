@@ -48,11 +48,11 @@ public class FillService {
 
             if(user == null) {
                 response.setMessage("Username incorrect.");
-                response.setSuccess("false");
+                response.setMessage("false");
             }
             else if (generations < 0) {
                 response.setMessage("generations must be 1 or more.");
-                response.setSuccess("false");
+                response.setMessage("false");
             }
             else {
                 // If there is any data in the database associated with the given user name, it is erased.
@@ -79,7 +79,7 @@ public class FillService {
 
                 // finished response!
                 response.setMessage("Successfully added " + numPeopleCalculation(generations) + " persons and " + numEventsCalculation(generations) + " events to the database.");
-                response.setSuccess("true");
+                response.setMessage("true");
                 closingConnectionBool = true;
             }
 
@@ -184,8 +184,10 @@ public class FillService {
         // Sets mother and father of person
         Person mother = generateFemalePerson(person.getAssociatedUsername());
         mother.setMotherID(motherID);
+        person.setMotherID(motherID);
         Person father = generateMalePerson(person.getAssociatedUsername());
         father.setFatherID(fatherID);
+        person.setFatherID(fatherID);
 
         Generator generator = new Generator();
         Location location1 = generator.generateLocation();

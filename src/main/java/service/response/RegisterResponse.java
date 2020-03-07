@@ -22,7 +22,7 @@ public class RegisterResponse extends Response {
     private String authToken;
     private String userName;
     private String personID;
-    private String message; // message to be returned
+    private String message;
 
     // Setters
     public void setAuthToken(String authToken) { this.authToken = authToken; }

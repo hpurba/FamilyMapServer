@@ -1,8 +1,6 @@
 package DAO;
 
-import model.Event;
 import model.Person;
-import service.response.EventResponse;
 import service.response.PersonResponse;
 
 import java.sql.*;
@@ -160,12 +158,12 @@ public class PersonDAO {
 
         if(personArrayList.size() > 0) {
             personResponse.setPersons(personArrayList);
-            personResponse.setSuccess("true");
+            personResponse.setMessage("true");
             return personResponse;
         }
         else {
             personResponse.setMessage("No persons associated with username");
-            personResponse.setSuccess("false");
+            personResponse.setMessage("false");
         }
         return personResponse;
     }

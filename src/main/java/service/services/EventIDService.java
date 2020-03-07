@@ -3,7 +3,6 @@ package service.services;
 
 import DAO.DataAccessException;
 import DAO.EventDAO;
-import model.Event;
 import service.response.EventIDResponse;
 
 import java.sql.SQLException;
@@ -36,7 +35,7 @@ public class EventIDService {
 
         if (userName == null) {
             response.setMessage("Incorrect authorization token.");
-            response.setSuccess("false");
+            response.setMessage("false");
             return response;
         }
 
@@ -48,16 +47,16 @@ public class EventIDService {
             if(event != null) {
                 if (userName.equals(event.getUsername())) {
                     response.setEvent(event);
-                    response.setSuccess("true");
+                    response.setMessage("true");
                 }
                 else {
                     response.setMessage("event ID does not match provided authorization token.");
-                    response.setSuccess("false");
+                    response.setMessage("false");
                 }
             }
             else {
                 response.setMessage("Invalid event ID is not valid.");
-                response.setSuccess("false");
+                response.setMessage("false");
             }
         } catch (DataAccessException e) {
             e.printStackTrace();

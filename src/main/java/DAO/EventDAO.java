@@ -1,7 +1,6 @@
 package DAO;
 
 import model.Event;
-import model.User;
 import service.response.EventResponse;
 
 import java.sql.*;
@@ -134,12 +133,12 @@ public class EventDAO {
 
         if(eventsArrayList.size() > 0) {
             eventResponse.setEvents(eventsArrayList);
-            eventResponse.setSuccess("true");
+            eventResponse.setMessage("true");
             return eventResponse;
         }
         else {
             eventResponse.setMessage("No events associated with username");
-            eventResponse.setSuccess("false");
+            eventResponse.setMessage("false");
         }
         return eventResponse;
     }

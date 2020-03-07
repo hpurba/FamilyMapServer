@@ -31,6 +31,7 @@ public class ClearService {
             db.closeConnection(true);
         } catch (DataAccessException e) {
             response.setMessage("Error clearing");
+            response.setSuccess("false");
             try {
                 db.closeConnection(false);
             } catch (DataAccessException ex) {
