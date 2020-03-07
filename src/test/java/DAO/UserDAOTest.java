@@ -1,4 +1,4 @@
-package passoff;
+package DAO;
 
 import DAO.DataAccessException;
 import DAO.Database;

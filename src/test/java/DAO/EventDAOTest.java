@@ -1,9 +1,9 @@
-package passoff;
+package DAO;
 
 import DAO.DataAccessException;
 import DAO.Database;
-import DAO.PersonDAO;
-import model.Person;
+import DAO.EventDAO;
+import model.Event;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,11 +12,10 @@ import java.sql.Connection;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class PersonServiceDAOTest {
+//We will use this to test that our insert method is working and failing in the right ways
+public class EventDAOTest {
     private Database db;
-    private Person bestPerson;
-    private Person worstPerson;
-    private Person okPerson;
+    private Event bestEvent;
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -24,16 +23,9 @@ public class PersonServiceDAOTest {
         //lets create a new database
         db = new Database();
         //and a new event with random data
-        bestPerson = new Person("Person_123A", "hpurba", "Hikaru",
-                "Purba", "m", "father_1A", "mother_1A",
-                "spouse_1A");
-
-        worstPerson = new Person("Person_321", "bob", "Bobby",
-                "Dummy", "m", "father_2Z", "mother",
-                "spouse_2X");
-        okPerson = new Person("Person_320", "bob", "Bobby",
-                "Dummy", "m", "father_2Z", "mother",
-                "spouse_2X");
+        bestEvent = new Event("Biking_123A", "Gale", "Gale123A",
+                10.3f, 10.3f, "Japan", "Ushiku",
+                "Biking_Around", 2016);
     }
 
     @AfterEach
@@ -45,29 +37,26 @@ public class PersonServiceDAOTest {
         db.closeConnection(true);
     }
 
-
-    // INSERT -----------------------------------------------------------------------------------------------------------------
-
+    // does insert and does find, this can be copied for a find pass, find fail will be different from insert fail.
     @Test
     public void insertPass() throws Exception {
         //We want to make sure insert works
         //First lets create an Event that we'll set to null. We'll use this to make sure what we put
         //in the database is actually there.
-        Person compareTest = null;
+        Event compareTest = null;
 
         try {
             //Let's get our connection and make a new DAO
             Connection conn = db.openConnection();
-            PersonDAO eDao = new PersonDAO();
+            EventDAO eDao = new EventDAO();
             //While insert returns a bool we can't use that to verify that our function actually worked
             //only that it ran without causing an error
-            eDao.insert(bestPerson);
+            eDao.insert(bestEvent);
             //So lets use a find method to get the event that we just put in back out
-            compareTest = eDao.find(bestPerson.getPersonID());
+            compareTest = eDao.find(bestEvent.getEventID());
             db.closeConnection(true);
         } catch (DataAccessException e) {
             db.closeConnection(false);
-//             fail();
         }
         //First lets see if our find found anything at all. If it did then we know that if nothing
         //else something was put into our database, since we cleared it in the beginning
@@ -75,7 +64,7 @@ public class PersonServiceDAOTest {
         //Now lets make sure that what we put in is exactly the same as what we got out. If this
         //passes then we know that our insert did put something in, and that it didn't change the
         //data in any way
-        assertEquals(bestPerson, compareTest);
+        assertEquals(bestEvent, compareTest);
     }
 
     @Test
@@ -88,12 +77,12 @@ public class PersonServiceDAOTest {
         boolean didItWork = true;
         try {
             Connection conn = db.openConnection();
-            PersonDAO eDao = new PersonDAO();
+            EventDAO eDao = new EventDAO();
             //if we call the method the first time it will insert it successfully
-            eDao.insert(bestPerson);
+            eDao.insert(bestEvent);
             //but our sql table is set up so that "eventID" must be unique. So trying to insert it
             //again will cause the method to throw an exception
-            eDao.insert(bestPerson);
+            eDao.insert(bestEvent);
             db.closeConnection(true);
         } catch (DataAccessException e) {
             //If we catch an exception we will end up in here, where we can change our boolean to
@@ -108,75 +97,40 @@ public class PersonServiceDAOTest {
         //rolled back. So for added security lets make one more quick check using our find function
         //to make sure that our event is not in the database
         //Set our compareTest to an actual event
-        Person compareTest = bestPerson;
+        Event compareTest = bestEvent;
         try {
             Connection conn = db.openConnection();
-            PersonDAO eDao = new PersonDAO();
+            EventDAO eDao = new EventDAO();
             //and then get something back from our find. If the event is not in the database we
             //should have just changed our compareTest to a null object
-            compareTest = eDao.find(bestPerson.getPersonID());
+            compareTest = eDao.find(bestEvent.getEventID());
             db.closeConnection(true);
         } catch (DataAccessException e) {
             db.closeConnection(false);
-            didItWork = false;
         }
 
         //Now make sure that compareTest is indeed null
         assertNull(compareTest);
     }
 
-    // RETRIEVE ------------------------------------------------------------------------------------------------------
 
-    @Test
-    public void retrievePass() throws Exception {
-        Person compareTest = null;
-
-        try {
-            Connection conn = db.openConnection();
-            PersonDAO eDao = new PersonDAO();
-            eDao.insert(okPerson);
-            compareTest = eDao.find(okPerson.getPersonID());
-            db.closeConnection(true);
-        } catch (DataAccessException e) {
-            db.closeConnection(false);
-//             fail();
-        }
-        assertNotNull(compareTest);
-        assertEquals(okPerson, compareTest);
-    }
-
-    @Test
-    public void retrieveFail() throws Exception {
-        Person compareTest = null;
-        try {
-            Connection conn = db.openConnection();
-            PersonDAO eDao = new PersonDAO();
-            eDao.insert(bestPerson);
-            compareTest = eDao.find(worstPerson.getPersonID());
-            db.closeConnection(true);
-        } catch (DataAccessException e) {
-            db.closeConnection(false);
-        }
-
-        assertNull(compareTest);
-    }
-
-
-
-    // CLEAR ------------------------------------------------------------------------------------------------------
 
     @Test
     public void clearPass() throws Exception {
-        Person compareTest = null;
+        //We want to make sure insert works
+        //First lets create an Event that we'll set to null. We'll use this to make sure what we put
+        //in the database is actually there.
+        Event compareTest = null;
+
         try {
             //Let's get our connection and make a new DAO
             Connection conn = db.openConnection();
-            PersonDAO eDao = new PersonDAO();
+            EventDAO eDao = new EventDAO();
             //While insert returns a bool we can't use that to verify that our function actually worked
             //only that it ran without causing an error
             eDao.clear();
             //So lets use a find method to get the event that we just put in back out
-            compareTest = eDao.find(bestPerson.getPersonID());
+            compareTest = eDao.find(bestEvent.getEventID());
             db.closeConnection(true);
         } catch (DataAccessException e) {
             db.closeConnection(false);

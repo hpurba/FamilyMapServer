@@ -1,5 +1,5 @@
 package service.services;
 
 // write test functions (services and daos)
-public class ClearTest {
+public class ClearServiceTest {
 }

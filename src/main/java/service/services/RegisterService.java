@@ -63,11 +63,11 @@ public class RegisterService {
 
 
                 // 4 Generations
-//                Fill fillService = new Fill();
-//                fillService.execute(request.getUserName(), 4);
+                FillService fillService = new FillService();
+                fillService.execute(request.getUserName(), 4);
 
                 //create response to the Register Request
-                response.setAuthorizationToken(authorizationToken);
+                response.setAuthToken(authorizationToken);
                 response.setUserName(user.getUserName());
                 response.setPersonID(personID);
                 response.setSuccess(true);
