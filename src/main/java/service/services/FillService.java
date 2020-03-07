@@ -99,12 +99,7 @@ public class FillService {
      * @return
      */
     private int numPeopleCalculation(int generations) {
-        int numPeople = 1;
-        int index = 1;
-        for (int i = 0; i < generations; i++) {
-            index *= 2;
-            numPeople += index;
-        }
+        int numPeople = (int)(Math.pow(2, generations + 1) - 1);
         return numPeople;
     }
 
@@ -114,12 +109,9 @@ public class FillService {
      * @return
      */
     private int numEventsCalculation(int generations) {
-        int numEvents = 1;
-        int index = 1;
-        for (int i = 1; i < generations; i++) {
-            index *= 6;
-            numEvents += index;
-        }
+
+        int numPeople = (int)(Math.pow(2, generations + 1) - 1);
+        int numEvents = (numPeople * 3) - 2;
         return numEvents;
     }
 
