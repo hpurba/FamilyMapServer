@@ -183,22 +183,69 @@ public class FillService {
      * @throws DataAccessException
      */
     private void generateParents(Person person, int birthYear, int currentGeneration, int totalGenerations, String fatherID, String motherID) throws IOException, DataAccessException {
-
-        // set mother and father of person
-
-        // Make family tree
-
         if (currentGeneration >= totalGenerations) {
             return;
         }
 
+        birthYear = birthYear - 25;
 
+        // Sets mother and father of person
+        Person mother = generateFemalePerson(person.getAssociatedUsername());
+        mother.setMotherID(motherID);
+        Person father = generateMalePerson(person.getAssociatedUsername());
+        father.setFatherID(fatherID);
 
+        Generator generator = new Generator();
+        Location location1 = generator.generateLocation();
+        Location location2 = generator.generateLocation();
+        Event birthOfMother = generateBirthEvent(mother, birthYear, location1);
+        Event birthOfFather = generateBirthEvent(father, birthYear - 2, location2);
 
+        int marriageYear = birthYear + 23;
+        Location locationMarriage = generator.generateLocation();
+        Event marriageMother = generateMarriage(mother, locationMarriage, marriageYear);
+        Event marriageFather = generateMarriage(father, locationMarriage, marriageYear);
 
-        birthYear = birthYear - 20; // assume the age gap between parents and root child is 20 years
+        int deathYear1 = birthYear + 35;
+        int deathYear2 = birthYear + 42;
+        Location deathLocation = generator.generateLocation();
+        Event deathOfMother = generateDeathEvent(mother, deathLocation, deathYear1);
+        Event deathOfFather = generateDeathEvent(father, deathLocation, deathYear2);
 
+        mother.setSpouseID(fatherID);
+        father.setSpouseID(motherID);
 
+        String fatherOfFather = UUID.randomUUID().toString();
+        String motherOfFather = UUID.randomUUID().toString();
+        String fatherOfMother = UUID.randomUUID().toString();
+        String motherOfMother = UUID.randomUUID().toString();
+
+        if (currentGeneration <= totalGenerations - 2) {
+            father.setFatherID(fatherOfFather);
+            father.setMotherID(motherOfFather);
+            mother.setFatherID(fatherOfMother);
+            mother.setMotherID(motherOfMother);
+        }
+
+        PersonDAO person_dao = new PersonDAO();
+        EventDAO event_dao = new EventDAO();
+        try {
+            person_dao.insert(father);
+            person_dao.insert(mother);
+
+            event_dao.insert(birthOfMother);
+            event_dao.insert(birthOfFather);
+            event_dao.insert(marriageMother);
+            event_dao.insert(marriageFather);
+            event_dao.insert(deathOfMother);
+            event_dao.insert(deathOfFather);
+            currentGeneration++;
+
+            generateParents(mother, birthYear, currentGeneration, totalGenerations, fatherOfMother, motherOfMother);
+            generateParents(father, birthYear, currentGeneration, totalGenerations, fatherOfFather, motherOfFather);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
