@@ -33,11 +33,11 @@ public class RegisterService {
             // If the user already exists in the database, don't add. If the
             if ((user_dao.find(request.getUserName()) != null) || (person_dao.find(request.getUserName()) != null)) {
                 response.setMessage("Username already exists, please choose a different one.");
-                response.setSuccess(false);
+                response.setSuccess("false");
             }
             else if (!request.getGender().equals("f") && !request.getGender().equals("m")) {
                 response.setMessage("Gender must be either f or m.");
-                response.setSuccess(false);
+                response.setSuccess("false");
             }
             else {
                 // Generate unique AuthorizationToken and PersonID
@@ -70,7 +70,7 @@ public class RegisterService {
                 response.setAuthToken(authorizationToken);
                 response.setUserName(user.getUserName());
                 response.setPersonID(personID);
-                response.setSuccess(true);
+                response.setSuccess("true");
             }
             return response;
         }

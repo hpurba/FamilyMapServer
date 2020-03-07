@@ -52,7 +52,7 @@ public class LoadService {
 
         LoadResponse loadResponse = new LoadResponse();
         loadResponse.setMessage("Successfully added " + usersArray.length + " users, " + personsArray.length + " persons, and " + eventsArray.length + " events to the database.");
-        loadResponse.isSuccess(true);
+        loadResponse.isSuccess("true");
         return loadResponse;
     }
 }

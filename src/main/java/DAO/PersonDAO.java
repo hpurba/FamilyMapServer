@@ -160,12 +160,12 @@ public class PersonDAO {
 
         if(personArrayList.size() > 0) {
             personResponse.setPersons(personArrayList);
-            personResponse.setSuccess(true);
+            personResponse.setSuccess("true");
             return personResponse;
         }
         else {
             personResponse.setMessage("No persons associated with username");
-            personResponse.setSuccess(false);
+            personResponse.setSuccess("false");
         }
         return personResponse;
     }
