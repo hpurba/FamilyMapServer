@@ -60,6 +60,7 @@ public class PersonHandler extends HandlerGeneric implements HttpHandler {
                 String JsonString = "";
                 Gson gson = new Gson();
 
+                
                 JsonString = serialize(personResponseObj);                                       // Response Object to Json String
                 httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);     // Indicates the sending procedure is about to start
                 OutputStream responseBody = httpExchange.getResponseBody();                        //  Grabs the response body (OutputStream) from the httpExchange
