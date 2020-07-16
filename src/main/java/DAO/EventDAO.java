@@ -28,7 +28,7 @@ public class EventDAO {
             stmt.executeUpdate();   // executes the sql statement
         } catch (SQLException e) {
             e.printStackTrace();
-            db.closeConnection(false);
+//            db.closeConnection(false);
             throw new DataAccessException("Error encountered while inserting event into the database");
         }
         finally {

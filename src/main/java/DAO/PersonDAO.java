@@ -35,7 +35,6 @@ public class PersonDAO {
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            db.closeConnection(false);
             throw new DataAccessException("Error encountered while inserting person into the database");
         }
         finally {

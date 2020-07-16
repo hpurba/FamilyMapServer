@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -86,51 +87,22 @@ public class UserDAOTest {
 
     @Test
     public void insertFail() throws Exception {
-        //lets do this test again but this time lets try to make it fail
+        boolean workedSuccessfully = true;
 
-        // NOTE: The correct way to test for an exception in Junit 5 is to use an assertThrows
-        // with a lambda function. However, lambda functions are beyond the scope of this class
-        // so we are doing it another way.
-        boolean didItWork = true;
         try {
-            Connection conn = db.openConnection();
             UserDAO eDao = new UserDAO();
-            //if we call the method the first time it will insert it successfully
             eDao.insert(bestUser);
-            //but our sql table is set up so that "eventID" must be unique. So trying to insert it
-            //again will cause the method to throw an exception
             eDao.insert(bestUser);
-            db.closeConnection(true);
         } catch (DataAccessException e) {
-            //If we catch an exception we will end up in here, where we can change our boolean to
-            //false to show that our function failed to perform correctly
-            db.closeConnection(false);
-            didItWork = false;
+            workedSuccessfully = false;
         }
-        //Check to make sure that we did in fact enter our catch statement
-        assertFalse(didItWork);
-
-        //Since we know our database encountered an error, both instances of insert should have been
-        //rolled back. So for added security lets make one more quick check using our find function
-        //to make sure that our event is not in the database
-        //Set our compareTest to an actual event
-        User compareTest = bestUser;
-        try {
-            Connection conn = db.openConnection();
-            UserDAO eDao = new UserDAO();
-            //and then get something back from our find. If the event is not in the database we
-            //should have just changed our compareTest to a null object
-            compareTest = eDao.find(bestUser.getPersonID());
-            db.closeConnection(true);
-        } catch (DataAccessException e) {
-            db.closeConnection(false);
-        }
-        //Now make sure that compareTest is indeed null
-        assertNull(compareTest);
+        assertFalse(workedSuccessfully);
     }
 
-    // RETRIEVE ------------------------------------------------------------------------------------------------------
 
+
+
+    // RETRIEVE ------------------------------------------------------------------------------------------------------
     @Test
     public void retrievePass() throws Exception {
         User compareTest = null;

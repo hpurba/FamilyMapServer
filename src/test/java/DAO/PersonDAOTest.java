@@ -80,49 +80,18 @@ public class PersonDAOTest {
 
     @Test
     public void insertFail() throws Exception {
-        //lets do this test again but this time lets try to make it fail
-
-        // NOTE: The correct way to test for an exception in Junit 5 is to use an assertThrows
-        // with a lambda function. However, lambda functions are beyond the scope of this class
-        // so we are doing it another way.
-        boolean didItWork = true;
+        boolean workedSuccessfully = true;
         try {
-            Connection conn = db.openConnection();
             PersonDAO eDao = new PersonDAO();
-            //if we call the method the first time it will insert it successfully
             eDao.insert(bestPerson);
-            //but our sql table is set up so that "eventID" must be unique. So trying to insert it
-            //again will cause the method to throw an exception
             eDao.insert(bestPerson);
-            db.closeConnection(true);
         } catch (DataAccessException e) {
-            //If we catch an exception we will end up in here, where we can change our boolean to
-            //false to show that our function failed to perform correctly
-            db.closeConnection(false);
-            didItWork = false;
+            workedSuccessfully = false;
         }
         //Check to make sure that we did in fact enter our catch statement
-        assertFalse(didItWork);
+        assertFalse(workedSuccessfully);
 
-        //Since we know our database encountered an error, both instances of insert should have been
-        //rolled back. So for added security lets make one more quick check using our find function
-        //to make sure that our event is not in the database
-        //Set our compareTest to an actual event
-        Person compareTest = bestPerson;
-        try {
-            Connection conn = db.openConnection();
-            PersonDAO eDao = new PersonDAO();
-            //and then get something back from our find. If the event is not in the database we
-            //should have just changed our compareTest to a null object
-            compareTest = eDao.find(bestPerson.getPersonID());
-            db.closeConnection(true);
-        } catch (DataAccessException e) {
-            db.closeConnection(false);
-            didItWork = false;
-        }
 
-        //Now make sure that compareTest is indeed null
-        assertNull(compareTest);
     }
 
     // RETRIEVE ------------------------------------------------------------------------------------------------------

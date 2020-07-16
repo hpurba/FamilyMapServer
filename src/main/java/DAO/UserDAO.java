@@ -31,7 +31,6 @@ public class UserDAO {
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            db.closeConnection(false);
             throw new DataAccessException("Error encountered while inserting user into the database");
         }
         finally {
