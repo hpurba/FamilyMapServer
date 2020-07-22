@@ -41,16 +41,17 @@ public class LoginService {
             User userM = userDAO.find(request.getUserName());
 
             if (userM == null) {
-                response.setAuthToken("null");
-                response.setPersonID("null");
+                response.setAuthToken(null);
+                response.setPersonID(null);
+                response.setUserName(null);
                 response.setMessage("error : Username does not exist.");
-//                response.setMessage(null);
                 response.setSuccess("false");
                 return response;
             }
             else if (!(userM.getPassword().equals(request.getPassword()))) {
-                response.setAuthToken("null");
-                response.setPersonID("null");
+                response.setAuthToken(null);
+                response.setPersonID(null);
+                response.setUserName(null);
                 response.setMessage("error : Password does not match.");
                 response.setSuccess("false");
                 return response;

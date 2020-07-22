@@ -42,23 +42,28 @@ public class LoginHandler extends HandlerGeneric implements HttpHandler {
                     System.out.println("Login Failed");
                     httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
                     OutputStream responseBody = httpExchange.getResponseBody();
+                    // Write the JSON string to the output stream.
+                    String respData = gson.toJson(loginResponseObj);    // login response object, turns it into json string
+                    writeString(respData, responseBody);    // write to outputstream "responseBody"
                     responseBody.close();
-                    httpExchange.getResponseBody().close();
+//                    httpExchange.getResponseBody().close();
                 }
 
             } catch (DataAccessException e) {
                 System.out.println("Login Failed");
                 httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
                 OutputStream responseBody = httpExchange.getResponseBody();
+                String respData = gson.toJson(loginResponseObj);    // login response object, turns it into json string
+                writeString(respData, responseBody);    // write to outputstream "responseBody"
                 responseBody.close();
-                httpExchange.getResponseBody().close();
                 e.printStackTrace();
             } catch (SQLException e) {
                 System.out.println("Login Failed");
                 httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
                 OutputStream responseBody = httpExchange.getResponseBody();
+                String respData = gson.toJson(loginResponseObj);    // login response object, turns it into json string
+                writeString(respData, responseBody);    // write to outputstream "responseBody"
                 responseBody.close();
-                httpExchange.getResponseBody().close();
                 e.printStackTrace();
             }
 
