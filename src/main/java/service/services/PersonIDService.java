@@ -26,7 +26,7 @@ public class PersonIDService {
 
         if (userName == null) {
             response.setMessage("Incorrect authorization token.");
-            response.setMessage("false");
+            response.setSuccess("false");
             return response;
         }
 
@@ -38,21 +38,22 @@ public class PersonIDService {
             if(person != null) {
                 if (userName.equals(person.getAssociatedUsername())) {
                     response.setPerson(person);
-                    response.setMessage("true");
+                    response.setSuccess("true");
+                    response.setMessage("success");
+                    return response;
                 }
                 else {
-                    response.setMessage("person ID does not match provided authorization token.");
-                    response.setMessage("false");
+                    response.setMessage("error person ID does not match provided authorization token.");
+                    response.setSuccess("false");
                 }
             }
             else {
-                response.setMessage("Invalid person ID is not valid.");
-                response.setMessage("false");
+                response.setMessage("error  Invalid person ID is not valid.");
+                response.setSuccess("false");
             }
         } catch (DataAccessException e) {
             e.printStackTrace();
         }
-
         return response;
     }
 }

@@ -114,11 +114,20 @@ public class PersonHandler extends HandlerGeneric implements HttpHandler {
                     e.printStackTrace();
                 }
 
-                JsonString = serialize(personIDResponseObj);                                       // Response Object to Json String
-                httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);     // Indicates the sending procedure is about to start
-                OutputStream responseBody = httpExchange.getResponseBody();                        //  Grabs the response body (OutputStream) from the httpExchange
-                writeString(JsonString, responseBody);                                             // Writes the Json into the response body / OutputStream
-                responseBody.close();                                                              // indicates "I'm done", closes the httpExchange
+                if (personIDResponseObj.getSuccess() == "true") {
+                    JsonString = serialize(personIDResponseObj);                                       // Response Object to Json String
+                    httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);     // Indicates the sending procedure is about to start
+                    OutputStream responseBody = httpExchange.getResponseBody();                        //  Grabs the response body (OutputStream) from the httpExchange
+                    writeString(JsonString, responseBody);                                             // Writes the Json into the response body / OutputStream
+                    responseBody.close();                                                              // indicates "I'm done", closes the httpExchange
+                }
+                else {
+                    JsonString = serialize(personResponseObj);
+                    httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+                    OutputStream responseBody = httpExchange.getResponseBody();
+                    writeString(JsonString, responseBody);
+                    responseBody.close();
+                }
             }
         } catch (IOException e) {
             JsonString = serialize(personResponseObj);
