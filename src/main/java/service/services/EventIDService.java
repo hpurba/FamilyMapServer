@@ -34,7 +34,7 @@ public class EventIDService {
         EventIDResponse response = new EventIDResponse();
 
         if (userName == null) {
-            response.setMessage("Incorrect authorization token.");
+            response.setMessage("error Incorrect authorization token.");
             response.setMessage("false");
             return response;
         }
@@ -60,12 +60,12 @@ public class EventIDService {
                     response.setSuccess("true");
                 }
                 else {
-                    response.setMessage("event ID does not match provided authorization token.");
+                    response.setMessage("error event ID does not match provided authorization token.");
                     response.setSuccess("false");
                 }
             }
             else {
-                response.setMessage("Invalid event ID is not valid.");
+                response.setMessage("error Invalid event ID is not valid.");
                 response.setSuccess("false");
             }
         } catch (DataAccessException e) {

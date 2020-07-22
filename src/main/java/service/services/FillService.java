@@ -45,12 +45,12 @@ public class FillService {
             User user = user_dao.find(username);
 
             if(user == null) {
-                response.setMessage("Username incorrect.");
-                response.setMessage("false");
+                response.setMessage("error Username incorrect.");
+                response.setSuccess("false");
             }
             else if (generations < 0) {
-                response.setMessage("generations must be 1 or more.");
-                response.setMessage("false");
+                response.setMessage("error generations must be 1 or more.");
+                response.setSuccess("false");
             }
             else {
                 eraseAssociatedDataToGivenUser(user, username); // If there is any data in the database associated with the given user name, it is erased.

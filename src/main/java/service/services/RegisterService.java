@@ -32,11 +32,11 @@ public class RegisterService {
 
             // If the user already exists in the database, don't add. If the
             if ((user_dao.find(request.getUserName()) != null) || (person_dao.find(request.getUserName()) != null)) {
-                response.setMessage("Username already exists, please choose a different one.");
+                response.setMessage("error Username already exists, please choose a different one.");
                 response.setSuccess("false");
             }
             else if (!request.getGender().equals("f") && !request.getGender().equals("m")) {
-                response.setMessage("Gender must be either f or m.");
+                response.setMessage("error Gender must be either f or m.");
                 response.setSuccess("false");
             }
             else {
