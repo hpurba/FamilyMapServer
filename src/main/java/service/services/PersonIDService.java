@@ -37,7 +37,17 @@ public class PersonIDService {
 
             if(person != null) {
                 if (userName.equals(person.getAssociatedUsername())) {
-                    response.setPerson(person);
+
+                    // put the setting in here
+                    response.setPersonID(personID);
+                    response.setAssociatedUsername(person.getAssociatedUsername());
+                    response.setFirstName(person.getFirstName());
+                    response.setLastName(person.getLastName());
+                    response.setGender(person.getGender());
+                    response.setFatherID(person.getFatherID());
+                    response.setMotherID(person.getMotherID());
+                    response.setSpouse(person.getSpouseID());
+
                     response.setSuccess("true");
                     response.setMessage("success");
                     return response;

@@ -46,17 +46,27 @@ public class EventIDService {
 
             if(event != null) {
                 if (userName.equals(event.getUsername())) {
-                    response.setEvent(event);
-                    response.setMessage("true");
+                    response.setEventID(event.getEventID());
+                    response.setAssociatedUserName(event.getUsername());
+                    response.setPersonID(event.getPersonID());
+                    response.setLatitude(event.getLatitude());
+                    response.setLongitude(event.getLongitude());
+                    response.setCountry(event.getCountry());
+                    response.setCity(event.getCity());
+                    response.setEventType(event.getEventType());
+                    response.setYear(event.getYear());
+
+                    response.setMessage("success");
+                    response.setSuccess("true");
                 }
                 else {
                     response.setMessage("event ID does not match provided authorization token.");
-                    response.setMessage("false");
+                    response.setSuccess("false");
                 }
             }
             else {
                 response.setMessage("Invalid event ID is not valid.");
-                response.setMessage("false");
+                response.setSuccess("false");
             }
         } catch (DataAccessException e) {
             e.printStackTrace();
