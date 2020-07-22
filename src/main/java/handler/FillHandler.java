@@ -20,7 +20,7 @@ public class FillHandler extends HandlerGeneric implements HttpHandler {
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
 
-        System.out.println("Now inside the fill handler");
+//        System.out.println("Now inside the fill handler");
 
         try {
             String urlPathGiven = httpExchange.getRequestURI().toString();

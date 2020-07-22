@@ -3,6 +3,7 @@ package service.services;
 import DAO.*;
 import DataGenerator.Generator;
 import DataGenerator.Location;
+import model.AuthorizationToken;
 import model.Event;
 import model.Person;
 import model.User;
@@ -30,19 +31,16 @@ import java.util.UUID;
 public class FillService {
 
     public FillResponse execute(String username, int generations) throws SQLException {
-        System.out.println("Entered the fill!");
-
+//        System.out.println("Entered the fill!");
         FillResponse response = new FillResponse();
-        boolean closingConnectionBool = false;
-
+//        boolean closingConnectionBool = false;
         Database db = new Database();
-        Connection conn = null;
+//        Connection conn = null;
 
         try {
-            conn = db.openConnection();
+//            conn = db.openConnection();
 //            int numPeople = 1;
 //            int numEvents = 1;
-
             UserDAO user_dao = new UserDAO();
             User user = user_dao.find(username);
 
@@ -55,40 +53,101 @@ public class FillService {
                 response.setMessage("false");
             }
             else {
-                // If there is any data in the database associated with the given user name, it is erased.
-                eraseAssociatedDataToGivenUser(user, username);
+                eraseAssociatedDataToGivenUser(user, username); // If there is any data in the database associated with the given user name, it is erased.
 
-                // GENERATE THE PARENTS OF PARENTS
+                PersonDAO personDAO = new PersonDAO();
+                Person person = personDAO.find(user.getPersonID());
+                String personID = person.getPersonID();
+                String associatedUsername = person.getAssociatedUsername();
+
+                String firstName = person.getFirstName();
+                String lastName = person.getLastName();
+                String gender = person.getGender();
+                personDAO.deletePersonFamily(person.getAssociatedUsername());
+                EventDAO eventDAO = new EventDAO();
+                eventDAO.deleteEventFamily(person.getAssociatedUsername());
+                person = new Person(personID, associatedUsername, firstName, lastName, gender, null, null, null);
+                String fatherID = UUID.randomUUID().toString().substring(0 ,7);
+                String motherID = UUID.randomUUID().toString().substring(0 ,7);
+                person.setFatherID(fatherID);
+                person.setMotherID(motherID);
+                personDAO.insert(person);
+
+                Generator generator = new Generator();
+                Location location = generator.generateLocation();
                 int birthYear = 1996;
-                Generator generator = new Generator();                  // new Generator
-                PersonDAO person_dao = new PersonDAO();                 // Need to grab the person for the given username
-                Person person = person_dao.find(user.getPersonID());
-                EventDAO event_dao = new EventDAO();                    // new event DAO
-                Location location = generator.generateLocation();       // generate a location for everything
+                Event eventBirth = generateBirthEvent(person, birthYear, location);
+                eventDAO.insert(eventBirth);
+                generateParents(person, birthYear, 0, generations, fatherID, motherID);
 
-                // BIRTH
-                Event birthEvent = generateBirthEvent(person, birthYear, location);
-                event_dao.insert(birthEvent);
+                int numPeopleAdded = numPeopleCalculation(generations);
+                int numEventsAdded = numEventsCalculation(generations);
 
-                // Generate 2 more miscilaneous events
+                response.setMessage("Successfully added " + numPeopleAdded + " persons and " + numEventsAdded + " events to the database.");
+
+
+
+//// ORIGINAL
+//                // GENERATE THE PARENTS OF PARENTS
+//                int birthYear = 1996;
+//                Generator generator = new Generator();                  // new Generator
+//                PersonDAO person_dao = new PersonDAO();                 // Need to grab the person for the given username
+//                Person person = person_dao.find(user.getPersonID());
+//                EventDAO event_dao = new EventDAO();                    // new event DAO
+//                Location location = generator.generateLocation();       // generate a location for everything
+//
+//                // BIRTH
+//                Event birthEvent = generateBirthEvent(person, birthYear, location);
+//                event_dao.insert(birthEvent);
+//// ORIGINAL
+
+
+
+
+                // Generate 2 more events
                 // DO IT HERE
+                // Generate unique AuthorizationToken and PersonID
+//                String authorizationToken = UUID.randomUUID().toString();
+//                String personID = UUID.randomUUID().toString();
+//
+//                String requestJsonStr = gson.toJson(request);                  // conversion to Json
+//
+//                // USER
+//                User user = gson.fromJson(requestJsonStr, User.class);
+//                user.setPersonID(personID);
+//                // PERSON
+//                Person person = gson.fromJson(requestJsonStr, Person.class);   // grab the person
+//                person.setPersonID(personID);
+//                person.setAssociatedUsername(user.getUserName());
+//                // AUTHORIZATION TOKEN
+//                AuthorizationToken token = new AuthorizationToken(authorizationToken, user.getUserName());
+//
+//                // Insertion into database
+//                user_dao.insert(user);
+//                person_dao.insert(person);
+//                token_dao.addAuthorizationToken(token);
 
 
-                int rootGeneration = 0;
-                generateParents(person, birthYear, rootGeneration, generations, person.getFatherID(), person.getMotherID());
 
-                // finished response!
-                response.setMessage("Successfully added " + numPeopleCalculation(generations) + " persons and " + numEventsCalculation(generations) + " events to the database.");
-                response.setMessage("true");
-                closingConnectionBool = true;
+
+
+
+
+//                int rootGeneration = 0;
+//                generateParents(person, birthYear, rootGeneration, generations, person.getFatherID(), person.getMotherID());
+//
+//                // finished response!
+//                response.setMessage("Successfully added " + numPeopleCalculation(generations) + " persons and " + numEventsCalculation(generations) + " events to the database.");
+//                response.setMessage("true");
+//                closingConnectionBool = true;
             }
 
-            try { db.closeConnection(closingConnectionBool); } catch (DataAccessException e) { e.printStackTrace(); }
+//            try { db.closeConnection(closingConnectionBool); } catch (DataAccessException e) { e.printStackTrace(); }
         }
         catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try { conn.close(); } catch (SQLException e) { e.printStackTrace(); }
+//            try { conn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return response;
     }
@@ -115,7 +174,13 @@ public class FillService {
         return numEvents;
     }
 
-    // If there is any data in the database associated with the given user name, it is erased.
+    /**
+     * If there is any data in the database associated with the given user name, it is erased.
+     * @param user
+     * @param username
+     * @throws SQLException
+     * @throws DataAccessException
+     */
     private void eraseAssociatedDataToGivenUser(User user, String username) throws SQLException, DataAccessException {
         // Grabbing all the necessary information before doing the actual fill
         // Person
