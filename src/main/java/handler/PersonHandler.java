@@ -24,18 +24,16 @@ public class PersonHandler extends HandlerGeneric implements HttpHandler {
         String urlPathGiven = httpExchange.getRequestURI().toString();
         String[] requestData = urlPathGiven.split("/");             // Splits up the url path into an Array of Strings
         String personID;
+        String JsonString = "";
+        Gson gson = new Gson();
 
-        // 0: ""
-        // 1: "person"
-        // 2: "personID"
+        AuthorizationTokenDAO auth_dao = new AuthorizationTokenDAO();
+        PersonService personService = new PersonService();
+        PersonIDService personIDService = new PersonIDService();
+        PersonResponse personResponseObj = new PersonResponse();
+        PersonIDResponse personIDResponseObj = new PersonIDResponse();
 
         try {
-            AuthorizationTokenDAO auth_dao = new AuthorizationTokenDAO();
-            PersonService personService = new PersonService();
-            PersonIDService personIDService = new PersonIDService();
-            PersonResponse personResponseObj = new PersonResponse();
-            PersonIDResponse personIDResponseObj = new PersonIDResponse();
-
             // This API will return ALL events for ALL family members of the current user.
             // The current user is determined from the provided authorization authToken (which is required for this call).
             // The returned JSON object contains "data" which is an array of event objects. Authorization authToken is required.
@@ -51,21 +49,42 @@ public class PersonHandler extends HandlerGeneric implements HttpHandler {
                 try {
                     username = auth_dao.getUserName(token);
                     personResponseObj = personService.execute(username);  //  Attempt to fill using the fillService
+
+//                    JsonString = serialize(personResponseObj);
+//                    httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+//                    OutputStream responseBody = httpExchange.getResponseBody();
+//                    writeString(JsonString, responseBody);
+//                    responseBody.close();
+
                 } catch (SQLException e) {
+                    JsonString = serialize(personResponseObj);
+                    httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+                    OutputStream responseBody = httpExchange.getResponseBody();
+                    writeString(JsonString, responseBody);
+                    responseBody.close();
                     e.printStackTrace();
                 } catch (DataAccessException e) {
+                    JsonString = serialize(personResponseObj);
+                    httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+                    OutputStream responseBody = httpExchange.getResponseBody();
+                    writeString(JsonString, responseBody);
+                    responseBody.close();
                     e.printStackTrace();
                 }
 
-                String JsonString = "";
-                Gson gson = new Gson();
-
-                
-                JsonString = serialize(personResponseObj);                                       // Response Object to Json String
-                httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);     // Indicates the sending procedure is about to start
-                OutputStream responseBody = httpExchange.getResponseBody();                        //  Grabs the response body (OutputStream) from the httpExchange
-                writeString(JsonString, responseBody);                                             // Writes the Json into the response body / OutputStream
-                responseBody.close();                                                              // indicates "I'm done", closes the httpExchange
+                if(personResponseObj.getSuccess() == "true") {
+                    JsonString = serialize(personResponseObj);
+                    httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+                    OutputStream responseBody = httpExchange.getResponseBody();
+                    writeString(JsonString, responseBody);
+                    responseBody.close();
+                } else {
+                    JsonString = serialize(personResponseObj);
+                    httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+                    OutputStream responseBody = httpExchange.getResponseBody();
+                    writeString(JsonString, responseBody);
+                    responseBody.close();
+                }
             }
             // If url length is 3, it means eventID is provided
             else {
@@ -80,13 +99,20 @@ public class PersonHandler extends HandlerGeneric implements HttpHandler {
                     username = auth_dao.getUserName(token);
                     personIDResponseObj = personIDService.execute(username, personID);  //  Attempt to fill using the fillService
                 } catch (SQLException e) {
+                    JsonString = serialize(personResponseObj);
+                    httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+                    OutputStream responseBody = httpExchange.getResponseBody();
+                    writeString(JsonString, responseBody);
+                    responseBody.close();
                     e.printStackTrace();
                 } catch (DataAccessException e) {
+                    JsonString = serialize(personResponseObj);
+                    httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+                    OutputStream responseBody = httpExchange.getResponseBody();
+                    writeString(JsonString, responseBody);
+                    responseBody.close();
                     e.printStackTrace();
                 }
-
-                String JsonString = "";
-                Gson gson = new Gson();
 
                 JsonString = serialize(personIDResponseObj);                                       // Response Object to Json String
                 httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);     // Indicates the sending procedure is about to start
@@ -95,8 +121,11 @@ public class PersonHandler extends HandlerGeneric implements HttpHandler {
                 responseBody.close();                                                              // indicates "I'm done", closes the httpExchange
             }
         } catch (IOException e) {
-            httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_SERVER_ERROR, 0);
-            httpExchange.getResponseBody().close();
+            JsonString = serialize(personResponseObj);
+            httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+            OutputStream responseBody = httpExchange.getResponseBody();
+            writeString(JsonString, responseBody);
+            responseBody.close();
             e.printStackTrace();
         }
     }

@@ -133,12 +133,12 @@ public class EventDAO {
 
         if(eventsArrayList.size() > 0) {
             eventResponse.setEvents(eventsArrayList);
-            eventResponse.setMessage("true");
+            eventResponse.setSuccess("true");
             return eventResponse;
         }
         else {
             eventResponse.setMessage("No events associated with username");
-            eventResponse.setMessage("false");
+            eventResponse.setSuccess("false");
         }
         return eventResponse;
     }

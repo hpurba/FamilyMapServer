@@ -145,6 +145,8 @@ public class PersonDAO {
             }
             db.closeConnection(true);
         } catch (SQLException e) {
+            personResponse.setMessage("error");
+            personResponse.setSuccess("false");
             e.printStackTrace();
             db.closeConnection(false);
             throw new DataAccessException("Error encountered while finding person");
@@ -157,12 +159,12 @@ public class PersonDAO {
 
         if(personArrayList.size() > 0) {
             personResponse.setPersons(personArrayList);
-            personResponse.setMessage("true");
+            personResponse.setSuccess("true");
             return personResponse;
         }
         else {
-            personResponse.setMessage("No persons associated with username");
-            personResponse.setMessage("false");
+            personResponse.setMessage("error No persons associated with username");
+            personResponse.setSuccess("false");
         }
         return personResponse;
     }

@@ -17,75 +17,122 @@ public class LoginHandler extends HandlerGeneric implements HttpHandler {
 
     /**
      * Handles the httpExchange. Grabs the request body, uses it to register the user, then generates a response object to return to server.
+     *
      * @param httpExchange
      * @throws IOException
      */
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
 
+        LoginService loginService = new LoginService();
+        LoginResponse loginResponseObj = new LoginResponse();
+        String JsonString = "";
+        Gson gson = new Gson();
+        // From httpExchange, grab the inputStream request Body as an inputStream
+        InputStream requestBodyIS = httpExchange.getRequestBody();
+        String reqJsonStr = readString(requestBodyIS); // Convert InputStream to a Json
+        LoginRequest loginRequestObj = gson.fromJson(reqJsonStr, LoginRequest.class); // Json String to the request Object
+
         try {
-            boolean success = false;
-            LoginService loginService = new LoginService();
-            LoginResponse loginResponseObj = new LoginResponse();
-            String JsonString = "";
-            Gson gson = new Gson();
-
-            // From httpExchange, grab the inputStream request Body as an inputStream
-            InputStream requestBodyIS = httpExchange.getRequestBody();
-            String reqJsonStr = readString(requestBodyIS); // Convert InputStream to a Json
-            LoginRequest loginRequestObj = gson.fromJson(reqJsonStr, LoginRequest.class); // Json String to the request Object
-
-            try{
-                loginResponseObj = loginService.execute(loginRequestObj);    // this will give back to me a response object
-
-                if(loginResponseObj.getSuccess() == "false") {
-                    System.out.println("Login Failed");
-                    httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
-                    OutputStream responseBody = httpExchange.getResponseBody();
-                    // Write the JSON string to the output stream.
-                    String respData = gson.toJson(loginResponseObj);    // login response object, turns it into json string
-                    writeString(respData, responseBody);    // write to outputstream "responseBody"
-                    responseBody.close();
-//                    httpExchange.getResponseBody().close();
-                }
-
-            } catch (DataAccessException e) {
-                System.out.println("Login Failed");
+            loginResponseObj = loginService.execute(loginRequestObj);    // this will give back to me a response object
+            if (loginResponseObj.getSuccess() == "true") {
+                JsonString = serialize(loginResponseObj);
+                httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+                OutputStream responseBody = httpExchange.getResponseBody();
+                writeString(JsonString, responseBody);
+                responseBody.close();
+            } else {
+                JsonString = serialize(loginResponseObj);
                 httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
                 OutputStream responseBody = httpExchange.getResponseBody();
-                String respData = gson.toJson(loginResponseObj);    // login response object, turns it into json string
-                writeString(respData, responseBody);    // write to outputstream "responseBody"
+                writeString(JsonString, responseBody);
                 responseBody.close();
-                e.printStackTrace();
-            } catch (SQLException e) {
-                System.out.println("Login Failed");
-                httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
-                OutputStream responseBody = httpExchange.getResponseBody();
-                String respData = gson.toJson(loginResponseObj);    // login response object, turns it into json string
-                writeString(respData, responseBody);    // write to outputstream "responseBody"
-                responseBody.close();
-                e.printStackTrace();
             }
-
-            JsonString = serialize(loginResponseObj);    // object to Json String
-            httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0); // this indicates the sending proceedure is about to start
+        } catch (SQLException e) {
+            JsonString = serialize(loginResponseObj);
+            httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
             OutputStream responseBody = httpExchange.getResponseBody();
             writeString(JsonString, responseBody);
-            responseBody.close();   // indicates "I'm done", closes the connection
-        }
-        catch (IOException e) {
-            System.out.println("Login Failed");
-            httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
-            OutputStream responseBody = httpExchange.getResponseBody();
             responseBody.close();
-            httpExchange.getResponseBody().close();
             e.printStackTrace();
-        }
-        catch (Exception e){
-            // send BAD REQUEST http response key
+        } catch (DataAccessException e) {
+            JsonString = serialize(loginResponseObj);
             httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
             OutputStream responseBody = httpExchange.getResponseBody();
+            writeString(JsonString, responseBody);
             responseBody.close();
+            e.printStackTrace();
         }
     }
 }
+
+
+
+//        try {
+//            boolean success = false;
+//            LoginService loginService = new LoginService();
+//            LoginResponse loginResponseObj = new LoginResponse();
+//            String JsonString = "";
+//            Gson gson = new Gson();
+//
+//            // From httpExchange, grab the inputStream request Body as an inputStream
+//            InputStream requestBodyIS = httpExchange.getRequestBody();
+//            String reqJsonStr = readString(requestBodyIS); // Convert InputStream to a Json
+//            LoginRequest loginRequestObj = gson.fromJson(reqJsonStr, LoginRequest.class); // Json String to the request Object
+//
+//            try{
+//                loginResponseObj = loginService.execute(loginRequestObj);    // this will give back to me a response object
+//
+//                if(loginResponseObj.getSuccess() == "false") {
+//
+//
+//
+//                    System.out.println("Login Failed");
+//                    httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+//                    OutputStream responseBody = httpExchange.getResponseBody();
+//                    // Write the JSON string to the output stream.
+//                    String respData = gson.toJson(loginResponseObj);    // login response object, turns it into json string
+//                    writeString(respData, responseBody);    // write to outputstream "responseBody"
+//                    responseBody.close();
+//                }
+//
+//            } catch (DataAccessException e) {
+//                System.out.println("Login Failed");
+//                httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+//                OutputStream responseBody = httpExchange.getResponseBody();
+//                String respData = gson.toJson(loginResponseObj);    // login response object, turns it into json string
+//                writeString(respData, responseBody);    // write to outputstream "responseBody"
+//                responseBody.close();
+//                e.printStackTrace();
+//            } catch (SQLException e) {
+//                System.out.println("Login Failed");
+//                httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+//                OutputStream responseBody = httpExchange.getResponseBody();
+//                String respData = gson.toJson(loginResponseObj);    // login response object, turns it into json string
+//                writeString(respData, responseBody);    // write to outputstream "responseBody"
+//                responseBody.close();
+//                e.printStackTrace();
+//            }
+//
+//            JsonString = serialize(loginResponseObj);    // object to Json String
+//            httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0); // this indicates the sending proceedure is about to start
+//            OutputStream responseBody = httpExchange.getResponseBody();
+//            writeString(JsonString, responseBody);
+//            responseBody.close();   // indicates "I'm done", closes the connection
+//        }
+//        catch (IOException e) {
+//            System.out.println("Login Failed");
+//            httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+//            OutputStream responseBody = httpExchange.getResponseBody();
+//            responseBody.close();
+//            httpExchange.getResponseBody().close();
+//            e.printStackTrace();
+//        }
+//        catch (Exception e){
+//            // send BAD REQUEST http response key
+//            httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+//            OutputStream responseBody = httpExchange.getResponseBody();
+//            responseBody.close();
+//        }
+//    }
+//    }

@@ -24,7 +24,13 @@ public class EventService {
         EventDAO event_dao = new EventDAO();
         try {
             response = event_dao.getEvents(userName);
+            if (response.getSuccess() == "false") {
+                response.setMessage("error");
+                response.setSuccess("false");
+            }
         } catch (DataAccessException e) {
+            response.setMessage("error");
+            response.setSuccess("false");
             e.printStackTrace();
         }
 

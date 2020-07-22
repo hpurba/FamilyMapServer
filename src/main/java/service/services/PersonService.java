@@ -24,7 +24,14 @@ public class PersonService {
         PersonDAO person_dao = new PersonDAO();
         try {
             response = person_dao.getAllPersons(userName);
+
+            if (response.getSuccess() == "false") {
+                response.setMessage("error");
+                response.setSuccess("false");
+            }
         } catch (DataAccessException e) {
+            response.setMessage("error");
+            response.setSuccess("false");
             e.printStackTrace();
         }
 

@@ -23,18 +23,16 @@ public class EventHandler extends HandlerGeneric implements HttpHandler {
         String urlPathGiven = httpExchange.getRequestURI().toString();
         String[] requestData = urlPathGiven.split("/");             // Splits up the url path into an Array of Strings
         String eventID;
+        String JsonString = "";
+        Gson gson = new Gson();
 
-        // 0: ""
-        // 1: "event"
-        // 2: "eventID"
+        AuthorizationTokenDAO auth_dao = new AuthorizationTokenDAO();
+        EventService eventService = new EventService();
+        EventIDService eventIDService = new EventIDService();
+        EventResponse eventResponseObj = new EventResponse();
+        EventIDResponse eventIDResponseObj = new EventIDResponse();
 
         try {
-            AuthorizationTokenDAO auth_dao = new AuthorizationTokenDAO();
-            EventService eventService = new EventService();
-            EventIDService eventIDService = new EventIDService();
-            EventResponse eventResponseObj = new EventResponse();
-            EventIDResponse eventIDResponseObj = new EventIDResponse();
-
             // This API will return ALL events for ALL family members of the current user.
             // The current user is determined from the provided authorization authToken (which is required for this call).
             // The returned JSON object contains "data" which is an array of event objects. Authorization authToken is required.
@@ -51,19 +49,33 @@ public class EventHandler extends HandlerGeneric implements HttpHandler {
                     username = auth_dao.getUserName(token);
                     eventResponseObj = eventService.execute(username);  //  Attempt to fill using the fillService
                 } catch (SQLException e) {
+                    JsonString = serialize(eventResponseObj);
+                    httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+                    OutputStream responseBody = httpExchange.getResponseBody();
+                    writeString(JsonString, responseBody);
+                    responseBody.close();
                     e.printStackTrace();
                 } catch (DataAccessException e) {
+                    JsonString = serialize(eventResponseObj);
+                    httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+                    OutputStream responseBody = httpExchange.getResponseBody();
+                    writeString(JsonString, responseBody);
+                    responseBody.close();
                     e.printStackTrace();
                 }
-
-                String JsonString = "";
-                Gson gson = new Gson();
-
-                JsonString = serialize(eventResponseObj);                                       // Response Object to Json String
-                httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);     // Indicates the sending procedure is about to start
-                OutputStream responseBody = httpExchange.getResponseBody();                        //  Grabs the response body (OutputStream) from the httpExchange
-                writeString(JsonString, responseBody);                                             // Writes the Json into the response body / OutputStream
-                responseBody.close();                                                              // indicates "I'm done", closes the httpExchange
+                if (eventResponseObj.getSuccess() == "true") {
+                    JsonString = serialize(eventResponseObj);                                       // Response Object to Json String
+                    httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);     // Indicates the sending procedure is about to start
+                    OutputStream responseBody = httpExchange.getResponseBody();                        //  Grabs the response body (OutputStream) from the httpExchange
+                    writeString(JsonString, responseBody);                                             // Writes the Json into the response body / OutputStream
+                    responseBody.close();                                                              // indicates "I'm done", closes the httpExchange
+                } else {
+                    JsonString = serialize(eventResponseObj);
+                    httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+                    OutputStream responseBody = httpExchange.getResponseBody();
+                    writeString(JsonString, responseBody);
+                    responseBody.close();
+                }
             }
             // If url length is 3, it means eventID is provided
             else {
@@ -78,23 +90,41 @@ public class EventHandler extends HandlerGeneric implements HttpHandler {
                     username = auth_dao.getUserName(token);
                     eventIDResponseObj = eventIDService.execute(username, eventID);  //  Attempt to fill using the fillService
                 } catch (SQLException e) {
+                    JsonString = serialize(eventIDResponseObj);
+                    httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+                    OutputStream responseBody = httpExchange.getResponseBody();
+                    writeString(JsonString, responseBody);
+                    responseBody.close();
                     e.printStackTrace();
                 } catch (DataAccessException e) {
+                    JsonString = serialize(eventIDResponseObj);
+                    httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+                    OutputStream responseBody = httpExchange.getResponseBody();
+                    writeString(JsonString, responseBody);
+                    responseBody.close();
                     e.printStackTrace();
                 }
 
-                String JsonString = "";
-                Gson gson = new Gson();
-
-                JsonString = serialize(eventIDResponseObj);                                       // Response Object to Json String
-                httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);     // Indicates the sending procedure is about to start
-                OutputStream responseBody = httpExchange.getResponseBody();                        //  Grabs the response body (OutputStream) from the httpExchange
-                writeString(JsonString, responseBody);                                             // Writes the Json into the response body / OutputStream
-                responseBody.close();                                                              // indicates "I'm done", closes the httpExchange
+                if (eventIDResponseObj.getSuccess() == "true") {
+                    JsonString = serialize(eventIDResponseObj);                                       // Response Object to Json String
+                    httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);     // Indicates the sending procedure is about to start
+                    OutputStream responseBody = httpExchange.getResponseBody();                        //  Grabs the response body (OutputStream) from the httpExchange
+                    writeString(JsonString, responseBody);                                             // Writes the Json into the response body / OutputStream
+                    responseBody.close();                                                              // indicates "I'm done", closes the httpExchange
+                } else {
+                    JsonString = serialize(eventIDResponseObj);
+                    httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+                    OutputStream responseBody = httpExchange.getResponseBody();
+                    writeString(JsonString, responseBody);
+                    responseBody.close();
+                }
             }
         } catch (IOException e) {
-            httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_SERVER_ERROR, 0);
-            httpExchange.getResponseBody().close();
+            JsonString = serialize(eventIDResponseObj);
+            httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+            OutputStream responseBody = httpExchange.getResponseBody();
+            writeString(JsonString, responseBody);
+            responseBody.close();
             e.printStackTrace();
         }
     }
