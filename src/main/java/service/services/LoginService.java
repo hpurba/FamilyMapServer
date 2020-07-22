@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import model.AuthorizationToken;
 import model.User;
+import org.junit.jupiter.api.Assertions;
 import service.request.LoginRequest;
 import service.response.LoginResponse;
 
@@ -38,13 +39,19 @@ public class LoginService {
             authTokenDAO.addAuthorizationToken(authTokenM);
             UserDAO userDAO = new UserDAO();
             User userM = userDAO.find(request.getUserName());
+
             if (userM == null) {
-                response.setMessage("Error: Username does not exist.");
+                response.setAuthToken("null");
+                response.setPersonID("null");
+                response.setMessage("error : Username does not exist.");
+//                response.setMessage(null);
                 response.setSuccess("false");
                 return response;
             }
             else if (!(userM.getPassword().equals(request.getPassword()))) {
-                response.setMessage("Error: Password does not match.");
+                response.setAuthToken("null");
+                response.setPersonID("null");
+                response.setMessage("error : Password does not match.");
                 response.setSuccess("false");
                 return response;
             }

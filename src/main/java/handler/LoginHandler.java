@@ -37,10 +37,17 @@ public class LoginHandler extends HandlerGeneric implements HttpHandler {
 
             try{
                 loginResponseObj = loginService.execute(loginRequestObj);    // this will give back to me a response object
+
+                if(loginResponseObj.getSuccess() == "false") {
+                    System.out.println("Login Failed");
+                    httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+                    OutputStream responseBody = httpExchange.getResponseBody();
+                    responseBody.close();
+                    httpExchange.getResponseBody().close();
+                }
+
             } catch (DataAccessException e) {
                 System.out.println("Login Failed");
-//                httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
-//                httpExchange.getResponseBody().close();
                 httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
                 OutputStream responseBody = httpExchange.getResponseBody();
                 responseBody.close();
@@ -54,6 +61,7 @@ public class LoginHandler extends HandlerGeneric implements HttpHandler {
                 httpExchange.getResponseBody().close();
                 e.printStackTrace();
             }
+
             JsonString = serialize(loginResponseObj);    // object to Json String
             httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0); // this indicates the sending proceedure is about to start
             OutputStream responseBody = httpExchange.getResponseBody();
@@ -74,8 +82,5 @@ public class LoginHandler extends HandlerGeneric implements HttpHandler {
             OutputStream responseBody = httpExchange.getResponseBody();
             responseBody.close();
         }
-
-
-
     }
 }
