@@ -35,7 +35,7 @@ public class EventIDService {
 
         if (userName == null) {
             response.setMessage("error Incorrect authorization token.");
-            response.setMessage("false");
+            response.setSuccess("false");
             return response;
         }
 
@@ -69,6 +69,8 @@ public class EventIDService {
                 response.setSuccess("false");
             }
         } catch (DataAccessException e) {
+            response.setMessage("error Invalid event ID is not valid.");
+            response.setSuccess("false");
             e.printStackTrace();
         }
 

@@ -70,11 +70,13 @@ public class RegisterService {
                 response.setAuthToken(authorizationToken);
                 response.setUserName(user.getUserName());
                 response.setPersonID(personID);
-                response.setMessage("true");
+                response.setSuccess("true");
+                response.setMessage("Success");
             }
-            return response;
         }
         catch (Exception e){
+            response.setSuccess("false");
+            response.setMessage("error");
             e.printStackTrace();
         }
         return response;
