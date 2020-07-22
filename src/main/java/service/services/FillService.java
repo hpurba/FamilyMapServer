@@ -78,13 +78,16 @@ public class FillService {
                 int birthYear = 1996;
                 Event eventBirth = generateBirthEvent(person, birthYear, location);
                 eventDAO.insert(eventBirth);
+
+                System.out.println("Original user/person birth year: " + birthYear);
+
                 generateParents(person, birthYear, 0, generations, fatherID, motherID);
 
                 int numPeopleAdded = numPeopleCalculation(generations);
                 int numEventsAdded = numEventsCalculation(generations);
 
                 response.setMessage("Successfully added " + numPeopleAdded + " persons and " + numEventsAdded + " events to the database.");
-
+                response.setSuccess("true");
 
 
 //// ORIGINAL
@@ -249,10 +252,10 @@ public class FillService {
         // Sets mother and father of person
         Person mother = generateFemalePerson(person.getAssociatedUsername());
         mother.setMotherID(motherID);
-        person.setMotherID(motherID);
+//        person.setMotherID(motherID);
         Person father = generateMalePerson(person.getAssociatedUsername());
         father.setFatherID(fatherID);
-        person.setFatherID(fatherID);
+//        person.setFatherID(fatherID);
 
         Generator generator = new Generator();
         Location location1 = generator.generateLocation();
@@ -265,8 +268,14 @@ public class FillService {
         Event marriageMother = generateMarriage(mother, locationMarriage, marriageYear);
         Event marriageFather = generateMarriage(father, locationMarriage, marriageYear);
 
+//        int deathYear1 = birthYear + 35 - currentGeneration * 35;
+//        int deathYear2 = birthYear + 42 - currentGeneration * 35;
         int deathYear1 = birthYear + 35;
-        int deathYear2 = birthYear + 42;
+        int deathYear2 = birthYear + 35;
+
+        System.out.println("Generation: " + currentGeneration + " of " + totalGenerations);
+        System.out.println("Mother death year: " + deathYear1 + ". Father death year: " + deathYear2);
+
         Location deathLocation = generator.generateLocation();
         Event deathOfMother = generateDeathEvent(mother, deathLocation, deathYear1);
         Event deathOfFather = generateDeathEvent(father, deathLocation, deathYear2);
@@ -288,9 +297,14 @@ public class FillService {
 
         PersonDAO person_dao = new PersonDAO();
         EventDAO event_dao = new EventDAO();
+        UserDAO user_dao = new UserDAO();
         try {
             person_dao.insert(father);
             person_dao.insert(mother);
+//            User fatherUser = new User(father.getAssociatedUsername(), "123", "email", father.getFirstName(), father.getLastName(), father.getGender(), father.getPersonID());
+//            user_dao.insert(fatherUser);
+//            User motherUser = new User(mother.getAssociatedUsername(), "123", "email", mother.getFirstName(), mother.getLastName(), mother.getGender(), mother.getPersonID());
+//            user_dao.insert(motherUser);
 
             event_dao.insert(birthOfMother);
             event_dao.insert(birthOfFather);

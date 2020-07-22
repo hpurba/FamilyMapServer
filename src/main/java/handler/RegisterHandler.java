@@ -49,7 +49,8 @@ public class RegisterHandler extends HandlerGeneric implements HttpHandler {
             responseBody.close();                                                              // indicates "I'm done", closes the httpExchange
         }
         catch (IOException e) {
-            httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_SERVER_ERROR, 0);
+//            httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_SERVER_ERROR, 0);
+            httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
             httpExchange.getResponseBody().close();
             e.printStackTrace();
         }

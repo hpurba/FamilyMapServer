@@ -6,9 +6,11 @@ import java.sql.SQLException;
 
 import DAO.DataAccessException;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.sun.net.httpserver.*;
 import service.request.*;
 import service.response.LoginResponse;
+import service.response.Response;
 import service.services.LoginService;
 
 public class LoginHandler extends HandlerGeneric implements HttpHandler {
@@ -36,8 +38,20 @@ public class LoginHandler extends HandlerGeneric implements HttpHandler {
             try{
                 loginResponseObj = loginService.execute(loginRequestObj);    // this will give back to me a response object
             } catch (DataAccessException e) {
+                System.out.println("Login Failed");
+//                httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+//                httpExchange.getResponseBody().close();
+                httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+                OutputStream responseBody = httpExchange.getResponseBody();
+                responseBody.close();
+                httpExchange.getResponseBody().close();
                 e.printStackTrace();
             } catch (SQLException e) {
+                System.out.println("Login Failed");
+                httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+                OutputStream responseBody = httpExchange.getResponseBody();
+                responseBody.close();
+                httpExchange.getResponseBody().close();
                 e.printStackTrace();
             }
             JsonString = serialize(loginResponseObj);    // object to Json String
@@ -47,9 +61,21 @@ public class LoginHandler extends HandlerGeneric implements HttpHandler {
             responseBody.close();   // indicates "I'm done", closes the connection
         }
         catch (IOException e) {
-            httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_SERVER_ERROR, 0);
+            System.out.println("Login Failed");
+            httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+            OutputStream responseBody = httpExchange.getResponseBody();
+            responseBody.close();
             httpExchange.getResponseBody().close();
             e.printStackTrace();
         }
+        catch (Exception e){
+            // send BAD REQUEST http response key
+            httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+            OutputStream responseBody = httpExchange.getResponseBody();
+            responseBody.close();
+        }
+
+
+
     }
 }

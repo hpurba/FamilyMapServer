@@ -1,31 +1,37 @@
 import java.io.*;
 import java.net.*;
+
+import DAO.DataAccessException;
+import DAO.Database;
 import com.sun.net.httpserver.*;
 import handler.*;
 
 public class Server {
     public final int PORTNUM = 8080;
+    private static final int MAX_WAITING_CONNECTIONS = 12;
 
     public static void main(String args[]) {
         try {
             new Server().run();
         } catch (IOException e) {
             e.printStackTrace();
+            System.exit(1);
         }
     }
 
     private void run() throws IOException {
         InetSocketAddress serverAddress = new InetSocketAddress(PORTNUM);
-        HttpServer server = HttpServer.create(serverAddress, 12);
+        HttpServer server = HttpServer.create(serverAddress, MAX_WAITING_CONNECTIONS);
 
         server.setExecutor(null);
         registerHandlerFiles(server);
+
         server.start();
         System.out.println("Server started");
     }
 
     public void registerHandlerFiles(HttpServer server) {
-        server.createContext("/", new DefaultHandler());                    // Default Handler
+        server.createContext("/", new FileRequestHandler());                    // Default Handler
         server.createContext("/user/register", new RegisterHandler());      // Creates a new user account, generates 4 generations of ancestor data for the new user, logs the user in, and returns an auth token.
         server.createContext("/user/login", new LoginHandler());            // Logs in the user and returns an auth token
         server.createContext("/clear", new ClearHandler());                 // Deletes ALL data from the database, including user accounts, auth tokens, and generated person and event data.
@@ -34,4 +40,5 @@ public class Server {
         server.createContext("/person", new PersonHandler());               //  Returns ALL family members of the current user. The current user is determined from the provided auth token
         server.createContext("/event", new EventHandler());                 // Returns ALL events for ALL family members of the current user. The current user is determined from the provided auth token.
     }
+
 }
