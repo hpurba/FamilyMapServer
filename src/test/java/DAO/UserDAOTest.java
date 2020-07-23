@@ -30,8 +30,6 @@ public class UserDAOTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        //here we can set up any classes or variables we will need for the rest of our tests
-        //lets create a new database
         db = new Database();
         db.openConnection();
         db.clearTables();
@@ -47,8 +45,6 @@ public class UserDAOTest {
 
     @AfterEach
     public void tearDown() throws Exception {
-        //here we can get rid of anything from our tests we don't want to affect the rest of our program
-        //lets clear the tables so that any data we entered for testing doesn't linger in our files
         db.openConnection();
         db.clearTables();
         db.closeConnection(true);
@@ -56,32 +52,18 @@ public class UserDAOTest {
 
     @Test
     public void insertPass() throws Exception {
-        //We want to make sure insert works
-        //First lets create an Event that we'll set to null. We'll use this to make sure what we put
-        //in the database is actually there.
         User compareTest = null;
 
         try {
-            //Let's get our connection and make a new DAO
-
             Connection conn = db.openConnection();
             UserDAO eDao = new UserDAO();
-            //While insert returns a bool we can't use that to verify that our function actually worked
-            //only that it ran without causing an error
             eDao.insert(bestUser);
-            //So lets use a find method to get the event that we just put in back out
             compareTest = eDao.find(bestUser.getUserName());
             db.closeConnection(true);
         } catch (DataAccessException e) {
             db.closeConnection(false);
-//             fail();
         }
-        //First lets see if our find found anything at all. If it did then we know that if nothing
-        //else something was put into our database, since we cleared it in the beginning
         assertNotNull(compareTest);
-        //Now lets make sure that what we put in is exactly the same as what we got out. If this
-        //passes then we know that our insert did put something in, and that it didn't change the
-        //data in any way
         assertEquals(bestUser, compareTest);
     }
 
@@ -99,10 +81,6 @@ public class UserDAOTest {
         assertFalse(workedSuccessfully);
     }
 
-
-
-
-    // RETRIEVE ------------------------------------------------------------------------------------------------------
     @Test
     public void retrievePass() throws Exception {
         User compareTest = null;
@@ -115,7 +93,6 @@ public class UserDAOTest {
             db.closeConnection(true);
         } catch (DataAccessException e) {
             db.closeConnection(false);
-//             fail();
         }
         assertNotNull(compareTest);
         assertEquals(mehUser, compareTest);
@@ -136,24 +113,15 @@ public class UserDAOTest {
         assertNull(compareTest);
     }
 
-
-    // CLEAR ------------------------------------------------------------------------------------------------------
-
-
     @Test
     public void clearPass() throws Exception {
-        //We want to make sure insert works
-        //First lets create an Event that we'll set to null. We'll use this to make sure what we put
-        //in the database is actually there.
         User compareTest = null;
 
         try {
-            //Let's get our connection and make a new DAO
             Connection conn = db.openConnection();
             UserDAO eDao = new UserDAO();
             eDao.insert(mehUser);
             eDao.clear();
-            //So lets use a find method to get the event that we just put in back out
             compareTest = eDao.find(bestUser.getPersonID());
             db.closeConnection(true);
         } catch (DataAccessException e) {

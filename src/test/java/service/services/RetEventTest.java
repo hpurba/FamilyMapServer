@@ -22,7 +22,6 @@ public class RetEventTest {
     public void setUp() throws Exception {
         db = new Database();
         db.openConnection();
-//        db.createTables();
         db.closeConnection(true);
     }
 
@@ -38,8 +37,6 @@ public class RetEventTest {
         Event bestEvent = new Event("Biking_123A", "hpurba", "29472233",
                 10.3f, 10.3f, "Japan", "Senzokuike",
                 "Biking_Around", 2016);
-
-
         Event eventResponse = null;
 
         try {

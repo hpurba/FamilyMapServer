@@ -20,10 +20,7 @@ public class AuthTokenDAOTest {
     AuthorizationToken randomAuthToken;
     @BeforeEach
     public void setUp() throws Exception {
-        //here we can set up any classes or variables we will need for the rest of our tests
-        //lets create a new database
         db = new Database();
-        //and a new event with random data
         bestAuthToken = new AuthorizationToken("82795880-0ea6-4bcc-96ce-ec0c28f649f1", "hpurba");
         randomAuthToken = new AuthorizationToken("adfi9wef8gaisdb", "randomdude");
         db.openConnection();
@@ -32,10 +29,7 @@ public class AuthTokenDAOTest {
 
     @AfterEach
     public void tearDown() throws Exception {
-        //here we can get rid of anything from our tests we don't want to affect the rest of our program
-        //lets clear the tables so that any data we entered for testing doesn't linger in our files
         db.openConnection();
-//        db.clearTables();
         db.closeConnection(true);
     }
 

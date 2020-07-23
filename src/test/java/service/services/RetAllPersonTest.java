@@ -33,7 +33,6 @@ public class RetAllPersonTest {
     public void setUp() throws Exception {
         db = new Database();
         db.openConnection();
-//        db.createTables();
         db.closeConnection(true);
     }
 

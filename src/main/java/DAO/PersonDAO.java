@@ -7,9 +7,6 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class PersonDAO {
-
-    // INSERTION
-
     /**
      * INSERTION
      *  Inserts a person into the database

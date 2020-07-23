@@ -66,14 +66,11 @@ public class LoadTest {
         wrongArray = new Event[] {bestEvent1, bestEvent1, bestEvent1};
 
         db.openConnection();
-//        db.createTables();
         db.closeConnection(true);
     }
 
     @AfterEach
     public void tearDown() throws Exception {
-        //here we can get rid of anything from our tests we don't want to affect the rest of our program
-        //lets clear the tables so that any data we entered for testing doesn't linger in our files
         db.openConnection();
         db.clearTables();
         db.closeConnection(true);

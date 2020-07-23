@@ -8,8 +8,6 @@ import java.sql.Statement;
 public class Database {
     private Connection conn;
 
-    //Whenever we want to make a change to our database we will have to open a connection and use
-    //Statements created by that connection to initiate transactions
     public Connection openConnection() throws DataAccessException {
         try {
             //The Structure for this Connection is driver:language:path

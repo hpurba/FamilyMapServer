@@ -42,7 +42,7 @@ public class EventHandler extends HandlerGeneric implements HttpHandler {
 
                 // grab username using the provided Auth Token
                 List<String> authToken = httpExchange.getRequestHeaders().get("Authorization");
-                String token = authToken.get(0);    // System.out.print(authToken.get(0));
+                String token = authToken.get(0);
                 String username;
 
                 try {
@@ -64,8 +64,8 @@ public class EventHandler extends HandlerGeneric implements HttpHandler {
                     e.printStackTrace();
                 }
                 if (eventResponseObj.getSuccess() == "true") {
-                    JsonString = serialize(eventResponseObj);                                       // Response Object to Json String
-                    httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);     // Indicates the sending procedure is about to start
+                    JsonString = serialize(eventResponseObj);                                           // Response Object to Json String
+                    httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);                 // Indicates the sending procedure is about to start
                     OutputStream responseBody = httpExchange.getResponseBody();                        //  Grabs the response body (OutputStream) from the httpExchange
                     writeString(JsonString, responseBody);                                             // Writes the Json into the response body / OutputStream
                     responseBody.close();                                                              // indicates "I'm done", closes the httpExchange
@@ -83,7 +83,7 @@ public class EventHandler extends HandlerGeneric implements HttpHandler {
 
                 // grab username using the provided Auth Token
                 List<String> authToken = httpExchange.getRequestHeaders().get("Authorization");
-                String token = authToken.get(0);    // System.out.print(authToken.get(0));
+                String token = authToken.get(0);
                 String username;
 
                 try {
@@ -106,11 +106,11 @@ public class EventHandler extends HandlerGeneric implements HttpHandler {
                 }
 
                 if (eventIDResponseObj.getSuccess() == "true") {
-                    JsonString = serialize(eventIDResponseObj);                                       // Response Object to Json String
-                    httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);     // Indicates the sending procedure is about to start
-                    OutputStream responseBody = httpExchange.getResponseBody();                        //  Grabs the response body (OutputStream) from the httpExchange
-                    writeString(JsonString, responseBody);                                             // Writes the Json into the response body / OutputStream
-                    responseBody.close();                                                              // indicates "I'm done", closes the httpExchange
+                    JsonString = serialize(eventIDResponseObj);
+                    httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+                    OutputStream responseBody = httpExchange.getResponseBody();
+                    writeString(JsonString, responseBody);
+                    responseBody.close();
                 } else {
                     JsonString = serialize(eventIDResponseObj);
                     httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);

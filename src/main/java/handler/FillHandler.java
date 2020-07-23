@@ -20,8 +20,6 @@ public class FillHandler extends HandlerGeneric implements HttpHandler {
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
 
-//        System.out.println("Now inside the fill handler");
-
         try {
             String urlPathGiven = httpExchange.getRequestURI().toString();
             String[] requestData = urlPathGiven.split("/");             // Splits up the url path into an Array of Strings
@@ -51,11 +49,11 @@ public class FillHandler extends HandlerGeneric implements HttpHandler {
             String JsonString = "";
             Gson gson = new Gson();
 
-            JsonString = serialize(fillResponseObj);                                       // Response Object to Json String
-            httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);     // Indicates the sending procedure is about to start
-            OutputStream responseBody = httpExchange.getResponseBody();                        //  Grabs the response body (OutputStream) from the httpExchange
-            writeString(JsonString, responseBody);                                             // Writes the Json into the response body / OutputStream
-            responseBody.close();                                                              // indicates "I'm done", closes the httpExchange
+            JsonString = serialize(fillResponseObj);
+            httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+            OutputStream responseBody = httpExchange.getResponseBody();
+            writeString(JsonString, responseBody);
+            responseBody.close();
         }
         catch (IOException e) {
             httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_SERVER_ERROR, 0);

@@ -48,13 +48,6 @@ public class PersonHandler extends HandlerGeneric implements HttpHandler {
                 try {
                     username = auth_dao.getUserName(token);
                     personResponseObj = personsService.execute(username);  //  Attempt to fill using the fillService
-
-//                    JsonString = serialize(personResponseObj);
-//                    httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-//                    OutputStream responseBody = httpExchange.getResponseBody();
-//                    writeString(JsonString, responseBody);
-//                    responseBody.close();
-
                 } catch (SQLException e) {
                     JsonString = serialize(personResponseObj);
                     httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
@@ -91,12 +84,12 @@ public class PersonHandler extends HandlerGeneric implements HttpHandler {
 
                 // grab username using the provided Auth Token
                 List<String> authToken = httpExchange.getRequestHeaders().get("Authorization");
-                String token = authToken.get(0);    // System.out.print(authToken.get(0));
+                String token = authToken.get(0);
                 String username;
 
                 try {
                     username = auth_dao.getUserName(token);
-                    personIDResponseObj = personIDService.execute(username, personID);  //  Attempt to fill using the fillService
+                    personIDResponseObj = personIDService.execute(username, personID);
                 } catch (SQLException e) {
                     JsonString = serialize(personResponseObj);
                     httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
@@ -114,11 +107,11 @@ public class PersonHandler extends HandlerGeneric implements HttpHandler {
                 }
 
                 if (personIDResponseObj.getSuccess() == "true") {
-                    JsonString = serialize(personIDResponseObj);                                       // Response Object to Json String
-                    httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);     // Indicates the sending procedure is about to start
-                    OutputStream responseBody = httpExchange.getResponseBody();                        //  Grabs the response body (OutputStream) from the httpExchange
-                    writeString(JsonString, responseBody);                                             // Writes the Json into the response body / OutputStream
-                    responseBody.close();                                                              // indicates "I'm done", closes the httpExchange
+                    JsonString = serialize(personIDResponseObj);
+                    httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+                    OutputStream responseBody = httpExchange.getResponseBody();
+                    writeString(JsonString, responseBody);
+                    responseBody.close();
                 }
                 else {
                     JsonString = serialize(personIDResponseObj);

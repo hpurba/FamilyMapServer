@@ -30,21 +30,21 @@ public class LoadHandler extends HandlerGeneric implements HttpHandler {
         LoadService loadService = new LoadService();
         LoadResponse loadResponseObj = new LoadResponse();
 
-        InputStream requestBodyIS = httpExchange.getRequestBody();                              // Grabs requestBody from httpExchange, which is an InputStream
-        String reqJsonStr = readString(requestBodyIS);                                          // Convert request InputStream to a Json String
-        LoadRequest loadRequestObj = gson.fromJson(reqJsonStr, LoadRequest.class); // Json String to the appropriate request Object
+        InputStream requestBodyIS = httpExchange.getRequestBody();
+        String reqJsonStr = readString(requestBodyIS);
+        LoadRequest loadRequestObj = gson.fromJson(reqJsonStr, LoadRequest.class);
 
         try{
-            loadResponseObj = loadService.execute(loadRequestObj);                  // Execution of registering. Done by the register service
+            loadResponseObj = loadService.execute(loadRequestObj);
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         String JsonString = "";
-        JsonString = serialize(loadResponseObj);                                       // Response Object to Json String
-        httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);     // Indicates the sending procedure is about to start
-        OutputStream responseBody = httpExchange.getResponseBody();                        //  Grabs the response body (OutputStream) from the httpExchange
-        writeString(JsonString, responseBody);                                             // Writes the Json into the response body / OutputStream
+        JsonString = serialize(loadResponseObj);
+        httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+        OutputStream responseBody = httpExchange.getResponseBody();
+        writeString(JsonString, responseBody);
         responseBody.close();
     }
 }

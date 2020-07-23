@@ -24,7 +24,7 @@ public class Generator {
         {
             e.printStackTrace();
         }
-        FemaleNames femaleNames = gson.fromJson(content, FemaleNames.class);  // Gets the object from file path
+        FemaleNames femaleNames = gson.fromJson(content, FemaleNames.class);
         return femaleNames.pickRandomName();
     }
 

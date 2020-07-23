@@ -25,10 +25,9 @@ public class EventDAO {
             stmt.setString(8, event.getEventType());
             stmt.setInt(9, event.getYear());
 
-            stmt.executeUpdate();   // executes the sql statement
+            stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-//            db.closeConnection(false);
             throw new DataAccessException("Error encountered while inserting event into the database");
         }
         finally {
@@ -118,8 +117,6 @@ public class EventDAO {
                         rs.getInt("Year"));
                 eventsArrayList.add(event);
             }
-//            eventResponse.setEvents(eventsArrayList);
-//            return eventResponse;
         } catch (SQLException e) {
             e.printStackTrace();
             db.closeConnection(false);

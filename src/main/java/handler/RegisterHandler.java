@@ -36,18 +36,6 @@ public class RegisterHandler extends HandlerGeneric implements HttpHandler {
             try{
                 registerResponseObj = registerService.execute(registerRequestObj);                  // Execution of registering. Done by the register service
 
-//                if(registerRequestObj.getUserName() != null) {
-//                    registerResponseObj = registerService.execute(registerRequestObj);                  // Execution of registering. Done by the register service
-//                }
-//                else {
-//                    JsonString = serialize(registerResponseObj);                                       // Response Object to Json String
-//                    httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);     // Indicates the sending procedure is about to start
-//                    OutputStream responseBody = httpExchange.getResponseBody();                        //  Grabs the response body (OutputStream) from the httpExchange
-//                    writeString(JsonString, responseBody);                                             // Writes the Json into the response body / OutputStream
-//                    responseBody.close();
-//                }
-
-
             } catch (DataAccessException e) {
                 JsonString = serialize(registerResponseObj);                                       // Response Object to Json String
                 httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);     // Indicates the sending procedure is about to start

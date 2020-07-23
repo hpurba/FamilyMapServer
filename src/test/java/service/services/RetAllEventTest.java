@@ -33,7 +33,6 @@ public class RetAllEventTest {
     public void setUp() throws Exception {
         db = new Database();
         db.openConnection();
-//        db.createTables();
         db.closeConnection(true);
     }
 
@@ -79,8 +78,6 @@ public class RetAllEventTest {
             eDao.insert(bestEvent3);
 
             db.closeConnection(true);
-
-
             allEventResponse = eDao.getEvents(registerRequest.getUserName());
 
         } catch ( DataAccessException e) {

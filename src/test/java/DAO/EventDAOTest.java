@@ -17,10 +17,7 @@ public class EventDAOTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        //here we can set up any classes or variables we will need for the rest of our tests
-        //lets create a new database
         db = new Database();
-        //and a new event with random data
         testEvent = new Event("Hiking_007", "hpurba", "hpurba314159",
                 38.8977f, 77.0365f, "United States of America", "WashingtonDC",
                 "Biking_Around", 2016); // added f to convert double to float
@@ -28,14 +25,11 @@ public class EventDAOTest {
 
     @AfterEach
     public void tearDown() throws Exception {
-        //here we can get rid of anything from our tests we don't want to affect the rest of our program
-        //lets clear the tables so that any data we entered for testing doesn't linger in our files
         db.openConnection();
         db.clearTables();
         db.closeConnection(true);
     }
 
-    // does insert and does find, this can be copied for a find pass, find fail will be different from insert fail.
     @Test
     public void insertPass() throws Exception {
         //We want to make sure insert works
@@ -82,8 +76,6 @@ public class EventDAOTest {
         //Check to make sure that we did in fact enter our catch statement
         assertFalse(workedSuccessfully);
     }
-
-
 
     @Test
     public void clearPass() throws Exception {

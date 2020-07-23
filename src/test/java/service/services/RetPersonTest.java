@@ -2,7 +2,6 @@ package service.services;
 
 import DAO.DataAccessException;
 import DAO.Database;
-import DAO.EventDAO;
 import DAO.PersonDAO;
 import model.Person;
 import org.junit.jupiter.api.AfterEach;
@@ -10,8 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import service.request.RegisterRequest;
 import service.response.EventResponse;
-import service.response.PersonIDResponse;
-import service.response.PersonResponse;
 import service.response.RegisterResponse;
 
 import java.sql.Connection;
@@ -58,12 +55,7 @@ public class RetPersonTest {
             String eventID = bestPerson.getPersonID();
             EventResponse retEvent = new EventResponse();
             db.closeConnection(true);
-
-
-
             personResponse = pDao.find("93472823");
-
-
         } catch (DataAccessException | SQLException e) {
             e.printStackTrace();
             try {

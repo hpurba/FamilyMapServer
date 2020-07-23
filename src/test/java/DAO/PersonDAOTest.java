@@ -20,10 +20,7 @@ public class PersonDAOTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        //here we can set up any classes or variables we will need for the rest of our tests
-        //lets create a new database
         db = new Database();
-        //and a new event with random data
         bestPerson = new Person("Person_123A", "hpurba", "Hikaru",
                 "Purba", "m", "father_1A", "mother_1A",
                 "spouse_1A");
@@ -38,21 +35,13 @@ public class PersonDAOTest {
 
     @AfterEach
     public void tearDown() throws Exception {
-        //here we can get rid of anything from our tests we don't want to affect the rest of our program
-        //lets clear the tables so that any data we entered for testing doesn't linger in our files
         db.openConnection();
         db.clearTables();
         db.closeConnection(true);
     }
 
-
-    // INSERT -----------------------------------------------------------------------------------------------------------------
-
     @Test
     public void insertPass() throws Exception {
-        //We want to make sure insert works
-        //First lets create an Event that we'll set to null. We'll use this to make sure what we put
-        //in the database is actually there.
         Person compareTest = null;
 
         try {
@@ -67,14 +56,8 @@ public class PersonDAOTest {
             db.closeConnection(true);
         } catch (DataAccessException e) {
             db.closeConnection(false);
-//             fail();
         }
-        //First lets see if our find found anything at all. If it did then we know that if nothing
-        //else something was put into our database, since we cleared it in the beginning
         assertNotNull(compareTest);
-        //Now lets make sure that what we put in is exactly the same as what we got out. If this
-        //passes then we know that our insert did put something in, and that it didn't change the
-        //data in any way
         assertEquals(bestPerson, compareTest);
     }
 
@@ -88,13 +71,10 @@ public class PersonDAOTest {
         } catch (DataAccessException e) {
             workedSuccessfully = false;
         }
-        //Check to make sure that we did in fact enter our catch statement
         assertFalse(workedSuccessfully);
 
 
     }
-
-    // RETRIEVE ------------------------------------------------------------------------------------------------------
 
     @Test
     public void retrievePass() throws Exception {
@@ -108,7 +88,6 @@ public class PersonDAOTest {
             db.closeConnection(true);
         } catch (DataAccessException e) {
             db.closeConnection(false);
-//             fail();
         }
         assertNotNull(compareTest);
         assertEquals(okPerson, compareTest);
@@ -130,21 +109,13 @@ public class PersonDAOTest {
         assertNull(compareTest);
     }
 
-
-
-    // CLEAR ------------------------------------------------------------------------------------------------------
-
     @Test
     public void clearPass() throws Exception {
         Person compareTest = null;
         try {
-            //Let's get our connection and make a new DAO
             Connection conn = db.openConnection();
             PersonDAO eDao = new PersonDAO();
-            //While insert returns a bool we can't use that to verify that our function actually worked
-            //only that it ran without causing an error
             eDao.clear();
-            //So lets use a find method to get the event that we just put in back out
             compareTest = eDao.find(bestPerson.getPersonID());
             db.closeConnection(true);
         } catch (DataAccessException e) {

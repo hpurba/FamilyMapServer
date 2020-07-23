@@ -26,7 +26,6 @@ public class AuthorizationTokenDAO {
             throw new DataAccessException("Error encountered while inserting into the database");
         }
         finally {
-            // try { conn.close(); } catch (Exception e) { /* ignored */ }
             try {
                 conn.commit();
                 conn.close();
@@ -44,9 +43,7 @@ public class AuthorizationTokenDAO {
         String sql = "SELECT UserName FROM AuthorizationTokens WHERE Token = ?;";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, token);
-            rs = stmt.executeQuery();   // execute the query on the statement will return a list of all the rows that match
-
-            // this could be a while loop later
+            rs = stmt.executeQuery();
             if (rs.next()) {
                 String username = rs.getString(1);
                 return username;
@@ -64,12 +61,6 @@ public class AuthorizationTokenDAO {
         }
         return null;
     }
-
-    // validate the user with their (token and userName)
-//    public boolean validateToken(String token) throws SQLException {
-//
-//        return false;
-//    }
 
     public AuthorizationToken findAuthToken(String authToken) throws DataAccessException {
         Database db = new Database();
@@ -98,16 +89,5 @@ public class AuthorizationTokenDAO {
             }
         }
         return null;
-    }
-
-
-    // removes all the tokens
-    public void clear() throws SQLException {
-
-    }
-
-    // delete a specific token
-    public void deleteToken(String token) throws SQLException {
-
     }
 }
