@@ -31,4 +31,15 @@ public class LoginResponse extends Response {
     public void setMessage(String message) { this.message = message; }
     public String getMessage() { return message; }
 
+    public String getAuthToken() {
+        return authToken;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getPersonID() {
+        return personID;
+    }
 }
