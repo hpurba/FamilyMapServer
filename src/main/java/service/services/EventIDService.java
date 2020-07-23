@@ -5,6 +5,8 @@ import DAO.DataAccessException;
 import DAO.EventDAO;
 import service.response.EventIDResponse;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.SQLException;
 
 /**
@@ -47,16 +49,25 @@ public class EventIDService {
             if(event != null) {
                 if (userName.equals(event.getUsername())) {
                     response.setEventID(event.getEventID());
-                    response.setAssociatedUserName(event.getUsername());
+                    response.setAssociatedUsername(userName);
                     response.setPersonID(event.getPersonID());
-                    response.setLatitude(event.getLatitude());
-                    response.setLongitude(event.getLongitude());
+
+                    BigDecimal bd_latitude = new BigDecimal(event.getLatitude()).setScale(4, RoundingMode.HALF_UP);
+                    BigDecimal bd_longitude = new BigDecimal(event.getLongitude()).setScale(4, RoundingMode.HALF_UP);
+                    double latitude = bd_latitude.doubleValue();
+                    double longitude = bd_longitude.doubleValue();
+
+//                    response.setLatitude(event.getLatitude());
+//                    response.setLongitude(event.getLongitude());
+                    response.setLatitude(latitude);
+                    response.setLongitude(longitude);
+
                     response.setCountry(event.getCountry());
                     response.setCity(event.getCity());
                     response.setEventType(event.getEventType());
                     response.setYear(event.getYear());
 
-                    response.setMessage("success");
+                    response.setMessage(null);
                     response.setSuccess("true");
                 }
                 else {
@@ -76,4 +87,6 @@ public class EventIDService {
 
         return response;
     }
+
+
 }

@@ -1,6 +1,5 @@
 package service.response;
 
-import com.google.gson.annotations.SerializedName;
 import model.Event;
 
 /**
@@ -28,7 +27,7 @@ import model.Event;
  */
 public class EventIDResponse extends Response{
     private String eventID;                // Event’s unique ID (non-empty string)
-    private String associatedUserName;     // Username of user account this event belongs to (non-empty string)
+    private String associatedUsername;     // Username of user account this event belongs to (non-empty string)
     private String personID;               // ID of the person this event belongs to (non-empty string)
     private double latitude;               // Latitude of the event’s location (number)
     private double longitude;             // Longitude of the event’s location (number)
@@ -53,12 +52,12 @@ public class EventIDResponse extends Response{
         this.eventID = eventID;
     }
 
-    public String getAssociatedUserName() {
-        return associatedUserName;
+    public String getAssociatedUsername() {
+        return associatedUsername;
     }
 
-    public void setAssociatedUserName(String associatedUserName) {
-        this.associatedUserName = associatedUserName;
+    public void setAssociatedUsername(String associatedUsername) {
+        this.associatedUsername = associatedUsername;
     }
 
     public String getPersonID() {
