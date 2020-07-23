@@ -47,7 +47,7 @@ public class RetAllPersonTest {
     @Test
     public void RetAllPersonPass() throws SQLException {
 
-        bestPerson1 = new Person("93472823", "immagal", "Hikaru",
+        bestPerson1 = new Person("93472823", "hpurba", "Hikaru",
                 "Purba", "m", "", "", "");
         bestPerson2 = new Person("29472233", "gal1", "Imma",
                 "Gal", "f", "", "", "");
