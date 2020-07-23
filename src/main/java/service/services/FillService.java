@@ -31,16 +31,10 @@ import java.util.UUID;
 public class FillService {
 
     public FillResponse execute(String username, int generations) throws SQLException {
-//        System.out.println("Entered the fill!");
         FillResponse response = new FillResponse();
-//        boolean closingConnectionBool = false;
         Database db = new Database();
-//        Connection conn = null;
 
         try {
-//            conn = db.openConnection();
-//            int numPeople = 1;
-//            int numEvents = 1;
             UserDAO user_dao = new UserDAO();
             User user = user_dao.find(username);
 
@@ -55,17 +49,21 @@ public class FillService {
             else {
                 eraseAssociatedDataToGivenUser(user, username); // If there is any data in the database associated with the given user name, it is erased.
 
+                // New root Person for fill
                 PersonDAO personDAO = new PersonDAO();
                 Person person = personDAO.find(user.getPersonID());
                 String personID = person.getPersonID();
                 String associatedUsername = person.getAssociatedUsername();
-
                 String firstName = person.getFirstName();
                 String lastName = person.getLastName();
                 String gender = person.getGender();
+
+                // Clean up
                 personDAO.deletePersonFamily(person.getAssociatedUsername());
                 EventDAO eventDAO = new EventDAO();
                 eventDAO.deleteEventFamily(person.getAssociatedUsername());
+
+                // create the new root person
                 person = new Person(personID, associatedUsername, firstName, lastName, gender, null, null, null);
                 String fatherID = UUID.randomUUID().toString().substring(0 ,7);
                 String motherID = UUID.randomUUID().toString().substring(0 ,7);
@@ -73,14 +71,14 @@ public class FillService {
                 person.setMotherID(motherID);
                 personDAO.insert(person);
 
+                // person birth event
                 Generator generator = new Generator();
                 Location location = generator.generateLocation();
                 int birthYear = 1996;
                 Event eventBirth = generateBirthEvent(person, birthYear, location);
                 eventDAO.insert(eventBirth);
 
-                System.out.println("Original user/person birth year: " + birthYear);
-
+                // generate root person's parents (and the later generations)
                 generateParents(person, birthYear, 0, generations, fatherID, motherID);
 
                 int numPeopleAdded = numPeopleCalculation(generations);
@@ -88,69 +86,10 @@ public class FillService {
 
                 response.setMessage("Successfully added " + numPeopleAdded + " persons and " + numEventsAdded + " events to the database.");
                 response.setSuccess("true");
-
-
-//// ORIGINAL
-//                // GENERATE THE PARENTS OF PARENTS
-//                int birthYear = 1996;
-//                Generator generator = new Generator();                  // new Generator
-//                PersonDAO person_dao = new PersonDAO();                 // Need to grab the person for the given username
-//                Person person = person_dao.find(user.getPersonID());
-//                EventDAO event_dao = new EventDAO();                    // new event DAO
-//                Location location = generator.generateLocation();       // generate a location for everything
-//
-//                // BIRTH
-//                Event birthEvent = generateBirthEvent(person, birthYear, location);
-//                event_dao.insert(birthEvent);
-//// ORIGINAL
-
-
-
-
-                // Generate 2 more events
-                // DO IT HERE
-                // Generate unique AuthorizationToken and PersonID
-//                String authorizationToken = UUID.randomUUID().toString();
-//                String personID = UUID.randomUUID().toString();
-//
-//                String requestJsonStr = gson.toJson(request);                  // conversion to Json
-//
-//                // USER
-//                User user = gson.fromJson(requestJsonStr, User.class);
-//                user.setPersonID(personID);
-//                // PERSON
-//                Person person = gson.fromJson(requestJsonStr, Person.class);   // grab the person
-//                person.setPersonID(personID);
-//                person.setAssociatedUsername(user.getUserName());
-//                // AUTHORIZATION TOKEN
-//                AuthorizationToken token = new AuthorizationToken(authorizationToken, user.getUserName());
-//
-//                // Insertion into database
-//                user_dao.insert(user);
-//                person_dao.insert(person);
-//                token_dao.addAuthorizationToken(token);
-
-
-
-
-
-
-
-//                int rootGeneration = 0;
-//                generateParents(person, birthYear, rootGeneration, generations, person.getFatherID(), person.getMotherID());
-//
-//                // finished response!
-//                response.setMessage("Successfully added " + numPeopleCalculation(generations) + " persons and " + numEventsCalculation(generations) + " events to the database.");
-//                response.setMessage("true");
-//                closingConnectionBool = true;
             }
-
-//            try { db.closeConnection(closingConnectionBool); } catch (DataAccessException e) { e.printStackTrace(); }
         }
         catch (Exception e) {
             e.printStackTrace();
-        } finally {
-//            try { conn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return response;
     }
@@ -204,8 +143,8 @@ public class FillService {
         person = new Person(user.getPersonID(), username, firstName, lastName, gender, null, null, null); // This is needed because a reset on the father,mother, and spouse ID is needed
 
         // Make father and mother
-        String motherID = UUID.randomUUID().toString();
-        String fatherID = UUID.randomUUID().toString();
+        String motherID = UUID.randomUUID().toString().substring(0 ,7);
+        String fatherID = UUID.randomUUID().toString().substring(0 ,7);
 
         // Set person mother and father ID
         person.setMotherID(motherID);
@@ -247,47 +186,47 @@ public class FillService {
             return;
         }
 
-        birthYear = birthYear - 25;
+        // Readjust the birth year
+        birthYear = birthYear - 40;
 
-        // Sets mother and father of person
+        // PERSON
+        // creates mother and father of person
         Person mother = generateFemalePerson(person.getAssociatedUsername());
-        mother.setMotherID(motherID);
-//        person.setMotherID(motherID);
+        mother.setPersonID(motherID);
         Person father = generateMalePerson(person.getAssociatedUsername());
-        father.setFatherID(fatherID);
-//        person.setFatherID(fatherID);
+        father.setPersonID(fatherID);
 
+        // Generate birth of parents
         Generator generator = new Generator();
         Location location1 = generator.generateLocation();
         Location location2 = generator.generateLocation();
         Event birthOfMother = generateBirthEvent(mother, birthYear, location1);
-        Event birthOfFather = generateBirthEvent(father, birthYear - 2, location2);
+        Event birthOfFather = generateBirthEvent(father, birthYear - 1, location2);
 
-        int marriageYear = birthYear + 23;
+        // Generate marriage event
+        int marriageYear = birthYear + 22;
         Location locationMarriage = generator.generateLocation();
         Event marriageMother = generateMarriage(mother, locationMarriage, marriageYear);
         Event marriageFather = generateMarriage(father, locationMarriage, marriageYear);
+        // Make parents married to each other
+        mother.setSpouseID(fatherID);
+        father.setSpouseID(motherID);
 
-//        int deathYear1 = birthYear + 35 - currentGeneration * 35;
-//        int deathYear2 = birthYear + 42 - currentGeneration * 35;
-        int deathYear1 = birthYear + 35;
-        int deathYear2 = birthYear + 35;
-
-        System.out.println("Generation: " + currentGeneration + " of " + totalGenerations);
-        System.out.println("Mother death year: " + deathYear1 + ". Father death year: " + deathYear2);
-
+        // Generate death
+        int deathYear1 = birthYear + 38;
+        int deathYear2 = birthYear + 38;
         Location deathLocation = generator.generateLocation();
         Event deathOfMother = generateDeathEvent(mother, deathLocation, deathYear1);
         Event deathOfFather = generateDeathEvent(father, deathLocation, deathYear2);
 
-        mother.setSpouseID(fatherID);
-        father.setSpouseID(motherID);
 
-        String fatherOfFather = UUID.randomUUID().toString();
-        String motherOfFather = UUID.randomUUID().toString();
-        String fatherOfMother = UUID.randomUUID().toString();
-        String motherOfMother = UUID.randomUUID().toString();
+        // Generate parents of parents personID
+        String fatherOfFather = UUID.randomUUID().toString().substring(0 ,7);
+        String motherOfFather = UUID.randomUUID().toString().substring(0 ,7);
+        String fatherOfMother = UUID.randomUUID().toString().substring(0 ,7);
+        String motherOfMother = UUID.randomUUID().toString().substring(0 ,7);
 
+        // Set parent of parent ID
         if (currentGeneration <= totalGenerations - 2) {
             father.setFatherID(fatherOfFather);
             father.setMotherID(motherOfFather);
@@ -299,13 +238,11 @@ public class FillService {
         EventDAO event_dao = new EventDAO();
         UserDAO user_dao = new UserDAO();
         try {
+            // INSERT PARENTS with personDAO
             person_dao.insert(father);
             person_dao.insert(mother);
-//            User fatherUser = new User(father.getAssociatedUsername(), "123", "email", father.getFirstName(), father.getLastName(), father.getGender(), father.getPersonID());
-//            user_dao.insert(fatherUser);
-//            User motherUser = new User(mother.getAssociatedUsername(), "123", "email", mother.getFirstName(), mother.getLastName(), mother.getGender(), mother.getPersonID());
-//            user_dao.insert(motherUser);
 
+            // INSERT EVENTS with personDAO
             event_dao.insert(birthOfMother);
             event_dao.insert(birthOfFather);
             event_dao.insert(marriageMother);
