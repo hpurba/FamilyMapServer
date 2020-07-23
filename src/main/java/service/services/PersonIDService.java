@@ -25,7 +25,7 @@ public class PersonIDService {
         PersonIDResponse response = new PersonIDResponse();
 
         if (userName == null) {
-            response.setMessage("Incorrect authorization token.");
+            response.setMessage("error Incorrect authorization token.");
             response.setSuccess("false");
             return response;
         }
