@@ -89,7 +89,7 @@ public class RetAllPersonTest {
             }
         }
         int eventArraySize = allPersonResponse.getData().size();
-        assertEquals(eventArraySize, 31);
+        assertEquals(32, eventArraySize );
     }
 
     @Test

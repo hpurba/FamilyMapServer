@@ -81,24 +81,6 @@ public class EventDAOTest {
 
         //Check to make sure that we did in fact enter our catch statement
         assertFalse(workedSuccessfully);
-
-//        //Since we know our database encountered an error, both instances of insert should have been
-//        //rolled back. So for added security lets make one more quick check using our find function
-//        //to make sure that our event is not in the database
-//        //Set our compareTest to an actual event
-//        Event compareTest = testEvent;
-//        try {
-//            EventDAO eDao = new EventDAO();
-//            //and then get something back from our find. If the event is not in the database we
-//            //should have just changed our compareTest to a null object
-//            compareTest = eDao.find(testEvent.getEventID());
-
-//        } catch (DataAccessException e) {
-
-//        }
-//
-//        //Now make sure that compareTest is indeed null
-//        assertNull(compareTest);
     }
 
 
