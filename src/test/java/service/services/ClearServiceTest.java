@@ -61,7 +61,7 @@ public class ClearServiceTest {
             e.printStackTrace();
         }
 
-        assertEquals("Clear succeeded", clearResponse.getMessage());
+        assertEquals("Clear succeeded.", clearResponse.getMessage());
 
     }
 }

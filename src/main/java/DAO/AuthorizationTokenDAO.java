@@ -66,9 +66,40 @@ public class AuthorizationTokenDAO {
     }
 
     // validate the user with their (token and userName)
-    public boolean validateToken(String token, String userName) throws SQLException {
-        return false;
+//    public boolean validateToken(String token) throws SQLException {
+//
+//        return false;
+//    }
+
+    public AuthorizationToken findAuthToken(String authToken) throws DataAccessException {
+        Database db = new Database();
+        Connection conn = db.openConnection();
+        AuthorizationToken authTokenM;
+        ResultSet rs = null;
+
+        String sql = "SELECT * FROM AuthorizationTokens WHERE Token = ?;";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, authToken);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                authTokenM = new AuthorizationToken( rs.getString("Token"), rs.getString("Username"));
+                return authTokenM;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while finding event");
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
     }
+
 
     // removes all the tokens
     public void clear() throws SQLException {
