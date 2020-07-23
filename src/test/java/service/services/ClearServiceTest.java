@@ -2,6 +2,7 @@ package service.services;
 
 import DAO.*;
 import model.*;
+import service.request.RegisterRequest;
 import service.response.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -60,8 +61,38 @@ public class ClearServiceTest {
         } catch (DataAccessException | SQLException e) {
             e.printStackTrace();
         }
-
         assertEquals("Clear succeeded.", clearResponse.getMessage());
-
     }
+
+    @Test
+    public void largerClearTest() {
+        User compareUserTest = bestUser;
+        Person comparePersonTest = bestPerson;
+        Event compareEventTest = bestEvent;
+        try {
+            PersonDAO personDAO = new PersonDAO();
+            personDAO.insert(bestPerson);
+            UserDAO userDAO = new UserDAO();
+            userDAO.insert(bestUser);
+            EventDAO eventDAO = new EventDAO();
+            eventDAO.insert(bestEvent);
+
+            RegisterService registerUser = new RegisterService();
+            RegisterRequest registerRequest = new RegisterRequest();
+            registerRequest.setUserName("hpurba");
+            registerRequest.setPassword("hpurba4634232");
+            registerRequest.setEmail("hpurba@gmail.com");
+            registerRequest.setFirstName("Hikaru");
+            registerRequest.setLastName("Purba");
+            registerRequest.setGender("m");
+            RegisterResponse registerResponse = registerUser.execute(registerRequest);
+            clearResponse = clear.execute();
+            assertNotEquals("hpurba", registerResponse.getUserName());
+
+        } catch (DataAccessException | SQLException e) {
+            e.printStackTrace();
+        }
+        assertEquals("Clear succeeded.", clearResponse.getMessage());
+    }
+
 }
