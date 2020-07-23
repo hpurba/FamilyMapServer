@@ -1,119 +1,144 @@
-//package service.services;
-//
-//import DataAccess.DataAccessException;
-//import DataAccess.Database;
-//import DataAccess.EventDAO;
-//import Model.EventM;
-//import Request.RegisterRequest;
-//import Response.AllEventResponse;
-//import Response.LoginRegisterResponse;
-//import org.junit.jupiter.api.AfterEach;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
-//
-//import java.sql.Connection;
-//import java.util.ArrayList;
-//
-//import static org.junit.jupiter.api.Assertions.assertEquals;
-//
-//public class RetAllEventTest {
-//    Database db;
-//    @BeforeEach
-//    public void setUp() throws Exception {
-//        db = new Database();
-//        db.openConnection();
+package service.services;
+
+import DAO.DataAccessException;
+import DAO.Database;
+import DAO.EventDAO;
+import model.Event;
+import model.Person;
+import model.User;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import service.request.RegisterRequest;
+import service.response.EventResponse;
+import service.response.LoginResponse;
+import service.response.RegisterResponse;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class RetAllEventTest {
+    Database db;
+
+    Event[] bestEventArray;
+
+    private Event bestEvent1;
+    private Event bestEvent2;
+    private Event bestEvent3;
+
+    @BeforeEach
+    public void setUp() throws Exception {
+        db = new Database();
+        db.openConnection();
 //        db.createTables();
-//        db.closeConnection(true);
-//    }
-//
-//    @AfterEach
-//    public void tearDown() throws Exception {
-//        db.openConnection();
-//        db.clearTables();
-//        db.closeConnection(true);
-//    }
-//
-//    @Test
-//    public void RetAllEventPass() {
-//        EventM bestEvent = new EventM("Biking_123A", "hkang3", "Gale123A",
-//                10.3f, 10.3f, "Japan", "Ushiku",
-//                "Biking_Around", 2016);
-//        EventM bestEvent2 = new EventM("Shopping_food", "hkang3", "113343222",
-//                10.55f, 4.3f, "USA", "Provo",
-//                "Shopping", 2019);
-//        EventM bestEvent3 = new EventM("Sleeping22", "hkang3", "113343222",
-//                10.55f, 4.99f, "USA", "Provo",
-//        "Sleeping", 2019);
-//        AllEventResponse allEventResponse = new AllEventResponse();
-//        try {
-//            RegisterUser registerUser = new RegisterUser();
-//            RegisterRequest registerRequest = new RegisterRequest();
-//            registerRequest.setUserName("hkang3");
-//            registerRequest.setPassword("hkang3123");
-//            registerRequest.setEmail("hkang3@gmail.com");
-//            registerRequest.setFirstName("Alex");
-//            registerRequest.setLastName("Kang");
-//            registerRequest.setGender("m");
-//            LoginRegisterResponse registerResponse = registerUser.register(registerRequest);
-//            Connection conn = db.openConnection();
-//            EventDAO eDao = new EventDAO(conn);
-//            eDao.insertEvent(bestEvent);
-//            eDao.insertEvent(bestEvent2);
-//            eDao.insertEvent(bestEvent3);
-//            db.closeConnection(true);
-//            RetAllEvent retAllEvent = new RetAllEvent();
-//            allEventResponse = retAllEvent.retAllEvent(registerResponse.getAuthToken());
-//        } catch (DataAccessException e) {
-//            e.printStackTrace();
-//            try {
-//                db.closeConnection(false);
-//            } catch (DataAccessException ex) {
-//                ex.printStackTrace();
-//            }
-//        }
-//        ArrayList<EventM> eventMArrayList = allEventResponse.getData();
-//        assertEquals(eventMArrayList.size(), 94);
-//    }
-//
-//    @Test
-//    public void RetAllEventFail() {
-//        EventM bestEvent = new EventM("Biking_123A", "Gale", "Gale123A",
-//                10.3f, 10.3f, "Japan", "Ushiku",
-//                "Biking_Around", 2016);
-//        EventM bestEvent2 = new EventM("Shopping_food", "teemo37", "113343222",
-//                10.55f, 4.3f, "USA", "Provo",
-//                "Shopping", 2019);
-//        EventM bestEvent3 = new EventM("Sleeping22", "teemo37", "113343222",
-//                10.55f, 4.99f, "USA", "Provo",
-//                "Sleeping", 2019);
-//        AllEventResponse allEventResponse = new AllEventResponse();
-//        try {
-//            RegisterUser registerUser = new RegisterUser();
-//            RegisterRequest registerRequest = new RegisterRequest();
-//            registerRequest.setUserName("hkang3");
-//            registerRequest.setPassword("hkang3123");
-//            registerRequest.setEmail("hkang3@gmail.com");
-//            registerRequest.setFirstName("Alex");
-//            registerRequest.setLastName("Kang");
-//            registerRequest.setGender("m");
-//            LoginRegisterResponse registerResponse = registerUser.register(registerRequest);
-//            Connection conn = db.openConnection();
-//            EventDAO eDao = new EventDAO(conn);
-//            eDao.insertEvent(bestEvent);
-//            eDao.insertEvent(bestEvent2);
-//            eDao.insertEvent(bestEvent3);
-//            db.closeConnection(true);
-//            RetAllEvent retAllEvent = new RetAllEvent();
-//            allEventResponse = retAllEvent.retAllEvent("someramdomauthToken");
-//        } catch (DataAccessException e) {
-//            e.printStackTrace();
-//            try {
-//                db.closeConnection(false);
-//            } catch (DataAccessException ex) {
-//                ex.printStackTrace();
-//            }
-//        }
-//
-//        assertEquals("Error: Invalid auth token.", allEventResponse.getMessage());
-//    }
-//}
+        db.closeConnection(true);
+    }
+
+    @AfterEach
+    public void tearDown() throws Exception {
+        db.openConnection();
+        db.clearTables();
+        db.closeConnection(true);
+    }
+
+    @Test
+    public void RetAllEventPass() throws SQLException {
+
+        bestEvent1 = new Event("Biking_123A", "immagal", "29472233",
+                10.3f, 10.3f, "Japan", "Tokyo",
+                "Biking_Around", 2016);
+        bestEvent2 = new Event("Shopping_food", "steveo", "49297811",
+                10.55f, 4.3f, "USA", "cupertino",
+                "Shopping", 2019);
+        bestEvent3 = new Event("Sleeping22", "steveo", "49297811",
+                10.55f, 4.99f, "USA", "cupertino",
+                "Sleeping", 2019);
+        bestEventArray = new Event[]{ bestEvent1, bestEvent2, bestEvent3};
+
+        EventResponse allEventResponse = new EventResponse();
+
+        try {
+            RegisterService registerUser = new RegisterService();
+            RegisterRequest registerRequest = new RegisterRequest();
+            registerRequest.setUserName("hkang3");
+            registerRequest.setPassword("hkang3123");
+            registerRequest.setEmail("hkang3@gmail.com");
+            registerRequest.setFirstName("Alex");
+            registerRequest.setLastName("Kang");
+            registerRequest.setGender("m");
+
+            RegisterResponse registerResponse = registerUser.execute(registerRequest);
+            Connection conn = db.openConnection();
+            EventDAO eDao = new EventDAO();
+
+            eDao.insert(bestEvent1);
+            eDao.insert(bestEvent2);
+            eDao.insert(bestEvent3);
+
+            db.closeConnection(true);
+
+
+            allEventResponse = eDao.getEvents(registerRequest.getUserName());
+
+        } catch ( DataAccessException e) {
+            e.printStackTrace();
+            try {
+                db.closeConnection(false);
+            } catch (DataAccessException ex) {
+                ex.printStackTrace();
+            }
+        }
+        int eventArraySize = allEventResponse.getData().size();
+        assertEquals(eventArraySize, 91);
+    }
+
+    @Test
+    public void RetAllEventFail() {
+
+        bestEvent1 = new Event("Biking_123A", "immagal", "29472233",
+                10.3f, 10.3f, "Japan", "Tokyo",
+                "Biking_Around", 2016);
+        bestEvent2 = new Event("Shopping_food", "steveo", "49297811",
+                10.55f, 4.3f, "USA", "cupertino",
+                "Shopping", 2019);
+        bestEvent3 = new Event("Sleeping22", "steveo", "49297811",
+                10.55f, 4.99f, "USA", "cupertino",
+                "Sleeping", 2019);
+        bestEventArray = new Event[]{ bestEvent1, bestEvent2, bestEvent3};
+
+
+        ArrayList<Event> allEventResponse = new ArrayList<Event>();
+        try {
+            RegisterService registerUser = new RegisterService();
+            RegisterRequest registerRequest = new RegisterRequest();
+            registerRequest.setUserName("hkang3");
+            registerRequest.setPassword("hkang3123");
+            registerRequest.setEmail("hkang3@gmail.com");
+            registerRequest.setFirstName("Alex");
+            registerRequest.setLastName("Kang");
+            registerRequest.setGender("m");
+            RegisterResponse registerResponse = registerUser.execute(registerRequest);
+            Connection conn = db.openConnection();
+            EventDAO eDao = new EventDAO();
+
+            eDao.insert(bestEvent1);
+            eDao.insert(bestEvent2);
+            eDao.insert(bestEvent3);
+            db.closeConnection(true);
+            EventResponse retAllEvent = new EventResponse();
+            allEventResponse = retAllEvent.getData();
+
+        } catch (DataAccessException | SQLException e) {
+            e.printStackTrace();
+            try {
+                db.closeConnection(false);
+            } catch (DataAccessException ex) {
+                ex.printStackTrace();
+            }
+        }
+        assertEquals(null, allEventResponse);
+    }
+}
