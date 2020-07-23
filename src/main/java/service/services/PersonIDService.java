@@ -47,13 +47,12 @@ public class PersonIDService {
                     response.setFatherID(person.getFatherID());
                     response.setMotherID(person.getMotherID());
                     response.setSpouse(person.getSpouseID());
-
-                    response.setSuccess("true");
                     response.setMessage("success");
-                    return response;
+                    response.setSuccess("true");
+//                    return response;
                 }
                 else {
-                    response.setMessage("error person ID does not match provided authorization token.");
+                    response.setMessage("error person ID does not match provided username.");
                     response.setSuccess("false");
                 }
             }
@@ -62,6 +61,8 @@ public class PersonIDService {
                 response.setSuccess("false");
             }
         } catch (DataAccessException e) {
+            response.setMessage("error ");
+            response.setSuccess("false");
             e.printStackTrace();
         }
         return response;

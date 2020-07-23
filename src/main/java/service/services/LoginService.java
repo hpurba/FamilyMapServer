@@ -25,8 +25,6 @@ public class LoginService {
      */
     public LoginResponse execute(LoginRequest request) throws SQLException, DataAccessException {
         // WORKING ONE >>>>
-
-        boolean isSuccess = false;
         Connection conn;
 
         String authToken = UUID.randomUUID().toString().substring(0 ,7);
@@ -54,13 +52,12 @@ public class LoginService {
                 response.setUserName(null);
                 response.setMessage("error : Password does not match.");
                 response.setSuccess("false");
-                return response;
             }
             else {
                 response.setAuthToken(authToken);
                 response.setUserName(request.getUserName());
                 response.setPersonID(userM.getPersonID());
-                isSuccess = true;
+                response.setMessage("Success");
                 response.setSuccess("true");
             }
             db.closeConnection(true);

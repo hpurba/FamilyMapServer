@@ -1,6 +1,7 @@
 package service.response;
 
 
+import com.google.gson.annotations.SerializedName;
 import model.Event;
 import model.Person;
 
@@ -35,10 +36,9 @@ public class PersonIDResponse extends Response{
     private String spouse;
     private String message;
 
-//    private Person person;
-//    public void setPerson(Person person) { this.person = person; }
-//    public Person getPerson() { return person; }
-
+    private Person person;
+    public void setPerson(Person person) { this.person = person; }
+    public Person getPerson() { return person; }
 
     public String getPersonID() {
         return personID;

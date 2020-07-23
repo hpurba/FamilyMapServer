@@ -5,11 +5,10 @@ import DAO.DataAccessException;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import model.Person;
 import service.response.PersonIDResponse;
 import service.response.PersonResponse;
 import service.services.PersonIDService;
-import service.services.PersonService;
+import service.services.PersonsService;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -28,7 +27,7 @@ public class PersonHandler extends HandlerGeneric implements HttpHandler {
         Gson gson = new Gson();
 
         AuthorizationTokenDAO auth_dao = new AuthorizationTokenDAO();
-        PersonService personService = new PersonService();
+        PersonsService personsService = new PersonsService();
         PersonIDService personIDService = new PersonIDService();
         PersonResponse personResponseObj = new PersonResponse();
         PersonIDResponse personIDResponseObj = new PersonIDResponse();
@@ -48,7 +47,7 @@ public class PersonHandler extends HandlerGeneric implements HttpHandler {
 
                 try {
                     username = auth_dao.getUserName(token);
-                    personResponseObj = personService.execute(username);  //  Attempt to fill using the fillService
+                    personResponseObj = personsService.execute(username);  //  Attempt to fill using the fillService
 
 //                    JsonString = serialize(personResponseObj);
 //                    httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
@@ -122,7 +121,7 @@ public class PersonHandler extends HandlerGeneric implements HttpHandler {
                     responseBody.close();                                                              // indicates "I'm done", closes the httpExchange
                 }
                 else {
-                    JsonString = serialize(personResponseObj);
+                    JsonString = serialize(personIDResponseObj);
                     httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
                     OutputStream responseBody = httpExchange.getResponseBody();
                     writeString(JsonString, responseBody);
@@ -130,7 +129,7 @@ public class PersonHandler extends HandlerGeneric implements HttpHandler {
                 }
             }
         } catch (IOException e) {
-            JsonString = serialize(personResponseObj);
+            JsonString = serialize(personIDResponseObj);
             httpExchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
             OutputStream responseBody = httpExchange.getResponseBody();
             writeString(JsonString, responseBody);

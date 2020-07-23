@@ -16,7 +16,7 @@ import java.sql.SQLException;
  * Request Body: None
  * Errors: Invalid auth token, Internal server error
  */
-public class PersonService {
+public class PersonsService {
 
     public PersonResponse execute(String userName) throws SQLException {
         PersonResponse response = new PersonResponse();
@@ -25,7 +25,11 @@ public class PersonService {
         try {
             response = person_dao.getAllPersons(userName);
 
-            if (response.getSuccess() == "false") {
+            if (response.getSuccess() == "true") {
+                response.setMessage(null);
+                return response;
+            }
+            else {
                 response.setMessage("error");
                 response.setSuccess("false");
             }
@@ -34,7 +38,6 @@ public class PersonService {
             response.setSuccess("false");
             e.printStackTrace();
         }
-
         return response;
     }
 }
