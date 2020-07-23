@@ -28,4 +28,16 @@ public class PersonResponse extends Response {
 
     public void setPersons(ArrayList<Person> personArrayList) { this.data = personArrayList; }
     public void setMessage(String message) { this.message = message; }
+
+    public ArrayList<Person> getData() {
+        return data;
+    }
+
+    public void setData(ArrayList<Person> data) {
+        this.data = data;
+    }
+
+    public String getMessage() {
+        return message;
+    }
 }
