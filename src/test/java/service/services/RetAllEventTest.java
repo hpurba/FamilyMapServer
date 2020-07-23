@@ -48,7 +48,7 @@ public class RetAllEventTest {
     public void RetAllEventPass() throws SQLException {
 
         bestEvent1 = new Event("Biking_123A", "immagal", "29472233",
-                10.3f, 10.3f, "Japan", "Tokyo",
+                10.3f, 10.3f, "Japan", "Saitama",
                 "Biking_Around", 2016);
         bestEvent2 = new Event("Shopping_food", "steveo", "49297811",
                 10.55f, 4.3f, "USA", "cupertino",
@@ -63,11 +63,11 @@ public class RetAllEventTest {
         try {
             RegisterService registerUser = new RegisterService();
             RegisterRequest registerRequest = new RegisterRequest();
-            registerRequest.setUserName("hkang3");
-            registerRequest.setPassword("hkang3123");
-            registerRequest.setEmail("hkang3@gmail.com");
-            registerRequest.setFirstName("Alex");
-            registerRequest.setLastName("Kang");
+            registerRequest.setUserName("hpurba");
+            registerRequest.setPassword("hpurba545343434");
+            registerRequest.setEmail("hpurba@gmail.com");
+            registerRequest.setFirstName("Hikaru");
+            registerRequest.setLastName("Purba");
             registerRequest.setGender("m");
 
             RegisterResponse registerResponse = registerUser.execute(registerRequest);
@@ -99,7 +99,7 @@ public class RetAllEventTest {
     public void RetAllEventFail() {
 
         bestEvent1 = new Event("Biking_123A", "immagal", "29472233",
-                10.3f, 10.3f, "Japan", "Tokyo",
+                10.3f, 10.3f, "Japan", "Senzokuike",
                 "Biking_Around", 2016);
         bestEvent2 = new Event("Shopping_food", "steveo", "49297811",
                 10.55f, 4.3f, "USA", "cupertino",
@@ -114,11 +114,11 @@ public class RetAllEventTest {
         try {
             RegisterService registerUser = new RegisterService();
             RegisterRequest registerRequest = new RegisterRequest();
-            registerRequest.setUserName("hkang3");
-            registerRequest.setPassword("hkang3123");
-            registerRequest.setEmail("hkang3@gmail.com");
-            registerRequest.setFirstName("Alex");
-            registerRequest.setLastName("Kang");
+            registerRequest.setUserName("hpurba");
+            registerRequest.setPassword("hpurba6762233");
+            registerRequest.setEmail("hpurba@gmail.com");
+            registerRequest.setFirstName("Hikaru");
+            registerRequest.setLastName("Purba");
             registerRequest.setGender("m");
             RegisterResponse registerResponse = registerUser.execute(registerRequest);
             Connection conn = db.openConnection();

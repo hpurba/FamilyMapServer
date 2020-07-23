@@ -35,11 +35,11 @@ public class RegisterTest {
     public void registerFail() throws SQLException, DataAccessException {
         RegisterService registerUser = new RegisterService();
         RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setUserName("hkang3");
-        registerRequest.setPassword("hkang3123");
-        registerRequest.setEmail("hkang3@gmail.com");
-        registerRequest.setFirstName("Alex");
-        registerRequest.setLastName("Kang");
+        registerRequest.setUserName("hpurba");
+        registerRequest.setPassword("hpurba74332323");
+        registerRequest.setEmail("hpurba@gmail.com");
+        registerRequest.setFirstName("Hikaru");
+        registerRequest.setLastName("Purba");
         registerRequest.setGender("m");
         RegisterResponse registerResponse = registerUser.execute(registerRequest);
         registerResponse = registerUser.execute(registerRequest);
@@ -50,13 +50,13 @@ public class RegisterTest {
     public void registerPass() throws SQLException, DataAccessException {
         RegisterService registerUser = new RegisterService();
         RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setUserName("hkang3");
-        registerRequest.setPassword("hkang3123");
-        registerRequest.setEmail("hkang3@gmail.com");
-        registerRequest.setFirstName("Alex");
-        registerRequest.setLastName("Kang");
+        registerRequest.setUserName("hpurba");
+        registerRequest.setPassword("hpurba4634232");
+        registerRequest.setEmail("hpurba@gmail.com");
+        registerRequest.setFirstName("Hikaru");
+        registerRequest.setLastName("Purba");
         registerRequest.setGender("m");
         RegisterResponse registerResponse = registerUser.execute(registerRequest);
-        assertEquals("hkang3", registerResponse.getUserName());
+        assertEquals("hpurba", registerResponse.getUserName());
     }
 }

@@ -40,17 +40,17 @@ public class FillTest {
     public void fillPass() throws SQLException, DataAccessException {
         RegisterService registerUser = new RegisterService();
         RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setUserName("hkang3");
-        registerRequest.setPassword("hkang3123");
-        registerRequest.setEmail("hkang3@gmail.com");
-        registerRequest.setFirstName("Alex");
-        registerRequest.setLastName("Kang");
+        registerRequest.setUserName("hpurba");
+        registerRequest.setPassword("hpurba42322");
+        registerRequest.setEmail("hpurba@gmail.com");
+        registerRequest.setFirstName("Hikaru");
+        registerRequest.setLastName("Purba");
         registerRequest.setGender("m");
 
         registerUser.execute(registerRequest);
 
         FillService fill = new FillService();
-        FillResponse fillResponse = fill.execute("hkang3", 2);
+        FillResponse fillResponse = fill.execute("hpurba", 2);
         assertEquals("Successfully added 7 persons and 19 events to the database.", fillResponse.getMessage());
     }
 }
